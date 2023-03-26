@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://sbw6pypipunm"
+path="res://.godot/imported/Lost_Red_Canal_City.mp3-516505ab256f510a6fb7708ef5367817.mp3str"
+
+[deps]
+
+source_file="res://map/Lost Red Canal City/Lost_Red_Canal_City.mp3"
+dest_files=["res://.godot/imported/Lost_Red_Canal_City.mp3-516505ab256f510a6fb7708ef5367817.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

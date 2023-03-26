@@ -1,0 +1,452 @@
+[gd_scene load_steps=37 format=3 uid="uid://6a71q4rbivrv"]
+
+[ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_rqxl5"]
+[ext_resource type="Texture2D" uid="uid://fpi44kosojgq" path="res://image/background/トトリの夢の中.png" id="2_m18n7"]
+[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://theme/default_theme.tres" id="3_adoyv"]
+[ext_resource type="Script" path="res://scene/main_menu/SongList.gd" id="4_7f42v"]
+[ext_resource type="StyleBox" uid="uid://4gt50npyknng" path="res://ui/song_card.stylebox" id="5_2xbq4"]
+[ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="6_81ncd"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://font/Alibaba-PuHuiTi-Regular.ttf" id="7_3r8sg"]
+[ext_resource type="Shader" path="res://shader/acrylic_plate.gdshader" id="7_gtxvj"]
+[ext_resource type="PackedScene" uid="uid://dog2ujsoveet6" path="res://scene/partner/partner.tscn" id="8_vdbcq"]
+[ext_resource type="FontFile" uid="uid://mqvi1o7fpls2" path="res://font/HuXiaoBoZhenShuaiTi.ttf" id="10_mmsoa"]
+[ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://image/texture/circle_white_512.svg" id="10_vs7lf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_o8td5"]
+line_spacing = 0.0
+font_size = 360
+font_color = Color(1, 1, 1, 0.215686)
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7y4ls"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cqvah"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4oa5"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_r75pa"]
+color = Color(0, 0, 0, 0.5)
+thickness = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_88kvk"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rhtk2"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iexgm"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5o6b"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_color = Color(0, 0, 0, 0.27451)
+shadow_color = Color(0, 0, 0, 0.501961)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8hb83"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_color = Color(0, 0, 0, 0.27451)
+shadow_color = Color(0, 0, 0, 0.501961)
+anti_aliasing = false
+
+[sub_resource type="Theme" id="Theme_nkv8k"]
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_7y4ls")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_cqvah")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_w4oa5")
+HScrollBar/styles/scroll = SubResource("StyleBoxLine_r75pa")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_88kvk")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_rhtk2")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_iexgm")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_o5o6b")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_8hb83")
+
+[sub_resource type="LabelSettings" id="LabelSettings_k2800"]
+line_spacing = 0.0
+font = ExtResource("7_3r8sg")
+font_size = 37
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pe2pw"]
+line_spacing = 0.0
+font = ExtResource("7_3r8sg")
+font_size = 22
+font_color = Color(0.6, 0.6, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lwhhd"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+shadow_size = 314
+shadow_offset = Vector2(-150, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u48j"]
+bg_color = Color(0, 0, 0, 0.376471)
+border_width_right = 244
+border_color = Color(0.8, 0.8, 0.8, 0)
+border_blend = true
+corner_radius_top_left = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sdias"]
+content_margin_left = 27.0
+content_margin_right = 41.0
+bg_color = Color(0, 0, 0, 0.333333)
+border_width_left = 2
+border_color = Color(1, 1, 1, 0.568627)
+corner_radius_top_right = 66
+corner_radius_bottom_right = 43
+corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_6erxh"]
+line_spacing = 0.0
+font = ExtResource("7_3r8sg")
+font_size = 62
+shadow_size = 15
+shadow_color = Color(0, 0.478431, 0.439216, 0.392157)
+shadow_offset = Vector2(-1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_d8qto"]
+font = ExtResource("7_3r8sg")
+font_size = 35
+shadow_color = Color(0, 0.478431, 0.439216, 0.392157)
+shadow_offset = Vector2(-3, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uipoy"]
+content_margin_left = 27.0
+content_margin_right = 41.0
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 16
+border_color = Color(1, 0.501961, 0, 0.568627)
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_cxrir"]
+font = ExtResource("10_mmsoa")
+font_size = 82
+shadow_size = 3
+shadow_color = Color(0.854902, 0.478431, 0.364706, 0.729412)
+shadow_offset = Vector2(-4, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qopu8"]
+shader = ExtResource("7_gtxvj")
+shader_parameter/rim_light = false
+shader_parameter/rim_thickness = 40.0
+shader_parameter/rim_intense = 1.0
+shader_parameter/rim_extra_thick = false
+shader_parameter/rim_light_pos = Vector2(1.391, 0.25)
+shader_parameter/diffuse_reflection = true
+shader_parameter/diffuse_intense = 1.0
+shader_parameter/diffuse_light_pos = Vector2(1.1, 1.1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_h86yd"]
+font = ExtResource("10_mmsoa")
+font_size = 28
+font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_g35vr"]
+script/source = "extends HSlider
+
+func _ready():
+	value_changed.connect(func(p_value_changed):
+		if p_value_changed: get_tree().root.set_content_scale_factor(value);
+	);
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_qknmj"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_8ojig"]
+font_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 7
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_rqxl5")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_m18n7")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Bg_Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.85
+anchor_top = 0.65
+anchor_right = 0.85
+anchor_bottom = 0.65
+grow_horizontal = 2
+grow_vertical = 2
+text = "####"
+label_settings = SubResource("LabelSettings_o8td5")
+
+[node name="Partner" parent="." instance=ExtResource("8_vdbcq")]
+visible = false
+layout_mode = 1
+
+[node name="SongList" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -410.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
+theme = SubResource("Theme_nkv8k")
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+script = ExtResource("4_7f42v")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SongList"]
+layout_direction = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="Song" type="Panel" parent="SongList/VBoxContainer"]
+modulate = Color(0.984568, 0.984568, 0.984568, 1)
+custom_minimum_size = Vector2(380, 90)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 1
+theme_override_styles/panel = ExtResource("5_2xbq4")
+script = ExtResource("6_81ncd")
+
+[node name="SongTexts" type="VBoxContainer" parent="SongList/VBoxContainer/Song"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.03
+anchor_top = 0.5
+anchor_right = 0.03
+anchor_bottom = 0.5
+offset_top = -46.5
+offset_right = 279.0
+offset_bottom = 46.5
+grow_vertical = 2
+
+[node name="SongTitle" type="Label" parent="SongList/VBoxContainer/Song/SongTexts"]
+layout_mode = 2
+text = "The #### song"
+label_settings = SubResource("LabelSettings_k2800")
+
+[node name="Info" type="Label" parent="SongList/VBoxContainer/Song/SongTexts"]
+layout_mode = 2
+text = "LSDog"
+label_settings = SubResource("LabelSettings_pe2pw")
+
+[node name="Image" type="TextureRect" parent="SongList/VBoxContainer/Song"]
+modulate = Color(1, 1, 1, 0.117647)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_m18n7")
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_use_anchors_ = true
+
+[node name="SongPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.3
+anchor_bottom = 1.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lwhhd")
+
+[node name="Panel" type="Panel" parent="SongPanel"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.02
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 6.10352e-05
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7u48j")
+
+[node name="Info" type="VBoxContainer" parent="SongPanel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 633.0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="-1" type="Control" parent="SongPanel/Info"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Title" type="PanelContainer" parent="SongPanel/Info"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_sdias")
+
+[node name="Label" type="Label" parent="SongPanel/Info/Title"]
+layout_mode = 2
+text = "The #### song"
+label_settings = SubResource("LabelSettings_6erxh")
+vertical_alignment = 2
+
+[node name="Singer" type="PanelContainer" parent="SongPanel/Info"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_sdias")
+
+[node name="Label" type="Label" parent="SongPanel/Info/Singer"]
+layout_mode = 2
+text = "LSDog"
+label_settings = SubResource("LabelSettings_d8qto")
+vertical_alignment = 2
+
+[node name="-2" type="Control" parent="SongPanel/Info"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Score" type="Panel" parent="SongPanel/Info"]
+custom_minimum_size = Vector2(330, 110)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_uipoy")
+
+[node name="Label" type="Label" parent="SongPanel/Info/Score"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.0
+offset_top = -42.0
+offset_right = 149.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "9,999,999"
+label_settings = SubResource("LabelSettings_cxrir")
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Diff" type="ScrollContainer" parent="SongPanel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -125.0
+offset_right = 643.0
+offset_bottom = 5.0
+grow_vertical = 0
+mouse_filter = 2
+theme = ExtResource("3_adoyv")
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SongPanel/Diff"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="Button" type="TextureRect" parent="SongPanel/Diff/HBoxContainer"]
+modulate = Color(1, 1, 1, 0.8)
+material = SubResource("ShaderMaterial_qopu8")
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+texture = ExtResource("10_vs7lf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="SongPanel/Diff/HBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Simple"
+label_settings = SubResource("LabelSettings_h86yd")
+
+[node name="Debugs" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 1.0
+anchor_right = 0.02
+anchor_bottom = 1.0
+offset_top = -51.0
+offset_right = 200.0
+grow_vertical = 0
+
+[node name="ScaleSlider" type="HSlider" parent="Debugs"]
+layout_mode = 2
+min_value = 0.2
+max_value = 2.0
+step = 0.01
+value = 1.0
+script = SubResource("GDScript_g35vr")
+
+[node name="Label" type="Label" parent="Debugs/ScaleSlider"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.1
+anchor_top = 0.5
+anchor_right = 1.1
+anchor_bottom = 0.5
+grow_vertical = 2
+text = "stretch/scale"
+label_settings = SubResource("LabelSettings_qknmj")
+
+[node name="DebugLabel" type="Label" parent="Debugs"]
+layout_mode = 2
+text = "debug:"
+label_settings = SubResource("LabelSettings_8ojig")

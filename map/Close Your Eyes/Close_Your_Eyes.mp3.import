@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cyjyruwx08o4j"
+path="res://.godot/imported/Close_Your_Eyes.mp3-c084942e9b08d5533128c87c674827c8.mp3str"
+
+[deps]
+
+source_file="res://map/Close Your Eyes/Close_Your_Eyes.mp3"
+dest_files=["res://.godot/imported/Close_Your_Eyes.mp3-c084942e9b08d5533128c87c674827c8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

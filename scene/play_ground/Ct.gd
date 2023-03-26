@@ -1,0 +1,21 @@
+extends RigidBody2D
+
+var trail :Line2D = null;
+var curve :Curve2D = Curve2D.new();
+
+var last_position :Vector2;
+
+func _ready():
+	trail = $Trail;
+	$Trail.name = name + "_" + $Trail.name;
+	# 把轨道放外面去，本体的下方
+	remove_child(trail);
+	get_parent().add_child.call_deferred(trail);
+	get_parent().move_child.call_deferred(trail, get_index());
+
+func _process(_delta):
+	if trail == null: return;
+	var point_count = trail.get_point_count();
+	if point_count > 10:
+		trail.remove_point(0);
+	trail.add_point(position)

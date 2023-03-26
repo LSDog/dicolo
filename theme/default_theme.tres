@@ -1,0 +1,78 @@
+[gd_resource type="Theme" load_steps=11 format=3 uid="uid://d3m8pmhle7d8r"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_71cnt"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_iajem"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_lf42l"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_aabyw"]
+color = Color(0, 0, 0, 0.5)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_k5buq"]
+color = Color(0, 0, 0, 0.5)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_opqm8"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+vertical = true
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_e7s47"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+vertical = true
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_7p6dj"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+vertical = true
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_8j3h5"]
+color = Color(0, 0, 0, 0.5)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+vertical = true
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_bd5mp"]
+color = Color(0, 0, 0, 0.5)
+grow_begin = 0.0
+grow_end = 0.0
+thickness = 10
+vertical = true
+
+[resource]
+HScrollBar/styles/grabber = SubResource("StyleBoxLine_71cnt")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxLine_iajem")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxLine_lf42l")
+HScrollBar/styles/scroll = SubResource("StyleBoxLine_aabyw")
+HScrollBar/styles/scroll_focus = SubResource("StyleBoxLine_k5buq")
+VScrollBar/styles/grabber = SubResource("StyleBoxLine_opqm8")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxLine_e7s47")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxLine_7p6dj")
+VScrollBar/styles/scroll = SubResource("StyleBoxLine_8j3h5")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxLine_bd5mp")

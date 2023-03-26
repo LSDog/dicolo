@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dm6oqtebgey1"
+path="res://.godot/imported/Gold_Sequence.mp3-aaca63b51af34c0241f6a8de1c28d0d4.mp3str"
+
+[deps]
+
+source_file="res://map/Gold Sequence - Movement of Life (Original Mix)/Gold_Sequence.mp3"
+dest_files=["res://.godot/imported/Gold_Sequence.mp3-aaca63b51af34c0241f6a8de1c28d0d4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://dog2ujsoveet6"]
+
+[ext_resource type="Script" path="res://scene/partner/partner.gd" id="1_kyea8"]
+[ext_resource type="Shader" path="res://shader/acrylic_plate.gdshader" id="1_mdplh"]
+[ext_resource type="Texture2D" uid="uid://c04oxkkh6fnky" path="res://image/partner/杏由里.png" id="1_pkh46"]
+[ext_resource type="Texture2D" uid="uid://bqnke500v6r2x" path="res://image/icon/icon_chara.png" id="3_b82ao"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5mhg"]
+shader = ExtResource("1_mdplh")
+shader_parameter/rim_light = true
+shader_parameter/rim_thickness = 13.5
+shader_parameter/rim_intense = 1.0
+shader_parameter/rim_extra_thick = true
+shader_parameter/rim_light_pos = Vector2(0.25, 0.5)
+shader_parameter/diffuse_reflection = true
+shader_parameter/diffuse_intense = 0.2
+shader_parameter/diffuse_light_pos = Vector2(0, 0)
+
+[node name="Partner" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_kyea8")
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 0.546
+anchor_top = 1.0
+anchor_right = 0.546
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -256.0
+offset_right = 128.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(128, 59.402)
+
+[node name="Sprite" type="Sprite2D" parent="Control"]
+self_modulate = Color(0.901961, 0.901961, 0.901961, 0.960784)
+material = SubResource("ShaderMaterial_l5mhg")
+position = Vector2(126, 136)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_pkh46")
+region_rect = Rect2(-5.25513, 155.42, 1032.92, 827.855)
+
+[node name="Paper" type="Sprite2D" parent="Control"]
+visible = false
+self_modulate = Color(0.901961, 0.901961, 0.901961, 1)
+material = SubResource("ShaderMaterial_l5mhg")
+position = Vector2(129, 214)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_b82ao")
+region_rect = Rect2(-5.25513, 155.42, 1032.92, 827.855)
