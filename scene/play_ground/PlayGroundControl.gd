@@ -18,6 +18,10 @@ extends Control
 ## Fine
 @export var judge_before :float = 0.1;
 
+var play_mode;
+enum PLAY_MODE {PLAY, EDIT};
+
+
 ## 铺面
 var beatmap :BeatMap;
 ## 事件索引（包括音符等...）
@@ -61,11 +65,16 @@ var trackr_mesh :MeshInstance2D;
 var trackr_center :Vector2;
 var trackr_path :Path2D;
 
+@onready var audio_player := $Panel/AudioPlayer;
+@onready var video_player := $Panel/VideoPlayer;
+@onready var background := $Panel/Background;
 var texture_crash = preload("res://image/texture/crash.svg");
 var texture_follow = preload("res://image/texture/follow.svg");
 
 var countdown_word := ["①","②","⑨"];
 
+## 铺面加载完毕
+signal loaded;
 
 func _ready():
 	
@@ -76,12 +85,12 @@ func _ready():
 	print("[PlayGround] loaded: ", beatmap);
 	map_file = null;
 	
-	$Panel/AudioPlayer.stream = load(beatmap.audio_path);
-	$Panel/VideoPlayer.stream = load(beatmap.video_path);
-	$Panel/Background.texture = beatmap.bg_image;
+	audio_player.stream = load(beatmap.audio_path);
+	video_player.stream = load(beatmap.video_path);
+	background.texture = beatmap.bg_image;
 	$Panel/DebugLabel.text = "debug text..."
 	
-	has_video = false if $Panel/VideoPlayer.stream == null else true;
+	has_video = false if video_player.stream == null else true;
 	
 	$MenuButton.pressed.connect(func():
 		if !paused: pause();
@@ -112,8 +121,10 @@ func _ready():
 	trackr_mesh = $PlayGround/TrackR/Mesh;
 	trackr_path = $PlayGround/TrackR/Path;
 	
-	$Panel/AudioPlayer.finished.connect(end);# 音乐结束之后进入end
-	$Panel/VideoPlayer.finished.connect(end);# 或者视频结束之后进入end
+	audio_player.finished.connect(end);# 音乐结束之后进入end
+	video_player.finished.connect(end);# 或者视频结束之后进入end
+	
+	loaded.emit();
 	
 	pre_start.call_deferred();
 	# ▼▼▼ 这里初始化结束进入 pre_start
@@ -164,38 +175,38 @@ func pre_start():
 func start():
 	if has_video:
 		# 背景变更黑
-		create_tween().tween_property($Panel/Background, "modulate:v", 0.3, 2).from_current().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
+		create_tween().tween_property(background, "modulate:v", 0.3, 2).from_current().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
 		# 开始视频
-		$Panel/VideoPlayer.play();
+		video_player.play();
 		# 淡入视频
-		create_tween().tween_property($Panel/VideoPlayer, "modulate:a", 1.0, 1).from(0.0).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
+		create_tween().tween_property(video_player, "modulate:a", 1.0, 1).from(0.0).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
 	# 开始音频
-	$Panel/AudioPlayer.play();
+	audio_player.play();
 	started = true;
 	start_time = Time.get_unix_time_from_system();
 
 func pause():
 	if !started: return;
 	paused = true;
-	$Panel/VideoPlayer.paused = true;
-	$Panel/AudioPlayer.stream_paused = true;
+	video_player.paused = true;
+	audio_player.stream_paused = true;
 	$Pause.visible = true;
 
 func resume():
 	$Pause.visible = false;
-	$Panel/VideoPlayer.paused = false;
-	$Panel/AudioPlayer.stream_paused = false;
+	video_player.paused = false;
+	audio_player.stream_paused = false;
 	paused = false;
 
 func retry():
 	$Pause.visible = false;
 	started = false;
 	paused = false;
-	$Panel/AudioPlayer.stop();
-	$Panel/AudioPlayer.seek(0);
-	$Panel/VideoPlayer.stop();
-	$Panel/AudioPlayer.stream_paused = false;
-	$Panel/VideoPlayer.paused = false;
+	audio_player.stop();
+	audio_player.seek(0);
+	video_player.stop();
+	audio_player.stream_paused = false;
+	video_player.paused = false;
 	stream_time = 0;
 	start_time = 0.0;
 	play_time = 0.0;
@@ -212,8 +223,8 @@ func end():
 	if ended: return;
 	print("ended")
 	ended = true;
-	$Panel/AudioPlayer.stop();
-	$Panel/VideoPlayer.stop();
+	audio_player.stop();
+	video_player.stop();
 
 func _unhandled_input(event):
 	if event is InputEvent:
@@ -229,8 +240,8 @@ func _process(delta):
 	
 	if !ended: # 未结束
 		
-		var audio_pos = $Panel/AudioPlayer.get_playback_position();
-		var video_pos = $Panel/VideoPlayer.stream_position;
+		var audio_pos = audio_player.get_playback_position();
+		var video_pos = video_player.stream_position;
 		
 		stream_time = video_pos if has_video else audio_pos;
 		
@@ -249,7 +260,7 @@ func _process(delta):
 					if abs(audio_delay) > max_delay: # 音视频延迟超过校准时间就回调音频
 						# 更新 audio_pos
 						audio_pos = audio_pos-audio_delay;
-						$Panel/AudioPlayer.seek(audio_pos);
+						audio_player.seek(audio_pos);
 						print("[audio] delay", audio_delay, " > ",max_delay," --> reset-audio=",video_pos);
 				
 				# 演奏总时间 <- 音频流校准
