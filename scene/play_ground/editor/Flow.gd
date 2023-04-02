@@ -30,9 +30,10 @@ var beat_space :float = bar_space/beat_count;
 		queue_redraw();
 
 var mouse_offset := 0.0;
-var holding_note :CanvasItem;
+var holding_note :Control;
 var holding_note_type ;#:editor.NOTE_TYPE
-var note_blocked :bool = false;
+var barrier_touched :bool = false;
+var barrier_note_pos :Vector2;
 var note_map :Dictionary = {};
 
 func _ready():
@@ -48,7 +49,7 @@ func _process(delta):
 func _draw():
 	
 	# 绘制边框
-	var visible_rect := get_viewport_rect().intersection(get_rect());
+	var visible_rect := editor.get_rect().intersection(get_rect());
 	visible_rect.position.x = -position.x;
 	visible_rect.position.y = 0;
 	var middle_line_start := Vector2(visible_rect.position.x, visible_rect.size.y/2);
@@ -88,7 +89,8 @@ func _gui_input(event):
 			if event.pressed:
 				
 				var note_pos = get_note_pos(event.position);
-				if note_map.has(note_pos): return; # 当前位置存在note则忽略
+				if rect_overlapped_note(Rect2(note_pos, Vector2.ZERO)): return; # 当前位置存在note则忽略
+				#if note_map.has(note_pos): return;
 				
 				holding_note_type = editor.edit_note_type;
 				
@@ -123,13 +125,16 @@ func _gui_input(event):
 					if rm_note != null: remove_note(rm_note);
 					return;
 			
-			if holding_note == null: return; # 移动持有的note
+			if holding_note == null: return;
+			
+			# 移动持有的note
 			match holding_note_type:
 				editor.NOTE_TYPE.CRASH:
-					if !note_map.has(note_pos):
+					if !note_overlapped(holding_note, note_pos):
 						move_note(holding_note, note_pos);
 				editor.NOTE_TYPE.SLIDE:
 					if editor.edit_note_type == editor.NOTE_TYPE.SLIDE:
+						note_pos = get_note_pos(event.position, false);
 						var size_x = note_pos.x - holding_note.position.x;
 						if size_x < 0: return;
 						holding_note.size.x = 10 + size_x;
@@ -151,11 +156,19 @@ func _unhandled_input(event):
 					if editor.edit_note_type != editor.NOTE_TYPE.CRASH:
 						editor.choose_note_type(editor.NOTE_TYPE.CRASH);
 
-func get_note_pos(mouse_pos :Vector2):
-	return Vector2(
-		floor_multiple(mouse_pos.x, beat_space),
-		clampf(floor_multiple(mouse_pos.y, size.y/2), 0, size.y/2) + note_margin_vertical
-	);
+func get_note_pos(mouse_pos :Vector2, allow_cross :bool = true) -> Vector2:
+	var y = clampf(floor_multiple(mouse_pos.y, size.y/2), 0, size.y/2) + note_margin_vertical;
+	if allow_cross:
+		return Vector2(floor_multiple(mouse_pos.x, beat_space), y);
+	else:
+		pass;
+		var last_x = size.x;
+		var have_last_x = false;
+		for pos in note_map.keys():
+			if pos.y == holding_note.position.y && pos.x < last_x && pos.x > holding_note.position.x:
+				have_last_x = true;
+				last_x = pos.x;
+		return Vector2(floor_multiple(last_x - beat_space if have_last_x && mouse_pos.x >= last_x else mouse_pos.x, beat_space), y);
 
 func move_flow(p_offset :float):
 	if p_offset < 0: p_offset = 0;
@@ -178,7 +191,7 @@ func add_note(note: Control, note_type): # editor.NOTE_TYPE
 							holding_note = note;
 							holding_note_type = note_type;
 							if holding_note_type == editor.NOTE_TYPE.SLIDE:
-								mouse_offset = -event.position.x;
+								mouse_offset = - event.position.x;
 						else:
 							holding_note = null;
 					MOUSE_BUTTON_RIGHT:
@@ -194,21 +207,27 @@ func add_note(note: Control, note_type): # editor.NOTE_TYPE
 				move_child(note, 0);
 				match holding_note_type:
 					editor.NOTE_TYPE.CRASH:
-						if !note_map.has(note_pos):
+						if !note_overlapped(note, note_pos):
 							move_note(note, note_pos);
 					editor.NOTE_TYPE.SLIDE:
-						note_pos.x += mouse_offset;
+						note_pos.x += 10 + mouse_offset;
+						note_pos = get_note_pos(note_pos);
+						if note_overlapped(note, note_pos): return;
 						move_note(note, note_pos);
-						#if editor.edit_note_type == editor.NOTE_TYPE.SLIDE:
-						#	var size_x = note_pos.x - holding_note.position.x;
-						#	if size_x < 0: return;
-						#	note.size.x = 10 + size_x;
-						#	mouse_offset -= event.relative.x;
-						#else:
-						#	note_pos.x += mouse_offset;
-						#	move_note(note, note_pos);
 	);
 	note_map[note.position] = note;
+
+func note_overlapped(note :Control, pos :Vector2 = note.get_position()) -> bool:
+	var rect = note.get_rect();
+	rect.position = pos;
+	for map_note in note_map.values():
+		if note != map_note && rect.intersects(map_note.get_rect(), true): return true;
+	return false;
+
+func rect_overlapped_note(rect :Rect2) -> bool:
+	for map_note in note_map.values():
+		if rect.intersects(map_note.get_rect(), true): return true;
+	return false;
 
 func move_note(note :Control, pos :Vector2):
 	note_map.erase(note.position);
