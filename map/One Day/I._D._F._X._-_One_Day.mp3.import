@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bcjt637mfcm5k"
+path="res://.godot/imported/I._D._F._X._-_One_Day.mp3-22888794eefa7771aeb432caa3d109e8.mp3str"
+
+[deps]
+
+source_file="res://map/One Day/I._D._F._X._-_One_Day.mp3"
+dest_files=["res://.godot/imported/I._D._F._X._-_One_Day.mp3-22888794eefa7771aeb432caa3d109e8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
