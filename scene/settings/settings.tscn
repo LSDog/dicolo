@@ -274,7 +274,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_nlk63")
 libraries = {
 "": SubResource("AnimationLibrary_3u46d")
 }
-blend_times = [&"hide", &"show", 0.2, &"hide", &"hide", 0.2]
+blend_times = [&"hide", &"hide", 0.2, &"hide", &"show", 0.2]
 
 [node name="Label" type="Label" parent="FloatBar"]
 layout_mode = 1

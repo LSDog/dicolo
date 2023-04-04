@@ -7,12 +7,10 @@ extends Control
 @export var max_delay :float = 0.05;
 
 @export_category("Timing")
-## 音符在击打前多久开始出现动画
-@export var note_before_time :float = 0.5;
-## 音符在多久后消失
-@export var note_remove :float = 1;
-## 音符在消失前多久开始消失动画
-@export var note_temove_time :float = 0.25;
+## 预处理时间，相当于“音符在击打前多久开始出现动画”
+@export var event_before_time :float = 0.5;
+## 音符在多久后消失(包含淡出等动画时间)
+@export var note_after_time :float = 0.35;
 
 @export_category("Judge")
 ## Fine
@@ -70,6 +68,8 @@ var trackr_path :Path2D;
 @onready var background := $Panel/Background;
 var texture_crash = preload("res://image/texture/crash.svg");
 var texture_follow = preload("res://image/texture/follow.svg");
+var tecture_line_crash = preload("res://image/texture/crash_line.svg");
+var tecture_slide = preload("res://image/texture/slide_line.svg");
 
 var countdown_word := ["①","②","⑨"];
 
@@ -160,6 +160,14 @@ func pre_start():
 	#var bg_dark_tween = $Panel/Mask.create_tween();
 	create_tween().tween_property($Panel/Mask, "color:a", 0.25, 1.5).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
 	
+	# Track旋转
+	var trackl_start_tween = trackl.create_tween();
+	trackl_start_tween.tween_property(trackl, "rotation", 0.0, 1.5).from(1.0
+		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
+	var trackr_start_tween = trackr.create_tween();
+	trackr_start_tween.tween_property(trackr, "rotation", 0.0, 1.5).from(-1.0
+		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
+	
 	# Ct移动
 	var playground_size = $PlayGround.size;
 	var ctl_start_tween = ctl.create_tween();
@@ -168,7 +176,6 @@ func pre_start():
 	var ctr_start_tween = ctr.create_tween();
 	ctr_start_tween.tween_property(ctr, "position", Vector2(playground_size.x/3.0*2.0, playground_size.y/2.0), 1.5
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
-	
 	ctr_start_tween.finished.connect(start);
 	# ▼▼▼ 这里动画结束进入 start
 
@@ -269,29 +276,29 @@ func _process(delta):
 					play_time = play_time - play_time_delay;
 					print("[play] delay",play_time_delay," > ",max_delay," --> reset-play_time=",audio_pos);
 				
-				# 生成音符
+				# 预处理event
 				while event_index < beatmap.events.size():
 					# 这种方法永远会多获取一个event，然后才在发现时机未到后break出循环，可缓存优化
 					var event :BeatMap.Event = beatmap.events[event_index];
-					if event.time <= play_time:
+					if play_time + event_before_time >= event.time:
 						# 判断Event是否为Note
 						if event is BeatMap.Event.Note:
 							# 场景里生成note
 							var canvasItems = generate_note(event);
 							# 塞到待判定音符里
 							waiting_notes[event_index] = [event, canvasItems];
-						else:
-							# 处理事件
-							handle_event(event);
 						event_index += 1;
 					else:
 						break;
 				
-				# 消去音符
+				# 处理event
 				for wait_index in waiting_notes:
-					# 这里的“当前时间与出现时间的差值”大于1的时候直接remove_note，应改为先动画再移除
-					if play_time - (waiting_notes[wait_index][0] as BeatMap.Event.Note).time > 1:
-						remove_note(wait_index);
+					var event = waiting_notes[wait_index][0];
+					if play_time > event.time + event.keep_time:
+						if event is BeatMap.Event.Note:
+							remove_note(wait_index);
+						else:
+							handle_event(event);
 				
 				$Panel/DebugLabel.text = "Play: %.2f || Audio: %.2f || Video: %.2f" % [play_time,audio_pos,video_pos];
 	
@@ -331,7 +338,7 @@ func generate_note(note :RefCounted) -> Array:
 	#note = note as BeatMap.Event.Note;
 	print(note.event_type, play_time);
 	var track = get_track(note);
-	var path = track.get_child(0); # 获取 path2D 记得放在第一位
+	var path :Path2D = track.get_child(0) as Path2D; # 获取 path2D 记得放在第一位
 	match note.event_type:
 		"Crash":
 			var follow := PathFollow2D.new();
@@ -342,9 +349,82 @@ func generate_note(note :RefCounted) -> Array:
 			crash.scale.x = 0.2;
 			crash.scale.y = 0.2;
 			follow.add_child(crash);
-			return[follow];
-			
+			show_animation(follow);
+			return [follow];
+		"LineCrash":
+			var follow_start := PathFollow2D.new();
+			var follow_end := PathFollow2D.new();
+			path.add_child(follow_start);
+			path.add_child(follow_end);
+			follow_start.progress_ratio = note.deg/360.0;
+			follow_end.progress_ratio = note.deg_end/360.0;
+			var crash := Sprite2D.new();
+			crash.texture = texture_crash;
+			crash.scale.x = 0.2;
+			crash.scale.y = 0.2;
+			follow_start.add_child(crash);
+			follow_end.add_child(crash.duplicate());
+			var line := Line2D.new();
+			var points = get_points_from_curve(
+				trackl_path.curve if note.side == note.SIDE.LEFT else trackr_path.curve, 
+				note.deg/360.0, note.deg_end/360.0
+			);
+			line.points = points;
+			line.width = 14;
+			line.texture = tecture_line_crash;
+			line.texture_mode = Line2D.LINE_TEXTURE_TILE;
+			line.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED;
+			path.add_child(line);
+			show_animation(follow_start);
+			show_animation(follow_end);
+			show_animation(line);
+			return [follow_start, line, follow_end];
+		"Slide":
+			var follow_start := PathFollow2D.new();
+			var follow_end := PathFollow2D.new();
+			path.add_child(follow_start);
+			path.add_child(follow_end);
+			follow_start.progress_ratio = note.deg/360.0;
+			follow_end.progress_ratio = note.deg_end/360.0;
+			var crash := Sprite2D.new();
+			crash.texture = texture_crash;
+			crash.scale.x = 0.2;
+			crash.scale.y = 0.2;
+			follow_start.add_child(crash);
+			follow_end.add_child(crash.duplicate());
+			var line := Line2D.new();
+			var points = get_points_from_curve(
+				trackl_path.curve if note.side == note.SIDE.LEFT else trackr_path.curve, 
+				note.deg/360.0, note.deg_end/360.0
+			);
+			line.points = points;
+			line.width = 37;
+			line.texture = tecture_slide;
+			line.texture_mode = Line2D.LINE_TEXTURE_TILE;
+			line.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED;
+			path.add_child(line);
+			show_animation(follow_start);
+			show_animation(follow_end);
+			show_animation(line);
+			return [follow_start, line, follow_end];
 	return [];
+
+func show_animation(node :Node):
+	node.create_tween().tween_property(node, "modulate:a", 1.0, event_before_time/3.0).from(0.0
+		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
+	var hint_node := node.duplicate();
+	hint_node.position = Vector2.ZERO;
+	hint_node.rotation = 0;
+	node.get_parent().add_child(hint_node);
+	hint_node.modulate.a = 0.2;
+	hint_node.modulate.v = 0.5;
+	hint_node.modulate.s = 1;
+	#hint_node.z_index = -1;
+	var tween = hint_node.create_tween();
+	tween.finished.connect(func():
+		hint_node.queue_free();
+	);
+	tween.tween_property(hint_node, "scale", Vector2(1.0,1.0), event_before_time).from(Vector2(3.0,3.0));
 
 ## 删掉waiting_note[index]的全部玩意儿
 func remove_note(wait_index :int) :
@@ -360,7 +440,20 @@ func remove_note(wait_index :int) :
 	
 	# 删掉所有 canvasItem
 	for item in canvas_items:
-		path.remove_child(item);
-		item.queue_free();
+		var tween := create_tween().bind_node(item);
+		tween.finished.connect(func():
+			item.queue_free();
+		);
+		tween.tween_property(item, "modulate:a", 0.0, note_after_time
+		).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD);
 	
 	waiting_notes.erase(wait_index);
+
+func get_points_from_curve(curve :Curve2D, start_ratio :float = 0, end_ratio :float = 1):
+	while start_ratio < 0: start_ratio += 1;
+	while end_ratio < 0: end_ratio += 1;
+	var curve_points = curve.get_baked_points();
+	var point_count = curve_points.size();
+	var start = (start_ratio if start_ratio < end_ratio else end_ratio) * point_count;
+	var end = (start_ratio if start_ratio > end_ratio else end_ratio) * point_count;
+	return curve_points.slice(ceili(start), floori(end));

@@ -100,21 +100,26 @@ func add_note(time :float, note_string :String):
 			events.append(Event.Note.Crash.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
-				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float()
+				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
+				0 if (note_split.size() < 4 || !note_split[3].is_valid_float()) else note_split[3]
 			));
 		"l": #line-crash
 			events.append(Event.Note.LineCrash.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
-				0.0 if !note_split[3].is_valid_float() else note_split[3].to_float()
+				0.0 if !note_split[3].is_valid_float() else note_split[3].to_float(), \
+				0 if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4]
 			));
 		"s": # slide
+			var p_deg = 0.0 if !note_split[2].is_valid_float() else note_split[2].to_float();
+			var p_deg_end = 0.0 if !note_split[3].is_valid_float() else note_split[3].to_float();
 			events.append(Event.Note.Slide.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
-				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
-				0.0 if !note_split[3].is_valid_float() else note_split[3].to_float()
+				p_deg, p_deg_end, \
+				# 未指定时自动算slide时间
+				abs(p_deg - p_deg_end) / 360.0 / (bpm / 170) if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4]
 			));
 
 
@@ -126,32 +131,38 @@ class Event:
 	## 执行的时间(s)
 	var time :float;
 	
+	## 开始消失前保持的时间(s)
+	var keep_time :float = 0.0;
+	
 	## 所在track的位置
 	var side :int;
 	## 位置常量
 	enum SIDE {OTHER=-1, LEFT=0, RIGHT=1}
 	
-	func _init(p_time :float, p_side :int = SIDE.OTHER):
+	func _init(p_time :float, p_side :int = SIDE.OTHER, p_keep_time :float = 0.0):
 		self.time = p_time;
 		self.side = p_side;
+		self.keep_time = p_keep_time;
 	
 	## 音符
 	class Note:
 		extends Event;
 		
-		func _init(p_time :float, p_side :int):
+		func _init(p_time :float, p_side :int, p_keep_time :float = 0.0):
 			super._init(p_time, p_side);
-			event_type = "Note";
+			self.event_type = "Note";
+			self.keep_time = p_keep_time;
 		
 		class Crash:
 			extends Note;
 			
 			var deg :float;
 			
-			func _init(p_time :float, p_side :int, p_deg :float):
+			func _init(p_time :float, p_side :int, p_deg :float, p_keep_time :float = 0.0):
 				super._init(p_time, p_side);
 				self.deg = p_deg;
-				event_type = "Crash";
+				self.event_type = "Crash";
+				self.keep_time = p_keep_time;
 		
 		class LineCrash:
 			extends Note;
@@ -159,11 +170,12 @@ class Event:
 			var deg :float;
 			var deg_end :float;
 			
-			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float):
+			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float, p_keep_time :float = 0.0):
 				super._init(p_time, p_side);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				event_type = "LineCrash";
+				self.event_type = "LineCrash";
+				self.keep_time = p_keep_time;
 		
 		class Slide:
 			extends Note;
@@ -171,11 +183,12 @@ class Event:
 			var deg :float;
 			var deg_end :float;
 			
-			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float):
+			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float, p_keep_time :float = 0.0):
 				super._init(p_time, p_side);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				event_type = "Slide";
+				self.event_type = "Slide";
+				self.keep_time = p_keep_time;
 	
 	## 开始
 	class Start:
