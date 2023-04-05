@@ -2,6 +2,9 @@
 class_name BeatMap
 extends Resource
 
+## 音符类型
+enum EVENT_TYPE {None, Note, Crash, LineCrash, Slide, Start, Bpm, End};
+
 ## 是否加载完毕
 var loaded :bool = false;
 
@@ -15,12 +18,8 @@ var mapper :String;
 var level :String;
 ## 音频文件路径
 var audio_path :String;
-## 音频
-#var audio :AudioStream;
 ## 视频文件路径
 var video_path :String;
-## 视频
-#var video :VideoStream;
 ## 默认Bpm
 var bpm :float;
 ## 背景图片路径
@@ -28,7 +27,9 @@ var bg_image_path :String;
 ## 背景图片
 var bg_image :Texture2D;
 ## 音符/事件等
-var events :Array = [];
+var events :Array[Event] = [];
+## 开始时间（来自第一个event的时间）
+var start_time :float;
 
 ## 构造器。需要当前铺面目录和已经打开的 [FileAccess] ([method FileAccess.open])
 func _init(dir :String, file :FileAccess):
@@ -72,6 +73,7 @@ func _init(dir :String, file :FileAccess):
 				"events":
 					in_event = true;
 	file.close();
+	start_time = 0 if events.size() < 0 else events[0].time;
 	loaded = true;
 
 ## 接受1行带时间的event形式，如 "0.6 _start" 或 "1.93 c/l/-135 c/r/-90"
@@ -126,7 +128,7 @@ func add_note(time :float, note_string :String):
 class Event:
 	
 	# Event 类型（get_class不能用）
-	var event_type = "Event";
+	var event_type = EVENT_TYPE.None;
 	
 	## 执行的时间(s)
 	var time :float;
@@ -150,7 +152,7 @@ class Event:
 		
 		func _init(p_time :float, p_side :int, p_keep_time :float = 0.0):
 			super._init(p_time, p_side);
-			self.event_type = "Note";
+			self.event_type = EVENT_TYPE.Note;
 			self.keep_time = p_keep_time;
 		
 		class Crash:
@@ -159,10 +161,9 @@ class Event:
 			var deg :float;
 			
 			func _init(p_time :float, p_side :int, p_deg :float, p_keep_time :float = 0.0):
-				super._init(p_time, p_side);
+				super._init(p_time, p_side, p_keep_time);
 				self.deg = p_deg;
-				self.event_type = "Crash";
-				self.keep_time = p_keep_time;
+				self.event_type = EVENT_TYPE.Crash;
 		
 		class LineCrash:
 			extends Note;
@@ -171,11 +172,10 @@ class Event:
 			var deg_end :float;
 			
 			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float, p_keep_time :float = 0.0):
-				super._init(p_time, p_side);
+				super._init(p_time, p_side, p_keep_time);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				self.event_type = "LineCrash";
-				self.keep_time = p_keep_time;
+				self.event_type = EVENT_TYPE.LineCrash;
 		
 		class Slide:
 			extends Note;
@@ -184,18 +184,17 @@ class Event:
 			var deg_end :float;
 			
 			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float, p_keep_time :float = 0.0):
-				super._init(p_time, p_side);
+				super._init(p_time, p_side, p_keep_time);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				self.event_type = "Slide";
-				self.keep_time = p_keep_time;
+				self.event_type = EVENT_TYPE.Slide;
 	
 	## 开始
 	class Start:
 		extends Event;
 		func _init(p_time :float):
 			super._init(p_time, SIDE.OTHER);
-			event_type = "Start";
+			event_type = EVENT_TYPE.Start;
 	
 	## bpm更改
 	class Bpm:
@@ -206,5 +205,5 @@ class Event:
 		func _init(p_time :float, p_bpm :float):
 			super._init(p_time, SIDE.OTHER);
 			self.bpm = p_bpm;
-			event_type = "Bpm";
+			event_type = EVENT_TYPE.Bpm;
 	

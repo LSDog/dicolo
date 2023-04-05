@@ -426,6 +426,7 @@ offset_top = 20.0
 offset_right = 4096.0
 offset_bottom = 20.28
 script = ExtResource("10_5ox8q")
+offset = 0.0
 metadata/_edit_use_anchors_ = true
 
 [node name="Edit" type="Panel" parent="Editor"]

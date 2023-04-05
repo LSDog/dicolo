@@ -16,6 +16,8 @@ var joypad_id = -1;
 
 func _ready():
 	
+	print(BeatMap.EVENT_TYPE.find_key(0));
+	
 	start_time = Time.get_unix_time_from_system();
 	
 	get_tree().root.size_changed.connect(func():

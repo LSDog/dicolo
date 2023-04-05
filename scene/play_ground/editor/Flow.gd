@@ -1,8 +1,10 @@
 @tool
+class_name EditorFlow
 extends Panel
 
-@onready var editor :Control = get_parent();
+@onready var editor := get_parent() as Editor;
 @onready var note_crash_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_crash.stylebox");
+@onready var note_line_crash_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_line_crash.stylebox");
 @onready var note_slide_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_slide.stylebox");
 
 @export var outline_color := Color.LIGHT_YELLOW;
@@ -12,28 +14,31 @@ extends Panel
 
 signal flow_changed;
 
+## 两小节线间距离
 @export var bar_space := 120.0:
 	set(value):
 		bar_space = value;
 		flow_changed.emit();
+## 一小节有几拍
 @export_range(1,8) var beat_count :int = 4:
 	set(value):
 		beat_count = value;
 		flow_changed.emit();
-
+## 每拍间距离
 var beat_space :float = bar_space/beat_count;
-
-@export_range(0, 4096) var offset := 0.0:
+## 偏移值(播放进度)
+var offset := 0.0:
 	set(value):
 		offset = value;
 		position.x = -offset;
-		queue_redraw();
 
+## 鼠标拖动偏移值
 var mouse_offset := 0.0;
+## 控制中的note
 var holding_note :Control;
-var holding_note_type ;#:editor.NOTE_TYPE
-var barrier_touched :bool = false;
-var barrier_note_pos :Vector2;
+## 控制中的note的type
+var holding_note_type :BeatMap.EVENT_TYPE = 0;
+## 所有的note {位置: Vector2, 位置: Note}
 var note_map :Dictionary = {};
 
 func _ready():
@@ -41,44 +46,36 @@ func _ready():
 		beat_space = bar_space/beat_count;
 		queue_redraw();
 	);
-	pass
 
-func _process(delta):
-	pass
-
+## 画节拍线，老方法是只画可见部分的节拍线，改为一次全画
 func _draw():
 	
-	# 绘制边框
-	var visible_rect := editor.get_rect().intersection(get_rect());
-	visible_rect.position.x = -position.x;
-	visible_rect.position.y = 0;
-	var middle_line_start := Vector2(visible_rect.position.x, visible_rect.size.y/2);
-	var middle_line_end := Vector2(visible_rect.position.x+visible_rect.size.x, middle_line_start.y);
-	draw_rect(visible_rect, outline_color, false, 3);
-	draw_line(middle_line_start, middle_line_end, outline_color, 3)
+	var scroll_page := editor.playground.get_rect().size.x;
+	var rect := get_global_rect();
 	
 	# 绘制节拍线
-	var h := visible_rect.size.y;
-	var d_offset := fmod(-offset, -bar_space);
-	var d_now := -position.x;
-	var d_end := visible_rect.size.x - position.x;
-	while d_now <= d_end + bar_space: # 多画一小节
-		draw_line(
-			Vector2(d_now + d_offset, 0),
-			Vector2(d_now + d_offset, h),
-			barline_color, 1.5, true
-		);
-		var beat_space_current := 0.0;
-		while beat_space_current <= bar_space:
+	var h := rect.size.y;
+	var x := editor.get_length_in_flow(editor.playground.beatmap.start_time);
+	print("beat map start time -> x = ", x);
+	while x > 0: x -= bar_space
+	while x <= size.x:
+		# 小节线
+		if x > 0.0:
 			draw_line(
-				Vector2(d_now + beat_space_current + d_offset, 0),
-				Vector2(d_now + beat_space_current + d_offset, h),
+				Vector2(x, 0),
+				Vector2(x, h),
+				barline_color, 1.5, true
+			);
+		# 每拍线
+		var beat_x := 0.0;
+		while x + beat_x <= size.x && beat_x <= bar_space:
+			draw_line(
+				Vector2(x + beat_x, 0),
+				Vector2(x + beat_x, h),
 				beatline_color, 1, true
 			);
-			beat_space_current += beat_space;
-		d_now += bar_space;
-
-
+			beat_x += beat_space;
+		x += bar_space;
 
 func _gui_input(event):
 	
@@ -90,24 +87,12 @@ func _gui_input(event):
 				
 				var note_pos = get_note_pos(event.position);
 				if rect_overlapped_note(Rect2(note_pos, Vector2.ZERO)): return; # 当前位置存在note则忽略
-				#if note_map.has(note_pos): return;
 				
 				holding_note_type = editor.edit_note_type;
 				
-				var panel_note := Panel.new();
-				panel_note.name = 'n' + str(holding_note_type);
-				panel_note.position = note_pos;
-				panel_note.size = Vector2(10, size.y/2 - note_margin_vertical*2);
+				var note_panel = add_note(holding_note_type, note_pos);
 				
-				match holding_note_type:
-					editor.NOTE_TYPE.CRASH:
-						panel_note.add_theme_stylebox_override("panel", note_crash_stylebox);
-					editor.NOTE_TYPE.SLIDE:
-						panel_note.add_theme_stylebox_override("panel", note_slide_stylebox);
-				
-				add_note(panel_note, holding_note_type);
-				
-				holding_note = panel_note;
+				holding_note = note_panel;
 				
 			else:
 				
@@ -115,6 +100,7 @@ func _gui_input(event):
 				mouse_offset = 0;
 		
 		"InputEventMouseMotion":
+			# 移动持有的note
 			event = event as InputEventMouseMotion;
 			
 			var note_pos = get_note_pos(event.position);
@@ -127,13 +113,9 @@ func _gui_input(event):
 			
 			if holding_note == null: return;
 			
-			# 移动持有的note
 			match holding_note_type:
-				editor.NOTE_TYPE.CRASH:
-					if !note_overlapped(holding_note, note_pos):
-						move_note(holding_note, note_pos);
-				editor.NOTE_TYPE.SLIDE:
-					if editor.edit_note_type == editor.NOTE_TYPE.SLIDE:
+				BeatMap.EVENT_TYPE.Slide:
+					if editor.edit_note_type == BeatMap.EVENT_TYPE.Slide:
 						note_pos = get_note_pos(event.position, false);
 						var size_x = note_pos.x - holding_note.position.x;
 						if size_x < 0: return;
@@ -142,19 +124,32 @@ func _gui_input(event):
 					else:
 						note_pos.x += mouse_offset;
 						move_note(holding_note, note_pos);
+				_:
+					if !note_overlapped(holding_note, note_pos):
+						move_note(holding_note, note_pos);
 
 
 func _unhandled_input(event):
 	match event.get_class():
 		"InputEventKey":
 			event = event as InputEventKey;
+			return;
 			match event.keycode:
-				KEY_TAB:
-					editor.choose_note_type(editor.NOTE_TYPE.SLIDE);
+				KEY_1:
+					editor.choose_note_type(BeatMap.EVENT_TYPE.Crash);
 					accept_event();
 				_:
-					if editor.edit_note_type != editor.NOTE_TYPE.CRASH:
-						editor.choose_note_type(editor.NOTE_TYPE.CRASH);
+					if editor.edit_note_type != BeatMap.EVENT_TYPE.Crash:
+						editor.choose_note_type(BeatMap.EVENT_TYPE.Crash);
+
+func get_note_pos_y(side :BeatMap.Event.SIDE) -> float:
+	match side:
+		BeatMap.Event.SIDE.LEFT:
+			return 0.0 + note_margin_vertical;
+		BeatMap.Event.SIDE.RIGHT:
+			return size.y/2 + note_margin_vertical;
+		_:
+			return size.y;
 
 func get_note_pos(mouse_pos :Vector2, allow_cross :bool = true) -> Vector2:
 	var y = clampf(floor_multiple(mouse_pos.y, size.y/2), 0, size.y/2) + note_margin_vertical;
@@ -170,52 +165,72 @@ func get_note_pos(mouse_pos :Vector2, allow_cross :bool = true) -> Vector2:
 				last_x = pos.x;
 		return Vector2(floor_multiple(last_x - beat_space if have_last_x && mouse_pos.x >= last_x else mouse_pos.x, beat_space), y);
 
-func move_flow(p_offset :float):
-	if p_offset < 0: p_offset = 0;
-	offset = p_offset;
-	queue_redraw();
-
-func add_note(note: Control, note_type): # editor.NOTE_TYPE
+func add_note(
+		note_type: BeatMap.EVENT_TYPE,
+		p_note_pos: Vector2,
+		p_size :Vector2 = Vector2(10, size.y/2 - note_margin_vertical*2)
+	) -> Panel:
+	
+	var note := Panel.new();
+	#note.name = 'note_' + BeatMap.EVENT_TYPE.find_key(note_type);
+	note.position = p_note_pos;
+	note.size = p_size;
+	
+	match note_type:
+		BeatMap.EVENT_TYPE.Crash:
+			note.add_theme_stylebox_override("panel", note_crash_stylebox);
+		BeatMap.EVENT_TYPE.LineCrash:
+			note.add_theme_stylebox_override("panel", note_line_crash_stylebox);
+		BeatMap.EVENT_TYPE.Slide:
+			note.add_theme_stylebox_override("panel", note_slide_stylebox);
+		_:
+			print("not support note type in edtor: ", note_type);
+			return;
 	
 	add_child(note);
 	
+	# note 自己的点击事件等
 	note.gui_input.connect(func(event):
 		
 		match event.get_class():
 			
 			"InputEventMouseButton":
-				event = event as InputEventMouseButton;
 				match event.button_index:
+					# 开始拖动note
 					MOUSE_BUTTON_LEFT:
 						if event.pressed:
 							holding_note = note;
 							holding_note_type = note_type;
-							if holding_note_type == editor.NOTE_TYPE.SLIDE:
+							if holding_note_type == BeatMap.EVENT_TYPE.Slide:
 								mouse_offset = - event.position.x;
 						else:
 							holding_note = null;
+					# 删除note
 					MOUSE_BUTTON_RIGHT:
 						if event.pressed:
 							remove_note(note);
 			
-			"InputEventMouseMotion": # 移动持有的note
-				event = event as InputEventMouseMotion;
+			"InputEventMouseMotion":
+				# 拖动持有的note
 				
 				if holding_note == null || holding_note != note: return;
-				var note_pos = get_note_pos(event.global_position);
+				var note_pos = event.global_position;
 				note_pos.x += offset;
+				note_pos = get_note_pos(note_pos);
 				move_child(note, 0);
+				
 				match holding_note_type:
-					editor.NOTE_TYPE.CRASH:
+					_:
 						if !note_overlapped(note, note_pos):
 							move_note(note, note_pos);
-					editor.NOTE_TYPE.SLIDE:
+					BeatMap.EVENT_TYPE.Slide:
 						note_pos.x += 10 + mouse_offset;
 						note_pos = get_note_pos(note_pos);
 						if note_overlapped(note, note_pos): return;
 						move_note(note, note_pos);
 	);
 	note_map[note.position] = note;
+	return note;
 
 func note_overlapped(note :Control, pos :Vector2 = note.get_position()) -> bool:
 	var rect = note.get_rect();
@@ -239,9 +254,6 @@ func remove_note(note :Control):
 	note_map.erase(note.position);
 	remove_child(note);
 	note = null;
-
-func round_multiple(value :float, round :float) -> float:
-	return roundf(value/round) * round;
 
 func floor_multiple(value :float, round :float) -> float:
 	return floorf(value/round) * round;

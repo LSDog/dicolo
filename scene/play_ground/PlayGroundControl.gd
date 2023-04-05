@@ -1,3 +1,4 @@
+class_name PlayGroundControl
 extends Control
 
 @export_category("Setting")
@@ -7,18 +8,18 @@ extends Control
 @export var max_delay :float = 0.05;
 
 @export_category("Timing")
-## 预处理时间，相当于“音符在击打前多久开始出现动画”
-@export var event_before_time :float = 0.5;
-## 音符在多久后消失(包含淡出等动画时间)
-@export var note_after_time :float = 0.35;
+## 预处理拍数，相当于“音符在击打前多久开始出现动画”
+@export var event_before_beat :float = 2;
+## 音符在几拍后消失(包含淡出等动画时间)
+@export var note_after_beat :float = 1;
 
 @export_category("Judge")
 ## Fine
 @export var judge_before :float = 0.1;
 
+## 游玩模式
 var play_mode;
 enum PLAY_MODE {PLAY, EDIT};
-
 
 ## 铺面
 var beatmap :BeatMap;
@@ -27,6 +28,10 @@ var event_index :int = 0;
 ## 在场的（等待判定）的音符和相关canvas结点。结构 [codeblock] 
 ## {8:[Note,[PathFollow2D]], 9:[Note,[PathFollow2D, Line2D, PathFollow2D]} [/codeblock]
 var waiting_notes := {};
+## 当前bpm
+var bpm :float;
+## 动画的tween们
+var anim_tweens :Array[Tween] = [];
 
 ## 游戏是否开始，开始前不允许暂停
 var started := false;
@@ -36,12 +41,14 @@ var paused := false;
 var ended := false;
 ## 是否有背景视频
 var has_video := false;
+## 是否为跳转后状态
+var jumped := false;
 
 ## 当前音乐(若有视频则为视频)播放的时间（秒）
 var stream_time := 0.0;
-## 开始时间
+## 开始时间戳
 var start_time := 0.0;
-## 演奏时间
+## 演奏总时间
 var play_time := 0.0;
 
 # 左侧准心
@@ -63,18 +70,31 @@ var trackr_mesh :MeshInstance2D;
 var trackr_center :Vector2;
 var trackr_path :Path2D;
 
-@onready var audio_player := $Panel/AudioPlayer;
-@onready var video_player := $Panel/VideoPlayer;
-@onready var background := $Panel/Background;
+@onready var bgpanel := $BGPanel;
+@onready var audio_player := $BGPanel/AudioPlayer;
+@onready var video_player := $BGPanel/VideoPlayer;
+@onready var background := $BGPanel/Background;
+@onready var playground := $PlayGround;
+
 var texture_crash = preload("res://image/texture/crash.svg");
 var texture_follow = preload("res://image/texture/follow.svg");
 var tecture_line_crash = preload("res://image/texture/crash_line.svg");
 var tecture_slide = preload("res://image/texture/slide_line.svg");
 
-var countdown_word := ["①","②","⑨"];
-
 ## 铺面加载完毕
-signal loaded;
+signal map_loaded;
+## 开始播放
+signal play_start;
+## 暂停
+signal play_pause;
+## 恢复
+signal play_resume;
+## 跳转
+signal play_jump(time:float);
+## 重开
+signal play_restart;
+## 结束
+signal play_end;
 
 func _ready():
 	
@@ -82,15 +102,19 @@ func _ready():
 	var map_file = FileAccess.open("res://map/HareHareYukai/map_normal.txt", FileAccess.READ);
 	print("[PlayGround] result: ", map_file, ": ", error_string(FileAccess.get_open_error()));
 	beatmap = BeatMap.new("res://map/HareHareYukai", map_file);
-	print("[PlayGround] loaded: ", beatmap);
+	print("[PlayGround] map_loaded: ", beatmap);
 	map_file = null;
 	
+	background.texture = beatmap.bg_image;
 	audio_player.stream = load(beatmap.audio_path);
 	video_player.stream = load(beatmap.video_path);
-	background.texture = beatmap.bg_image;
-	$Panel/DebugLabel.text = "debug text..."
-	
 	has_video = false if video_player.stream == null else true;
+	$BGPanel/DebugLabel.text = "debug text..."
+	
+	bpm = beatmap.bpm;
+	print("Default bpm = ", bpm);
+	print("One Beat = ", get_beat_time(), "s");
+	
 	
 	$MenuButton.pressed.connect(func():
 		if !paused: pause();
@@ -102,14 +126,12 @@ func _ready():
 		var playGroundScene = get_tree().current_scene;
 		Global.unfreeze(Global.scene_MainMenu);
 		Global.scene_MainMenu.visible = true;
-		#get_tree().root.add_child(Global.scene_MainMenu);
-		#get_tree().root.move_child(Global.scene_MainMenu, get_tree().root.get_child_count()-1);
 		get_tree().current_scene = Global.scene_MainMenu;
 		get_tree().root.remove_child(playGroundScene);
 		playGroundScene.queue_free();
 	)
 	$Pause/Content/Back.pressed.connect(resume);
-	$Pause/Content/Retry.pressed.connect(retry);
+	$Pause/Content/Restart.pressed.connect(restart);
 	
 	# 初始化控制柄
 	ctl = $PlayGround/CtL as RigidBody2D;
@@ -124,56 +146,36 @@ func _ready():
 	audio_player.finished.connect(end);# 音乐结束之后进入end
 	video_player.finished.connect(end);# 或者视频结束之后进入end
 	
-	loaded.emit();
+	map_loaded.emit();
 	
 	pre_start.call_deferred();
 	# ▼▼▼ 这里初始化结束进入 pre_start
 
 func pre_start():
 	
-	#$Animation.play("pre_start");
-	
 	trackl_center = trackl.position;
 	trackr_center = trackr.position;
 	
-	# 倒数
-	#var timer := Timer.new();
-	#add_child(timer);
-	#timer.start(1)
-	#var time_left := 3;
-	#
-	#while time_left > 0:
-	#	
-	#	time_left -= 1;
-	#	print(time_left)
-	#	$Panel/CountDownText.text = countdown_word[time_left]
-	#	var text_tween = create_tween();
-	#	text_tween.tween_property($Panel/CountDownText, "modulate:a8", 0, 1).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
-	#	if time_left > 0: text_tween.tween_callback(func(): $Panel/CountDownText.modulate.a8 = 150)
-	#	
-	#	await timer.timeout;
-	#timer.stop();
-	
+	# 为了演示加的延迟 记得删
 	await get_tree().create_timer(1).timeout;
 	
 	# 遮罩变暗
-	#var bg_dark_tween = $Panel/Mask.create_tween();
-	create_tween().tween_property($Panel/Mask, "color:a", 0.25, 1.5).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
+	create_anim_tween().tween_property($BGPanel/Mask, "color:a", 0.4, 1.5).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
 	
 	# Track旋转
-	var trackl_start_tween = trackl.create_tween();
+	var trackl_start_tween = create_anim_tween();
 	trackl_start_tween.tween_property(trackl, "rotation", 0.0, 1.5).from(1.0
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
-	var trackr_start_tween = trackr.create_tween();
+	var trackr_start_tween = create_anim_tween();
 	trackr_start_tween.tween_property(trackr, "rotation", 0.0, 1.5).from(-1.0
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
 	
 	# Ct移动
 	var playground_size = $PlayGround.size;
-	var ctl_start_tween = ctl.create_tween();
+	var ctl_start_tween = create_anim_tween();
 	ctl_start_tween.tween_property(ctl, "position", Vector2(playground_size.x/3.0*1.0, playground_size.y/2.0), 1.5
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
-	var ctr_start_tween = ctr.create_tween();
+	var ctr_start_tween = create_anim_tween();
 	ctr_start_tween.tween_property(ctr, "position", Vector2(playground_size.x/3.0*2.0, playground_size.y/2.0), 1.5
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
 	ctr_start_tween.finished.connect(start);
@@ -182,30 +184,81 @@ func pre_start():
 func start():
 	if has_video:
 		# 背景变更黑
-		create_tween().tween_property(background, "modulate:v", 0.3, 2).from_current().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
+		create_anim_tween().tween_property(background, "modulate:v", 0.3, 2).from_current().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
 		# 开始视频
 		video_player.play();
 		# 淡入视频
-		create_tween().tween_property(video_player, "modulate:a", 1.0, 1).from(0.0).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
+		create_anim_tween().tween_property(video_player, "modulate:a", 1.0, 1).from(0.0).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
 	# 开始音频
 	audio_player.play();
 	started = true;
 	start_time = Time.get_unix_time_from_system();
+	
+	play_start.emit();
 
 func pause():
 	if !started: return;
+	
 	paused = true;
 	video_player.paused = true;
 	audio_player.stream_paused = true;
 	$Pause.visible = true;
+	pause_anim_tweens();
+	
+	play_pause.emit();
 
 func resume():
+	
 	$Pause.visible = false;
 	video_player.paused = false;
 	audio_player.stream_paused = false;
 	paused = false;
+	resume_anim_tweens();
+	
+	play_resume.emit();
 
-func retry():
+func jump(time :float):
+	
+	if ended: ended = false;
+	
+	for i in waiting_notes.keys():
+		remove_note(i);
+	
+	# 获取跳转到的下一个event
+	var last_index := 0;
+	for event in beatmap.events:
+		if event.time >= play_time: break;
+		last_index += 1;
+	event_index = last_index;
+	
+	# 跳转音乐
+	if paused:
+		audio_player.play(time);
+		audio_player.stream_paused = true;
+	else:
+		audio_player.seek(time);
+	play_time = time;
+	print("[Play] Jump to: ", time, " index = ", last_index);
+	
+	if time == 0.0:
+		video_player.stop();
+		video_player.play();
+		video_player.paused = true;
+		pause();
+		jumped = false;
+	else:
+		# 无法跳转视频播放，故暂停
+		video_player.paused = true;
+		jumped = true;
+	
+	stream_time = time;
+	start_time = Time.get_unix_time_from_system() - time;
+	play_time = time;
+	
+	play_jump.emit(time);
+
+func restart():
+	
 	$Pause.visible = false;
 	started = false;
 	paused = false;
@@ -225,13 +278,31 @@ func retry():
 		trackr_path.remove_child(item);
 		item.free();
 	pre_start();
+	
+	play_restart.emit();
 
 func end():
 	if ended: return;
-	print("ended")
+	
+	print("[Play] end!");
 	ended = true;
 	audio_player.stop();
 	video_player.stop();
+	
+	play_end.emit();
+
+func create_anim_tween() -> Tween:
+	var tween = create_tween();
+	anim_tweens.push_back(tween);
+	return tween;
+
+func pause_anim_tweens():
+	for tween in anim_tweens:
+		if tween.is_valid(): tween.pause();
+
+func resume_anim_tweens():
+	for tween in anim_tweens:
+		if tween.is_valid(): tween.play();
 
 func _unhandled_input(event):
 	if event is InputEvent:
@@ -262,7 +333,7 @@ func _process(delta):
 				play_time += delta;
 				
 				# 音频 <- 视频流校准
-				if has_video:
+				if !jumped && has_video:
 					var audio_delay = audio_pos - video_pos;
 					if abs(audio_delay) > max_delay: # 音视频延迟超过校准时间就回调音频
 						# 更新 audio_pos
@@ -280,7 +351,7 @@ func _process(delta):
 				while event_index < beatmap.events.size():
 					# 这种方法永远会多获取一个event，然后才在发现时机未到后break出循环，可缓存优化
 					var event :BeatMap.Event = beatmap.events[event_index];
-					if play_time + event_before_time >= event.time:
+					if play_time + event_before_beat*get_beat_time() >= event.time:
 						# 判断Event是否为Note
 						if event is BeatMap.Event.Note:
 							# 场景里生成note
@@ -300,7 +371,7 @@ func _process(delta):
 						else:
 							handle_event(event);
 				
-				$Panel/DebugLabel.text = "Play: %.2f || Audio: %.2f || Video: %.2f" % [play_time,audio_pos,video_pos];
+				$BGPanel/DebugLabel.text = "Play: %.2f || Audio: %.2f || Video: %.2f" % [play_time,audio_pos,video_pos];
 	
 	else: # 游戏已结束
 		
@@ -323,24 +394,27 @@ func _process(delta):
 		ctr.position = trackr.position + joyr*trackr_mesh.mesh.size/2;
 
 ## 处理音符以外的事件
-func handle_event(event :RefCounted):
+func handle_event(event :BeatMap.Event):
 	event = event as BeatMap.Event;
 	match event.event_type:
 		"Start":
-			print("Notes start!");
+			print("[Event] Start!");
+		"Bpm":
+			bpm = event.bpm;
+			print("[Event] Bpm changed: ", event.bpm);
 
-func get_track(note :RefCounted) -> CanvasItem:
+func get_track(note :BeatMap.Event) -> CanvasItem:
 	return trackl if note.side == note.SIDE.LEFT else (
 		trackr if note.side == note.SIDE.RIGHT else null);
 
 ## 生成音符并返回相关的CanvasItem节点数组，如 [PathFollow2D] 或 [PathFollow2D, Path2D, PathFollow2D]
-func generate_note(note :RefCounted) -> Array:
+func generate_note(note :BeatMap.Event) -> Array:
 	#note = note as BeatMap.Event.Note;
-	print(note.event_type, play_time);
+	print("[Event] ", BeatMap.EVENT_TYPE.find_key(note.event_type), " ", play_time);
 	var track = get_track(note);
 	var path :Path2D = track.get_child(0) as Path2D; # 获取 path2D 记得放在第一位
 	match note.event_type:
-		"Crash":
+		BeatMap.EVENT_TYPE.Crash:
 			var follow := PathFollow2D.new();
 			path.add_child(follow);
 			follow.progress_ratio = note.deg/360.0;
@@ -351,7 +425,7 @@ func generate_note(note :RefCounted) -> Array:
 			follow.add_child(crash);
 			show_animation(follow);
 			return [follow];
-		"LineCrash":
+		BeatMap.EVENT_TYPE.LineCrash:
 			var follow_start := PathFollow2D.new();
 			var follow_end := PathFollow2D.new();
 			path.add_child(follow_start);
@@ -379,7 +453,7 @@ func generate_note(note :RefCounted) -> Array:
 			show_animation(follow_end);
 			show_animation(line);
 			return [follow_start, line, follow_end];
-		"Slide":
+		BeatMap.EVENT_TYPE.Slide:
 			var follow_start := PathFollow2D.new();
 			var follow_end := PathFollow2D.new();
 			path.add_child(follow_start);
@@ -409,8 +483,9 @@ func generate_note(note :RefCounted) -> Array:
 			return [follow_start, line, follow_end];
 	return [];
 
+## 播放出现动画
 func show_animation(node :Node):
-	node.create_tween().tween_property(node, "modulate:a", 1.0, event_before_time/3.0).from(0.0
+	create_anim_tween().tween_property(node, "modulate:a", 1.0, event_before_beat*get_beat_time()/3.0).from(0.0
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
 	var hint_node := node.duplicate();
 	hint_node.position = Vector2.ZERO;
@@ -420,11 +495,12 @@ func show_animation(node :Node):
 	hint_node.modulate.v = 0.5;
 	hint_node.modulate.s = 1;
 	#hint_node.z_index = -1;
-	var tween = hint_node.create_tween();
+	var tween = create_anim_tween();
 	tween.finished.connect(func():
 		hint_node.queue_free();
 	);
-	tween.tween_property(hint_node, "scale", Vector2(1.0,1.0), event_before_time).from(Vector2(3.0,3.0));
+	tween.tween_property(hint_node, "scale", Vector2(1.0,1.0), event_before_beat*get_beat_time()).from(Vector2(3.0,3.0)
+		).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD);
 
 ## 删掉waiting_note[index]的全部玩意儿
 func remove_note(wait_index :int) :
@@ -440,20 +516,40 @@ func remove_note(wait_index :int) :
 	
 	# 删掉所有 canvasItem
 	for item in canvas_items:
-		var tween := create_tween().bind_node(item);
+		var tween := create_anim_tween();
 		tween.finished.connect(func():
 			item.queue_free();
 		);
-		tween.tween_property(item, "modulate:a", 0.0, note_after_time
+		tween.tween_property(item, "modulate:a", 0.0, note_after_beat*get_beat_time()
 		).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD);
 	
 	waiting_notes.erase(wait_index);
 
+## 获得从start“转”到end的所有点，这意味着他可以返回绕好几圈的结果
 func get_points_from_curve(curve :Curve2D, start_ratio :float = 0, end_ratio :float = 1):
-	while start_ratio < 0: start_ratio += 1;
-	while end_ratio < 0: end_ratio += 1;
-	var curve_points = curve.get_baked_points();
-	var point_count = curve_points.size();
-	var start = (start_ratio if start_ratio < end_ratio else end_ratio) * point_count;
-	var end = (start_ratio if start_ratio > end_ratio else end_ratio) * point_count;
-	return curve_points.slice(ceili(start), floori(end));
+	
+	var points :PackedVector2Array = [];
+	var curve_points := curve.get_baked_points();
+	var point_count := curve_points.size();
+	var ratio := start_ratio;
+	var d_radio := 1.0/point_count;
+	
+	if start_ratio < end_ratio:
+		while ratio < end_ratio:
+			points.append(curve_points[roundi(round_multiple(ratio, d_radio)*point_count)]);
+			ratio += d_radio;
+	else:
+		d_radio = -d_radio;
+		while ratio > end_ratio:
+			points.append(curve_points[roundi(round_multiple(ratio, d_radio)*point_count)]);
+			ratio += d_radio;
+	return points;
+
+func get_beat_time() -> float:
+	return 60/bpm;
+
+func get_audio_length() -> float:
+	return audio_player.stream.get_length();
+
+func round_multiple(value :float, round :float) -> float:
+	return roundf(value/round) * round;

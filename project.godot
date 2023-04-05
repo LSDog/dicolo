@@ -12,13 +12,13 @@ config_version=5
 
 config/name="dicolo!"
 run/main_scene="res://scene/main_menu/main_menu.tscn"
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.0", "Mobile")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
 boot_splash/show_image=false
 boot_splash/image="res://image/icon/icon_title.png"
 config/icon="res://image/icon/dicolo!_trans.png"
 config/windows_native_icon="res://image/icon/dicolo!_trans.ico"
-config/quit_on_go_back=false
 
 [autoload]
 
