@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://scene/play_ground/editor/Editor.gd" id="9_rxls6"]
 [ext_resource type="PackedScene" uid="uid://d3uwa2so8ndgb" path="res://scene/virtual_joystick/virtual_joystick.tscn" id="9_sf2y2"]
 [ext_resource type="Script" path="res://scene/play_ground/editor/Flow.gd" id="10_5ox8q"]
-[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://theme/default_theme.tres" id="10_mfl71"]
+[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="11_1w5uc"]
 [ext_resource type="ButtonGroup" uid="uid://cg56w8paqidtx" path="res://scene/play_ground/editor/button_group_note_choose.tres" id="12_w1v2b"]
 
 [sub_resource type="Animation" id="Animation_4ys72"]
@@ -416,7 +416,7 @@ anchor_right = 1.0
 offset_bottom = 10.0
 grow_horizontal = 2
 scale = Vector2(1, 2)
-theme = ExtResource("10_mfl71")
+theme = ExtResource("11_1w5uc")
 
 [node name="Flow" type="Panel" parent="Editor"]
 layout_mode = 1

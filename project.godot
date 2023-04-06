@@ -45,7 +45,7 @@ import/blender/enabled=false
 
 [gui]
 
-theme/custom_font="res://font/Alibaba-PuHuiTi-Regular.ttf"
+theme/custom_font="res://ui/font/Alibaba-PuHuiTi-Regular.ttf"
 
 [input]
 

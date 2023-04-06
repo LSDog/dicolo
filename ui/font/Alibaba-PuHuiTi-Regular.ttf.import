@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://mqvi1o7fpls2"
-path="res://.godot/imported/HuXiaoBoZhenShuaiTi.ttf-73ae38de273ec99b5c52774851c5c7ce.fontdata"
+uid="uid://co8ymubld1txm"
+path="res://.godot/imported/Alibaba-PuHuiTi-Regular.ttf-0b1d32b45aff3e6ba429ace01aa80c59.fontdata"
 
 [deps]
 
-source_file="res://font/HuXiaoBoZhenShuaiTi.ttf"
-dest_files=["res://.godot/imported/HuXiaoBoZhenShuaiTi.ttf-73ae38de273ec99b5c52774851c5c7ce.fontdata"]
+source_file="res://ui/font/Alibaba-PuHuiTi-Regular.ttf"
+dest_files=["res://.godot/imported/Alibaba-PuHuiTi-Regular.ttf-0b1d32b45aff3e6ba429ace01aa80c59.fontdata"]
 
 [params]
 

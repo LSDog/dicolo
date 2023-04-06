@@ -1,12 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://dcsgp6kp0djji"]
+[gd_scene load_steps=17 format=3 uid="uid://cdyhqt27mk6t3"]
 
-[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://theme/default_theme.tres" id="1_2s2dw"]
-[ext_resource type="FontFile" uid="uid://mqvi1o7fpls2" path="res://font/HuXiaoBoZhenShuaiTi.ttf" id="1_d3eto"]
 [ext_resource type="Script" path="res://scene/settings/Settings.gd" id="1_lidja"]
-[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://font/Alibaba-PuHuiTi-Regular.ttf" id="2_dtkjt"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_vs43p"]
+[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="3_2sjp6"]
+[ext_resource type="FontFile" uid="uid://mqvi1o7fpls2" path="res://ui/font/HuXiaoBoZhenShuaiTi.ttf" id="4_tfek4"]
 
 [sub_resource type="Theme" id="Theme_xwlyw"]
-default_font = ExtResource("2_dtkjt")
+default_font = ExtResource("2_vs43p")
 default_font_size = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
@@ -133,7 +133,7 @@ _data = {
 
 [sub_resource type="LabelSettings" id="LabelSettings_3hwmm"]
 line_spacing = 0.0
-font = ExtResource("1_d3eto")
+font = ExtResource("4_tfek4")
 font_size = 27
 shadow_size = 0
 
@@ -175,7 +175,7 @@ offset_left = 10.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_2s2dw")
+theme = ExtResource("3_2sjp6")
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
@@ -274,7 +274,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_nlk63")
 libraries = {
 "": SubResource("AnimationLibrary_3u46d")
 }
-blend_times = [&"hide", &"show", 0.2, &"hide", &"hide", 0.2]
+blend_times = [&"hide", &"hide", 0.2, &"hide", &"show", 0.2]
 
 [node name="Label" type="Label" parent="FloatBar"]
 layout_mode = 1
