@@ -1,8 +1,8 @@
-@tool
+#@tool
 class_name EditorFlow
 extends Panel
 
-@onready var editor := get_parent() as Editor;
+@onready var editor :Editor = get_parent() as Editor;
 @onready var note_crash_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_crash.stylebox");
 @onready var note_line_crash_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_line_crash.stylebox");
 @onready var note_slide_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_slide.stylebox");
@@ -11,6 +11,8 @@ extends Panel
 @export var barline_color := Color.LIGHT_BLUE;
 @export var beatline_color := Color(0.372549, 0.619608, 0.627451, 0.2);
 @export var note_margin_vertical := 4;
+
+var start_offset :float = 0.0;
 
 signal flow_changed;
 
@@ -37,11 +39,13 @@ var mouse_offset := 0.0;
 ## 控制中的note
 var holding_note :Control;
 ## 控制中的note的type
-var holding_note_type :BeatMap.EVENT_TYPE = 0;
+var holding_note_type :BeatMap.EVENT_TYPE = BeatMap.EVENT_TYPE.None;
 ## 所有的note {位置: Vector2, 位置: Note}
 var note_map :Dictionary = {};
 
 func _ready():
+	print("Flow: editor ", editor)
+	print("Flow: editor.playground ", editor.playground);
 	flow_changed.connect(func():
 		beat_space = bar_space/beat_count;
 		queue_redraw();
@@ -50,12 +54,14 @@ func _ready():
 ## 画节拍线，老方法是只画可见部分的节拍线，改为一次全画
 func _draw():
 	
-	var scroll_page := editor.playground.get_rect().size.x;
+	start_offset = editor.get_length_in_flow(editor.playground.beatmap.start_time);
+	
+	#var scroll_page := editor.playground.get_rect().size.x;
 	var rect := get_global_rect();
 	
 	# 绘制节拍线
 	var h := rect.size.y;
-	var x := editor.get_length_in_flow(editor.playground.beatmap.start_time);
+	var x := start_offset;
 	print("beat map start time -> x = ", x);
 	while x > 0: x -= bar_space
 	while x <= size.x:
@@ -127,20 +133,6 @@ func _gui_input(event):
 				_:
 					if !note_overlapped(holding_note, note_pos):
 						move_note(holding_note, note_pos);
-
-
-func _unhandled_input(event):
-	match event.get_class():
-		"InputEventKey":
-			event = event as InputEventKey;
-			return;
-			match event.keycode:
-				KEY_1:
-					editor.choose_note_type(BeatMap.EVENT_TYPE.Crash);
-					accept_event();
-				_:
-					if editor.edit_note_type != BeatMap.EVENT_TYPE.Crash:
-						editor.choose_note_type(BeatMap.EVENT_TYPE.Crash);
 
 func get_note_pos_y(side :BeatMap.Event.SIDE) -> float:
 	match side:
@@ -220,14 +212,14 @@ func add_note(
 				move_child(note, 0);
 				
 				match holding_note_type:
-					_:
-						if !note_overlapped(note, note_pos):
-							move_note(note, note_pos);
 					BeatMap.EVENT_TYPE.Slide:
 						note_pos.x += 10 + mouse_offset;
 						note_pos = get_note_pos(note_pos);
 						if note_overlapped(note, note_pos): return;
 						move_note(note, note_pos);
+					_:
+						if !note_overlapped(note, note_pos):
+							move_note(note, note_pos);
 	);
 	note_map[note.position] = note;
 	return note;
@@ -255,5 +247,5 @@ func remove_note(note :Control):
 	remove_child(note);
 	note = null;
 
-func floor_multiple(value :float, round :float) -> float:
-	return floorf(value/round) * round;
+func floor_multiple(value :float, round_float :float) -> float:
+	return floorf(value/round_float) * round_float;

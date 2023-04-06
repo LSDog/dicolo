@@ -1,7 +1,7 @@
 class_name Editor
 extends Control
 
-@onready var playground :PlayGroundControl = get_parent();
+@onready var playground :PlayGroundControl = get_parent() as PlayGroundControl;
 @onready var scroll :HScrollBar = $Scroll as HScrollBar;
 @onready var flow :EditorFlow = $Flow as EditorFlow;
 @onready var note_choose := $NoteChoose;
@@ -9,7 +9,10 @@ extends Control
 var edit_note_type :BeatMap.EVENT_TYPE;
 
 func _ready():
-	playground.map_loaded.connect(loaded);
+	print("Editor: playground ", playground);
+	playground.map_loaded.connect(func():
+		loaded();
+	);
 	#for key in BeatMap.EVENT_TYPE.keys():
 	#	NOTE_TYPE_MAP[key] = BeatMap.EVENT_TYPE[key];
 	

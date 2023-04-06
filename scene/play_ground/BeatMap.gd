@@ -73,7 +73,7 @@ func _init(dir :String, file :FileAccess):
 				"events":
 					in_event = true;
 	file.close();
-	start_time = 0 if events.size() < 0 else events[0].time;
+	start_time = 0.0 if events.size() < 0 else events[0].time;
 	loaded = true;
 
 ## 接受1行带时间的event形式，如 "0.6 _start" 或 "1.93 c/l/-135 c/r/-90"
@@ -103,7 +103,7 @@ func add_note(time :float, note_string :String):
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
-				0 if (note_split.size() < 4 || !note_split[3].is_valid_float()) else note_split[3]
+				0.0 if (note_split.size() < 4 || !note_split[3].is_valid_float()) else note_split[3].to_float()
 			));
 		"l": #line-crash
 			events.append(Event.Note.LineCrash.new(
@@ -111,7 +111,7 @@ func add_note(time :float, note_string :String):
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
 				0.0 if !note_split[3].is_valid_float() else note_split[3].to_float(), \
-				0 if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4]
+				0.0 if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4].to_float()
 			));
 		"s": # slide
 			var p_deg = 0.0 if !note_split[2].is_valid_float() else note_split[2].to_float();

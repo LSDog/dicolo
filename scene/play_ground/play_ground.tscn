@@ -399,6 +399,7 @@ curve = SubResource("Curve2D_lc0kg")
 script = ExtResource("9_0rucv")
 
 [node name="Editor" type="Control" parent="."]
+process_priority = 3
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -426,7 +427,8 @@ offset_top = 20.0
 offset_right = 4096.0
 offset_bottom = 20.28
 script = ExtResource("10_5ox8q")
-offset = 0.0
+outline_color = Color(1, 1, 0.878431, 1)
+barline_color = Color(0.678431, 0.847059, 0.901961, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="Edit" type="Panel" parent="Editor"]

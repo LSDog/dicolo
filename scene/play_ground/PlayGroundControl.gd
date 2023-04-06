@@ -221,6 +221,8 @@ func jump(time :float):
 	
 	if ended: ended = false;
 	
+	pause();
+	
 	for i in waiting_notes.keys():
 		remove_note(i);
 	
@@ -240,15 +242,13 @@ func jump(time :float):
 	play_time = time;
 	print("[Play] Jump to: ", time, " index = ", last_index);
 	
+	video_player.stop();
 	if time == 0.0:
-		video_player.stop();
 		video_player.play();
 		video_player.paused = true;
-		pause();
 		jumped = false;
 	else:
 		# 无法跳转视频播放，故暂停
-		video_player.paused = true;
 		jumped = true;
 	
 	stream_time = time;
@@ -508,11 +508,7 @@ func remove_note(wait_index :int) :
 	var array :Array = waiting_notes[wait_index];
 	if array == null || array.is_empty(): return;
 	
-	var note = array[0];
 	var canvas_items = array[1];
-	
-	var track = get_track(note);
-	var path = track.get_child(0);
 	
 	# 删掉所有 canvasItem
 	for item in canvas_items:
@@ -551,5 +547,5 @@ func get_beat_time() -> float:
 func get_audio_length() -> float:
 	return audio_player.stream.get_length();
 
-func round_multiple(value :float, round :float) -> float:
-	return roundf(value/round) * round;
+func round_multiple(value :float, round_float :float) -> float:
+	return roundf(value/round_float) * round_float;
