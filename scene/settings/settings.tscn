@@ -10,7 +10,7 @@ default_font = ExtResource("2_vs43p")
 default_font_size = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
-bg_color = Color(0, 0, 0, 0.501961)
+bg_color = Color(0, 0, 0, 0.8)
 
 [sub_resource type="Animation" id="Animation_qwxee"]
 resource_name = "RESET"
@@ -36,7 +36,7 @@ tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Panel:anchor_bottom")
 tracks/0/interp = 1
-tracks/0/loop_wrap = false
+tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(2, 1),
@@ -58,6 +58,20 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(0.225313, 1),
 "update": 0,
 "values": [0.0, 1.0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"update_minimum_size"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yc10v"]
@@ -138,7 +152,6 @@ font_size = 27
 shadow_size = 0
 
 [node name="Setting" type="Control"]
-z_index = 10
 custom_minimum_size = Vector2(1152, 648)
 layout_mode = 3
 anchors_preset = 15
@@ -183,6 +196,8 @@ vertical_scroll_mode = 2
 texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 0
+mouse_default_cursor_shape = 3
 
 [node name="Placeholder" type="Control" parent="Panel/Scroll/List"]
 custom_minimum_size = Vector2(0, 50)
@@ -264,9 +279,9 @@ layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.045
 anchor_right = 0.045
-offset_left = 64.0
+offset_left = 12.16
 offset_top = -40.0
-offset_right = 214.0
+offset_right = 162.16
 offset_bottom = -8.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_nlk63")
 
@@ -274,7 +289,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_nlk63")
 libraries = {
 "": SubResource("AnimationLibrary_3u46d")
 }
-blend_times = [&"hide", &"hide", 0.2, &"hide", &"show", 0.2]
+blend_times = [&"hide", &"show", 0.2, &"hide", &"hide", 0.2]
 
 [node name="Label" type="Label" parent="FloatBar"]
 layout_mode = 1

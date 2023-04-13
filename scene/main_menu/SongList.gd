@@ -73,7 +73,7 @@ func _process(delta):
 	var wide = 4 / (Global.stretch_scale); # 弧线的长度
 	for song_card in $VBoxContainer.get_children():
 		#song_card = song_card as ColorRect;
-		var distance = abs(i-center_song_index_float+0.5); # 额外加一点让弧线上移，看起来更舒服
+		var distance = abs(i-center_song_index_float+0.5);
 		if (!song_card.is_mouse_entered):
 			var width_add = ( ((1-cos(PI/wide*distance))/2.0) if abs(distance) <= wide else 1.0 ) * 60.0;
 			song_card.width_offset = width_add;
