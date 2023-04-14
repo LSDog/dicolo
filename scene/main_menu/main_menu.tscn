@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=38 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_rqxl5"]
 [ext_resource type="Texture2D" uid="uid://fpi44kosojgq" path="res://image/background/トトリの夢の中.png" id="2_m18n7"]
@@ -7,11 +7,14 @@
 [ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="6_81ncd"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="7_lnhgj"]
 [ext_resource type="FontFile" uid="uid://mqvi1o7fpls2" path="res://ui/font/HuXiaoBoZhenShuaiTi.ttf" id="8_n53jo"]
-[ext_resource type="PackedScene" uid="uid://dog2ujsoveet6" path="res://scene/partner/partner.tscn" id="8_vdbcq"]
+[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="9_5irqw"]
+[ext_resource type="FontFile" uid="uid://bplyekufap58x" path="res://ui/font/Alibaba-PuHuiTi-Light.ttf" id="9_nkdeg"]
+[ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://image/partner/avatar_trans-1024x.png" id="9_sywfr"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_o8td5"]
 line_spacing = 0.0
-font_size = 360
+font = ExtResource("7_lnhgj")
+font_size = 280
 font_color = Color(1, 1, 1, 0.215686)
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
@@ -95,14 +98,6 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 shadow_size = 314
 shadow_offset = Vector2(-150, 0)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7u48j"]
-bg_color = Color(0, 0, 0, 0.376471)
-border_width_right = 244
-border_color = Color(0.8, 0.8, 0.8, 0)
-border_blend = true
-corner_radius_top_left = 22
-corner_radius_bottom_left = 22
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sdias"]
 content_margin_left = 27.0
 content_margin_right = 41.0
@@ -123,6 +118,31 @@ shadow_size = 4
 shadow_color = Color(0.521569, 0.643137, 0.4, 1)
 shadow_offset = Vector2(-2, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_n6jtj"]
+line_spacing = 0.0
+font = ExtResource("7_lnhgj")
+font_size = 26
+font_color = Color(0.92549, 0.956863, 0.929412, 1)
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(-1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qbqrq"]
+bg_color = Color(0, 0, 0, 0.298039)
+border_color = Color(1, 1, 1, 0)
+border_blend = true
+corner_radius_bottom_right = 43
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qnaqc"]
+content_margin_left = 8.0
+draw_center = false
+border_width_left = 1024
+border_color = Color(0, 0, 0, 0.941176)
+border_blend = true
+
 [sub_resource type="LabelSettings" id="LabelSettings_d8qto"]
 font = ExtResource("7_lnhgj")
 font_size = 35
@@ -134,17 +154,29 @@ content_margin_left = 27.0
 content_margin_right = 41.0
 bg_color = Color(0, 0, 0, 0.6)
 border_width_left = 16
-border_color = Color(1, 0.501961, 0, 0.568627)
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
+border_color = Color(1, 0.5, 0, 0.88)
+corner_radius_top_right = 10
 corner_detail = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_cxrir"]
+line_spacing = 0.0
 font = ExtResource("8_n53jo")
-font_size = 82
+font_size = 62
 shadow_size = 3
 shadow_color = Color(0.854902, 0.478431, 0.364706, 0.729412)
 shadow_offset = Vector2(-4, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hpptf"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_right = 512
+border_width_bottom = 128
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_ewllf"]
+line_spacing = 0.0
+font = ExtResource("7_lnhgj")
+font_size = 18
 
 [sub_resource type="GDScript" id="GDScript_g35vr"]
 script/source = "extends HSlider
@@ -196,12 +228,8 @@ anchor_right = 0.85
 anchor_bottom = 0.65
 grow_horizontal = 2
 grow_vertical = 2
-text = "####"
+text = "Dicolo!"
 label_settings = SubResource("LabelSettings_o8td5")
-
-[node name="Partner" parent="." instance=ExtResource("8_vdbcq")]
-visible = false
-layout_mode = 1
 
 [node name="SongList" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -276,93 +304,179 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.3
 anchor_bottom = 1.0
-grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lwhhd")
 
-[node name="Panel" type="Panel" parent="LeftPanel"]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.02
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 6.10352e-05
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_7u48j")
-
-[node name="Info" type="VBoxContainer" parent="LeftPanel"]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 633.0
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="-1" type="Control" parent="LeftPanel/Info"]
-custom_minimum_size = Vector2(0, 20)
+[node name="Title" type="PanelContainer" parent="LeftPanel"]
 layout_mode = 2
-
-[node name="Title" type="PanelContainer" parent="LeftPanel/Info"]
-layout_mode = 2
+offset_top = 10.0
+offset_right = 429.0
+offset_bottom = 88.0
 size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_sdias")
 
-[node name="Label" type="Label" parent="LeftPanel/Info/Title"]
+[node name="Label" type="Label" parent="LeftPanel/Title"]
 layout_mode = 2
 text = "The #### song"
 label_settings = SubResource("LabelSettings_6erxh")
 vertical_alignment = 2
 
-[node name="Singer" type="PanelContainer" parent="LeftPanel/Info"]
+[node name="InfoLabel" type="Label" parent="LeftPanel"]
+layout_mode = 1
+offset_top = 92.0
+offset_right = 633.0
+offset_bottom = 129.0
+text = "] The #### song - LSDog Music"
+label_settings = SubResource("LabelSettings_n6jtj")
+autowrap_mode = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="LeftPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -81.5
+offset_right = 208.0
+offset_bottom = 81.5
+grow_vertical = 2
+theme = ExtResource("9_5irqw")
+theme_override_styles/panel = SubResource("StyleBoxFlat_qbqrq")
+horizontal_scroll_mode = 0
+
+[node name="ItemList" type="ItemList" parent="LeftPanel/ScrollContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_selected_color = Color(0.964706, 0.764706, 0.537255, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/guide_color = Color(1, 0.827451, 0.619608, 0.258824)
+theme_override_fonts/font = ExtResource("9_nkdeg")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/panel = SubResource("StyleBoxFlat_qnaqc")
+auto_height = true
+item_count = 5
+item_0/text = "Simple"
+item_1/text = "Normal"
+item_2/text = "MySUckLevel"
+item_3/text = "a test lol 12a85  $$$"
+item_4/text = "awd"
+
+[node name="Mapper" type="PanelContainer" parent="LeftPanel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -226.0
+offset_right = 174.0
+offset_bottom = -168.0
+grow_vertical = 0
 size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_sdias")
 
-[node name="Label" type="Label" parent="LeftPanel/Info/Singer"]
+[node name="Label" type="Label" parent="LeftPanel/Mapper"]
 layout_mode = 2
 text = "LSDog"
 label_settings = SubResource("LabelSettings_d8qto")
 vertical_alignment = 2
 
-[node name="-2" type="Control" parent="LeftPanel/Info"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-
-[node name="Score" type="Panel" parent="LeftPanel/Info"]
-custom_minimum_size = Vector2(330, 110)
-layout_mode = 2
+[node name="Score" type="Panel" parent="LeftPanel"]
+custom_minimum_size = Vector2(420, 80)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_bottom = -80.0
+grow_vertical = 0
 size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_uipoy")
 
-[node name="Label" type="Label" parent="LeftPanel/Info/Score"]
+[node name="Label" type="Label" parent="LeftPanel/Score"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -135.0
-offset_top = -42.0
-offset_right = 149.0
-offset_bottom = 48.0
+anchors_preset = -1
+anchor_left = 0.53
+anchor_top = 0.962
+anchor_right = 0.53
+anchor_bottom = 0.962
+offset_left = -106.5
+offset_top = -66.0
+offset_right = 106.5
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 text = "9,999,999"
 label_settings = SubResource("LabelSettings_cxrir")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="RightPanel" type="Control" parent="."]
+[node name="DownPanel" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 1
-anchor_left = 0.7
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hpptf")
+metadata/_edit_use_anchors_ = true
+
+[node name="Avatar" type="Control" parent="DownPanel"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+anchors_preset = 0
+offset_top = -48.0
+offset_right = 128.0
+offset_bottom = 80.0
+grow_vertical = 0
+
+[node name="AvatarTrans-1024x" type="TextureRect" parent="DownPanel/Avatar"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
+texture = ExtResource("9_sywfr")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DownBarVBox" type="HBoxContainer" parent="DownPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 130.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PlayerInfoVBox" type="VBoxContainer" parent="DownPanel/DownBarVBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="DownPanel/DownBarVBox/PlayerInfoVBox"]
+layout_mode = 2
+text = "Name: LSDog
+Level: -1
+Status: ONLINE"
+label_settings = SubResource("LabelSettings_ewllf")
+
+[node name="VSeparator" type="VSeparator" parent="DownPanel/DownBarVBox"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="DeviceInfoVBox" type="VBoxContainer" parent="DownPanel/DownBarVBox"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="DownPanel/DownBarVBox/DeviceInfoVBox"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Time: 13:52:00
+Battery: 99%"
+label_settings = SubResource("LabelSettings_ewllf")
+vertical_alignment = 1
 
 [node name="Debugs" type="VBoxContainer" parent="."]
 visible = false
