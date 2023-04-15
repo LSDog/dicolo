@@ -8,6 +8,9 @@ enum EVENT_TYPE {None, Note, Crash, LineCrash, Slide, Start, Bpm, End};
 ## 是否加载完毕
 var loaded :bool = false;
 
+## 铺面文件路径
+var file_path :String;
+
 ## 歌曲标题
 var title :String;
 ## 演唱者
@@ -25,17 +28,23 @@ var bpm :float;
 ## 背景图片路径
 var bg_image_path :String;
 ## 背景图片
-var bg_image :Texture2D;
+#var bg_image :Texture2D;
 ## 音符/事件等
 var events :Array[Event] = [];
 ## 开始时间（来自第一个event的时间）
 var start_time :float;
 
 ## 构造器。需要当前铺面目录和已经打开的 [FileAccess] ([method FileAccess.open])
-func _init(dir :String, file :FileAccess):
+func _init(dir_access :DirAccess, file :FileAccess):
 	resource_name = "BeatMap";
 	if file == null || !file.is_open(): return;
-	if !dir.ends_with("/"): dir += "/";
+	file_path = file.get_path();
+	# 获取第一行的标识内容并检验
+	var head_line = file.get_line();
+	if head_line != "!dicolo_map_v1":
+		file.close();
+		return;
+	var dir = dir_access.get_current_dir() + '/';
 	var key :String = "";
 	var value :String = "";
 	var in_event :bool = false;
@@ -62,14 +71,12 @@ func _init(dir :String, file :FileAccess):
 				"level": level = value;
 				"audio":
 					audio_path = dir+value;
-					#audio = ResourceLoader.load(audio_path, "AudioStream");
 				"video":
 					video_path = dir+value;
-					#audio = ResourceLoader.load(video_path, "VideoStream");
 				"bpm": bpm = 0 if !value.is_valid_int() else value.to_int();
 				"bg":
-					bg_image_path = value;
-					bg_image = ResourceLoader.load(dir+value, "Texture2D");
+					bg_image_path = dir+value;
+					#bg_image = ResourceLoader.load(dir+value, "Texture2D");
 				"events":
 					in_event = true;
 	file.close();

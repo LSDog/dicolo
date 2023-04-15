@@ -1,6 +1,12 @@
+class_name MainMenu
 extends Control
 
 var debug_label_last_report = 0;
+
+@onready var song_list :SongList = $SongList as SongList;
+@onready var background :TextureRect = $Background;
+@onready var music_player :MusicPlayer = $LeftPanel/MusicPlayer;
+
 
 func _ready():
 	Global.scene_MainMenu = self;

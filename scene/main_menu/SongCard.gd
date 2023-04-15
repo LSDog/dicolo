@@ -1,10 +1,16 @@
+class_name SongCard
 extends Panel
 
+@onready var title_label := $Title;
+@onready var info_label := $Info;
+@onready var image_rect := $Image;
+
+# 颜色:v的状态
 var modulate_v_origin = 1;
 var modulate_v_hover = 1.3;
 var modulate_v_select = 1.5;
 var modulate_v_target = modulate_v_origin;
-
+# 长度的状态
 @onready var width_origin := custom_minimum_size.x;
 @onready var width_select_mul := 1.2;
 @onready var width_target := width_origin;
@@ -14,7 +20,19 @@ var is_mouse_entered := false;
 var pressed_pos;
 var selected = false;
 
-signal song_selected(index :int);
+## 用来提供展示的beatmap对象, 并非实际用于游玩的铺面
+var example_beatmap :BeatMap = null:
+	set(value):
+		example_beatmap = value;
+		title_label.text = example_beatmap.title;
+		info_label.text = example_beatmap.singer;
+		image_rect.texture = load(example_beatmap.bg_image_path);
+
+## readme.txt 里的话
+var readme :String;
+
+signal song_selected;
+signal song_play_request;
 
 func _ready():
 	
@@ -27,8 +45,19 @@ func _ready():
 		is_mouse_entered = false;
 		unhover();
 	);
+	
+	title_label.resized.connect(func():
+		if title_label.size.x > size.x:
+			title_label.scale.x = maxf(0.6, size.x / title_label.size.x);
+	);
+	
+	info_label.resized.connect(func():
+		if info_label.size.x > (size.x - info_label.position.x):
+			info_label.scale.x = maxf(0.6, (size.x - info_label.position.x) / info_label.size.x);
+	);
 
 func _process(_delta):
+	
 	if modulate.v != modulate_v_target:
 		modulate.v = Global.stick_edge(lerpf(modulate.v, modulate_v_target, 0.1));
 	if custom_minimum_size.x != width_target + width_offset:
@@ -54,13 +83,7 @@ func _gui_input(event):
 				else:
 					unhover();
 			else:
-				var packed_scene_playground = load("res://scene/play_ground/play_ground.tscn") as PackedScene;
-				var scene := packed_scene_playground.instantiate();
-				get_tree().root.add_child(scene);
-				get_tree().current_scene = scene;
-				Global.freeze(Global.scene_MainMenu);
-				Global.scene_MainMenu.visible = true;
-				#get_tree().root.remove_child(Global.scene_MainMenu);
+				song_play_request.emit();
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -74,7 +97,7 @@ func select():
 	selected = true;
 	modulate_v_target = modulate_v_select;
 	width_target = width_origin * width_select_mul;
-	song_selected.emit(get_index());
+	song_selected.emit();
 
 func unhover():
 	if !selected: modulate_v_target = modulate_v_origin;

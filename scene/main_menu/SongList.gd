@@ -1,4 +1,7 @@
+class_name SongList
 extends ScrollContainer
+
+@onready var container := $VBoxContainer;
 
 var scroll_speed := 0.0; # 滚动速度，向下为正方向
 var touch_scroll_speed := 0.0; # 最后一次手拖动的速度
@@ -16,21 +19,24 @@ var center_song_index :int = 0; # 当前在屏幕“中间”的歌曲位数
 var center_song_index_float :float = 0.0; # 当前在屏幕“中间”的歌曲位数的小数形式
 var dragging_index := [];
 
+var song_card_tscn = preload("res://scene/main_menu/song_card.tscn");
+
 func _ready():
 	
 	mouse_entered.connect(func(): is_mouse_entered = true);
 	mouse_exited.connect(func(): is_mouse_entered = false);
 	
-	var song_card = $VBoxContainer/Song;
+	_ready_later.call_deferred();
+
+func _ready_later():
 	
-	v_scroll_bar.add_theme_stylebox_override("scroll", v_scroll_bar_style);
-	
-	# 重复复制几个song_card用来演示参考
-	for i in range(20):
-		$VBoxContainer.add_child(song_card.duplicate(DUPLICATE_SCRIPTS));
-	
+	print("Loading maps ...")
+	load_maps();
 	for node in $VBoxContainer.get_children():
-		node.song_selected.connect(handle_song_select);
+		node = node as SongCard;
+		node.song_selected.connect(handle_song_select.bind(node));
+		node.song_play_request.connect(handle_song_play_request.bind(node));
+		
 
 func _process(delta):
 	
@@ -108,10 +114,70 @@ func _gui_input(event):
 			else:
 				scroll_speed = touch_scroll_speed;
 
+## 处理选中歌曲
+func handle_song_select(song_card: SongCard):
+	print("selected song: ", song_card.example_beatmap.title);
+	touch_scroll_speed = 0;
+	scroll_speed = 0;
+	var main_menu := get_parent() as MainMenu;
+	main_menu.background.texture = load(song_card.example_beatmap.bg_image_path);
+	main_menu.music_player.play_music(
+		load(song_card.example_beatmap.audio_path),
+		song_card.example_beatmap.title+" - "+song_card.example_beatmap.singer
+	);
+
+## 处理开始歌曲
+func handle_song_play_request(song_card: SongCard):
+	print("play song: ", song_card.example_beatmap.title)
+	pass;
+
 func has_point(point: Vector2) -> bool:
 	return get_rect().has_point(point);
 
-func handle_song_select(index :int):
-	print("selected song: No.", index);
-	touch_scroll_speed = 0;
-	scroll_speed = 0;
+## 加载铺面
+func load_maps():
+	
+	var dir_res := DirAccess.open("res://map");
+	if dir_res != null:
+		print("Loading maps in res://")
+		load_maps_in_dir(dir_res);
+		
+	var dir_user := DirAccess.open("user://map");
+	if dir_user != null:
+		print("Loading maps in user://")
+		load_maps_in_dir(dir_user);
+
+## 加载特定目录下的文件夹形式的铺面
+func load_maps_in_dir(dir: DirAccess):
+	for song_dir_name in dir.get_directories():
+		print(" - Looking folder: " + song_dir_name);
+		load_map_of_dir(Global.get_sub_dir(dir, song_dir_name));
+
+## 加载文件夹形式的铺面
+func load_map_of_dir(dir: DirAccess):
+	
+	var beatmap :BeatMap;
+	var readme;
+	
+	for file_name in dir.get_files():
+		if !file_name.ends_with(".txt"): continue;
+		
+		if file_name.to_lower() == "readme.txt":
+			readme = Global.get_sub_file(dir, file_name, FileAccess.READ).get_as_text();
+		elif beatmap == null:
+			var temp_beatmap := BeatMap.new(dir, Global.get_sub_file(dir, file_name, FileAccess.READ));
+			if temp_beatmap != null && temp_beatmap.loaded:
+				beatmap = temp_beatmap;
+				break;
+	
+	if beatmap != null:
+		print(beatmap.file_path);
+		add_song(beatmap, readme if readme != null else "");
+		print("   ↑ Loaded: " + beatmap.title);
+
+## 添加一首歌
+func add_song(beatmap: BeatMap, readme: String = ""):
+	var song_card :SongCard = song_card_tscn.instantiate(PackedScene.GEN_EDIT_STATE_DISABLED) as SongCard;
+	container.add_child(song_card);
+	song_card.example_beatmap = beatmap;
+	song_card.readme = readme;

@@ -101,11 +101,11 @@ func _ready():
 	print("[PlayGround] opening map files..")
 	var map_file = FileAccess.open("res://map/HareHareYukai/map_normal.txt", FileAccess.READ);
 	print("[PlayGround] result: ", map_file, ": ", error_string(FileAccess.get_open_error()));
-	beatmap = BeatMap.new("res://map/HareHareYukai", map_file);
+	beatmap = BeatMap.new(DirAccess.open("res://map/HareHareYukai"), map_file);
 	print("[PlayGround] map_loaded: ", beatmap);
 	map_file = null;
 	
-	background.texture = beatmap.bg_image;
+	background.texture = load(beatmap.bg_image_path);
 	audio_player.stream = load(beatmap.audio_path);
 	video_player.stream = load(beatmap.video_path);
 	has_video = false if video_player.stream == null else true;

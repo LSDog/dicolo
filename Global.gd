@@ -1,24 +1,26 @@
 extends Node
 
-var start_time = 0.0; # 启动的时间
-var elapsed_time = 0.0; # 自游戏开始经过的时间（秒）
+## 界面Strech大小
 var stretch_scale = 1.0;
-var window_wide_ratio = 1.0; # 与游戏窗口原比例关于宽度的比值
+## 与游戏窗口原比例关于宽度的比值
+var window_wide_ratio = 1.0;
+## 是否为全屏
 var full_screen = false;
+
+## 主界面
 var scene_MainMenu :Control = null;
 
-var last_auto_rotate := 0.0; # 上次旋转（游戏内时间）
+## 上次旋转屏幕方向的游戏时间
+var last_auto_rotate := 0.0;
+## 自动旋转冷却时间
 var auto_rotate_cd := 1;
 
+## 当前使用的joypad
 var joypad_id = -1;
 #var joy_l := Vector2.ZERO;
 #var joy_r := Vector2.ZERO;
 
 func _ready():
-	
-	print(BeatMap.EVENT_TYPE.find_key(0));
-	
-	start_time = Time.get_unix_time_from_system();
 	
 	get_tree().root.size_changed.connect(func():
 		var now = get_tree().root.size;
@@ -26,26 +28,13 @@ func _ready():
 		window_wide_ratio = (float(now.x) / now.y) / origin_ratio;
 	);
 	
-	# 初始化数据文件夹
+	# 搞到数据文件夹
 	var dir_res := DirAccess.open("res://");
-	print("Current res:// path: ", ProjectSettings.globalize_path(dir_res.get_current_dir()));
-	#print(" --dics--\n  ", "\n  ".join(dir_res.get_directories()))
-	#print(" --files--\n  ", "\n  ".join(dir_res.get_files()))
-	
-	print(" ");
-	
 	var dir_user := DirAccess.open("user://");
-	print("Current user:// path: ", ProjectSettings.globalize_path(dir_user.get_current_dir()));
-	#print(" --dics--\n  ", "\n  ".join(dir_user.get_directories()))
-	#print(" --files--\n  ", "\n  ".join(dir_user.get_files()))
 	
-	#var data_dir_path = dir.get_current_dir()+"/.dicolo!";
-	#print("Data path: " + data_dir_path);
-	#if !DirAccess.dir_exists_absolute(data_dir_path):
-	#	var error = DirAccess.make_dir_absolute(data_dir_path);
-	#	if error != OK:
-	#		printerr(error_string(error));
-	#		pop_text_exit("ERROR! " + error_string(error));
+	print("Current res:// path: ", ProjectSettings.globalize_path(dir_res.get_current_dir()));
+	print(" ");
+	print("Current user:// path: ", ProjectSettings.globalize_path(dir_user.get_current_dir()));
 	
 	# 信号
 	Input.joy_connection_changed.connect(func(device: int, connected: bool):
@@ -72,9 +61,11 @@ func _notification(what):
 			Input.parse_input_event(esc_event);
 
 func _process(_delta):
+	
 	stretch_scale = get_tree().root.get_content_scale_factor();
-	elapsed_time = get_elapsed_time();
-
+	
+	var elapsed_time = get_elapsed_time();
+	
 	# 自动旋转
 	if elapsed_time - last_auto_rotate > auto_rotate_cd && Input.get_accelerometer().y > 5: # 降低灵敏，只有转过头才会旋转方向
 		last_auto_rotate = elapsed_time;
@@ -98,21 +89,23 @@ func update_joypad():
 		joypad_id = i;
 		break;
 
+## 获取左摇杆Vec
 func get_joy_left() -> Vector2:
 	if joypad_id == -1: return Vector2.ZERO;
 	return Vector2(
 		Input.get_joy_axis(joypad_id, JOY_AXIS_LEFT_X),
 		Input.get_joy_axis(joypad_id, JOY_AXIS_LEFT_Y))
 
+## 获取右侧摇杆Vec
 func get_joy_right() -> Vector2:
 	if joypad_id == -1: return Vector2.ZERO;
 	return Vector2(
 		Input.get_joy_axis(joypad_id, JOY_AXIS_RIGHT_X),
 		Input.get_joy_axis(joypad_id, JOY_AXIS_RIGHT_Y))
 
-## 获取当前运行的时间
-func get_elapsed_time():
-	return Time.get_unix_time_from_system() - start_time;
+## 获取当前运行的时间 秒
+func get_elapsed_time() -> float:
+	return Time.get_unix_time_from_system() - Time.get_ticks_msec()/1000.0;
 
 ## 将浮点数贴合到dege（在value与edge距离小于等于threshold时返回edge，否则返回原value）
 func stick_edge(value:float, edge:float = 0, threshold:float = 0.01) -> float:
@@ -127,11 +120,22 @@ func pop_text_exit(text:String):
 	add_child(dialog);
 	dialog.popup_centered();
 
+## 获取当前系统时间 秒
 func now_time() -> float:
 	return Time.get_unix_time_from_system();
 
+## 冻结某个node
 func freeze(node: Node):
 	node.process_mode = PROCESS_MODE_DISABLED;
 
+## 还原冻结node
 func unfreeze(node: Node):
 	node.process_mode = PROCESS_MODE_INHERIT;
+
+## 获取一个子文件夹
+func get_sub_dir(parent_dir: DirAccess, sub_dir_name: String) -> DirAccess:
+	return DirAccess.open(parent_dir.get_current_dir()+'/'+sub_dir_name);
+
+## 获取一个文件夹内的文件
+func get_sub_file(parent_dir: DirAccess, sub_file_name: String, flags: FileAccess.ModeFlags) -> FileAccess:
+	return FileAccess.open(parent_dir.get_current_dir()+'/'+sub_file_name, flags);

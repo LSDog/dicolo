@@ -1,15 +1,14 @@
-[gd_scene load_steps=49 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=47 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_rqxl5"]
 [ext_resource type="Texture2D" uid="uid://fpi44kosojgq" path="res://image/background/トトリの夢の中.png" id="2_m18n7"]
 [ext_resource type="Script" path="res://scene/main_menu/SongList.gd" id="4_7f42v"]
-[ext_resource type="StyleBox" uid="uid://4gt50npyknng" path="res://scene/main_menu/ui/song_card.stylebox" id="5_ljcoo"]
-[ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="6_81ncd"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="7_lnhgj"]
 [ext_resource type="Texture2D" uid="uid://b4gdb06jpschw" path="res://image/ui_icon/pause-button.svg" id="7_qh8sl"]
 [ext_resource type="Texture2D" uid="uid://djconwornocsa" path="res://image/ui_icon/hearts.svg" id="8_4bcqp"]
 [ext_resource type="FontFile" uid="uid://mqvi1o7fpls2" path="res://ui/font/HuXiaoBoZhenShuaiTi.ttf" id="8_n53jo"]
 [ext_resource type="Texture2D" uid="uid://bmqfuuro17srb" path="res://image/ui_icon/fast-backward-button.svg" id="8_wwbqy"]
+[ext_resource type="Script" path="res://scene/main_menu/MusicPlayer.gd" id="8_yb02d"]
 [ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="9_5irqw"]
 [ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://image/partner/avatar_trans-1024x.png" id="9_sywfr"]
 [ext_resource type="Texture2D" uid="uid://sv03cqt1sa2u" path="res://image/ui_icon/fast-forward-button.svg" id="10_iahgp"]
@@ -18,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://bkw2uvfq75e5p" path="res://image/ui_icon/cloud-download.svg" id="11_d6yky"]
 [ext_resource type="Texture2D" uid="uid://d25b25n5ka51" path="res://image/ui_icon/rolling-dices.svg" id="12_jwht8"]
 [ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://image/ui_icon/anticlockwise-rotation.svg" id="12_t4kou"]
+[ext_resource type="Texture2D" uid="uid://dtohmxjhl3fj2" path="res://image/ui_icon/stop-sign.svg" id="18_tpegv"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_o8td5"]
 line_spacing = 0.0
@@ -86,34 +86,20 @@ VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_iexgm")
 VScrollBar/styles/scroll = SubResource("StyleBoxFlat_o5o6b")
 VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_8hb83")
 
-[sub_resource type="LabelSettings" id="LabelSettings_k2800"]
-line_spacing = 0.0
-font = ExtResource("7_lnhgj")
-font_size = 37
-outline_size = 7
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 0
-shadow_offset = Vector2(0, 0)
-
-[sub_resource type="LabelSettings" id="LabelSettings_pe2pw"]
-line_spacing = 0.0
-font = ExtResource("7_lnhgj")
-font_size = 22
-font_color = Color(0.6, 0.6, 0.6, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lwhhd"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 shadow_size = 314
 shadow_offset = Vector2(-150, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vy51k"]
-content_margin_left = 36.0
+content_margin_left = 14.0
 content_margin_top = 16.0
-content_margin_right = 22.0
+content_margin_right = 36.0
 content_margin_bottom = 8.0
 bg_color = Color(0.141176, 0.27451, 0.27451, 0.34902)
-border_width_left = 16
-border_color = Color(0, 0.4, 0.482353, 1)
+border_width_right = 1024
+border_color = Color(0, 0.4, 0.482353, 0)
+border_blend = true
 corner_detail = 1
 shadow_color = Color(0, 0, 0, 0.180392)
 anti_aliasing = false
@@ -148,7 +134,6 @@ shadow_offset = Vector2(-4, 1)
 content_margin_left = 27.0
 content_margin_right = 41.0
 bg_color = Color(0.929412, 0.698039, 0.352941, 0.964706)
-border_width_left = 2
 border_width_bottom = 6
 border_color = Color(1, 1, 1, 0.392157)
 corner_radius_top_right = 50
@@ -162,13 +147,13 @@ anti_aliasing = false
 line_spacing = 0.0
 font = ExtResource("11_38job")
 font_size = 52
-font_color = Color(0, 0, 0, 0.156863)
+font_color = Color(0, 0, 0, 0.0980392)
 shadow_size = 0
 
 [sub_resource type="LabelSettings" id="LabelSettings_n6jtj"]
 line_spacing = 0.0
 font = ExtResource("7_lnhgj")
-font_size = 26
+font_size = 20
 font_color = Color(0.92549, 0.956863, 0.929412, 1)
 outline_size = 1
 outline_color = Color(0, 0, 0, 1)
@@ -190,15 +175,18 @@ font_size = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p6fnm"]
 draw_center = false
+skew = Vector2(0.1, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q2owl"]
 bg_color = Color(1, 1, 1, 0.109804)
+skew = Vector2(0.1, 0)
 border_width_top = 1024
 border_color = Color(0, 0, 0, 0.12549)
 border_blend = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kcgan"]
 bg_color = Color(1, 1, 1, 0.109804)
+skew = Vector2(0.1, 0)
 border_width_top = 1024
 border_color = Color(0, 0, 0, 0.25098)
 border_blend = true
@@ -232,6 +220,7 @@ shadow_size = 7
 shadow_color = Color(0, 0, 0, 1)
 
 [node name="MainMenu" type="Control"]
+process_priority = 10
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -291,50 +280,6 @@ size_flags_vertical = 3
 theme_override_constants/separation = 10
 metadata/_edit_lock_ = true
 
-[node name="Song" type="Panel" parent="SongList/VBoxContainer"]
-modulate = Color(0.984568, 0.984568, 0.984568, 1)
-custom_minimum_size = Vector2(380, 90)
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 1
-theme_override_styles/panel = ExtResource("5_ljcoo")
-script = ExtResource("6_81ncd")
-
-[node name="SongTexts" type="VBoxContainer" parent="SongList/VBoxContainer/Song"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.03
-anchor_top = 0.5
-anchor_right = 0.03
-anchor_bottom = 0.5
-offset_top = -46.5
-offset_right = 279.0
-offset_bottom = 46.5
-grow_vertical = 2
-
-[node name="SongTitle" type="Label" parent="SongList/VBoxContainer/Song/SongTexts"]
-layout_mode = 2
-text = "The #### song"
-label_settings = SubResource("LabelSettings_k2800")
-
-[node name="Info" type="Label" parent="SongList/VBoxContainer/Song/SongTexts"]
-layout_mode = 2
-text = "LSDog"
-label_settings = SubResource("LabelSettings_pe2pw")
-
-[node name="Image" type="TextureRect" parent="SongList/VBoxContainer/Song"]
-modulate = Color(1, 1, 1, 0.117647)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_m18n7")
-expand_mode = 1
-stretch_mode = 6
-metadata/_edit_use_anchors_ = true
-
 [node name="LeftPanel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -343,24 +288,16 @@ anchor_bottom = 1.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lwhhd")
 
-[node name="VBox" type="VBoxContainer" parent="LeftPanel"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -282.0
-offset_right = 410.0
-offset_bottom = -160.0
-grow_vertical = 0
-theme_override_constants/separation = 0
-alignment = 2
-
-[node name="Mapper" type="PanelContainer" parent="LeftPanel/VBox"]
+[node name="Readme" type="PanelContainer" parent="LeftPanel"]
 layout_mode = 2
+offset_top = 411.0
+offset_right = 350.0
+offset_bottom = 435.0
+grow_vertical = 0
 size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_vy51k")
 
-[node name="Label" type="RichTextLabel" parent="LeftPanel/VBox/Mapper"]
+[node name="Label" type="RichTextLabel" parent="LeftPanel/Readme"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -372,42 +309,42 @@ theme_override_font_sizes/italics_font_size = 18
 theme_override_font_sizes/bold_italics_font_size = 18
 theme_override_font_sizes/mono_font_size = 18
 bbcode_enabled = true
-text = "This is a text that provides some useless informations which means you JUST GO PLAY AND STOP READING ME YOU CREAZY
-[b]Website:[/b] [url]http://www.lsdog.fun[/url]
-"
 fit_content = true
 scroll_following = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="LeftPanel/VBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="LeftPanel"]
 clip_children = 2
 layout_mode = 2
+offset_top = 435.0
+offset_right = 410.0
+offset_bottom = 488.0
 theme = ExtResource("9_5irqw")
 theme_override_styles/panel = SubResource("StyleBoxFlat_qbqrq")
 horizontal_scroll_mode = 2
 vertical_scroll_mode = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="LeftPanel/VBox/ScrollContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="LeftPanel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 14
 
-[node name="Label" type="Label" parent="LeftPanel/VBox/ScrollContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="LeftPanel/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "4/Easy"
 
-[node name="Label2" type="Label" parent="LeftPanel/VBox/ScrollContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="LeftPanel/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "6.5/Normal"
 
-[node name="Label3" type="Label" parent="LeftPanel/VBox/ScrollContainer/HBoxContainer"]
+[node name="Label3" type="Label" parent="LeftPanel/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "9/Hard"
 
-[node name="Label4" type="Label" parent="LeftPanel/VBox/ScrollContainer/HBoxContainer"]
+[node name="Label4" type="Label" parent="LeftPanel/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "12/Extreme"
@@ -440,70 +377,107 @@ label_settings = SubResource("LabelSettings_cxrir")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Music" type="PanelContainer" parent="LeftPanel"]
+[node name="MusicPlayer" type="Panel" parent="LeftPanel"]
 layout_mode = 2
 offset_top = 10.0
 offset_right = 429.0
-offset_bottom = 88.0
+offset_bottom = 90.0
 size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_sdias")
+script = ExtResource("8_yb02d")
 
-[node name="Label" type="Label" parent="LeftPanel/Music"]
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="LeftPanel/MusicPlayer"]
+
+[node name="Label" type="Label" parent="LeftPanel/MusicPlayer"]
 layout_mode = 2
-text = "The #### song"
+offset_left = 27.0
+offset_top = 1.0
+offset_right = 388.0
+offset_bottom = 73.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "dicolo! player"
 label_settings = SubResource("LabelSettings_6erxh")
 vertical_alignment = 2
 clip_text = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="LeftPanel/Music"]
+[node name="Buttons" type="HBoxContainer" parent="LeftPanel/MusicPlayer"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+offset_left = 20.0
+offset_top = 13.0
+offset_right = 381.0
+offset_bottom = 61.0
 size_flags_vertical = 4
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Button" type="TextureButton" parent="LeftPanel/Music/HBoxContainer"]
+[node name="Fav" type="TextureButton" parent="LeftPanel/MusicPlayer/Buttons"]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
+toggle_mode = true
+action_mode = 0
 texture_normal = ExtResource("8_4bcqp")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Button5" type="TextureButton" parent="LeftPanel/Music/HBoxContainer"]
+[node name="Pre" type="TextureButton" parent="LeftPanel/MusicPlayer/Buttons"]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
+toggle_mode = true
+action_mode = 0
 texture_normal = ExtResource("8_wwbqy")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Button2" type="TextureButton" parent="LeftPanel/Music/HBoxContainer"]
+[node name="Play" type="TextureButton" parent="LeftPanel/MusicPlayer/Buttons"]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
+toggle_mode = true
+action_mode = 0
 texture_normal = ExtResource("7_qh8sl")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Button3" type="TextureButton" parent="LeftPanel/Music/HBoxContainer"]
+[node name="Next" type="TextureButton" parent="LeftPanel/MusicPlayer/Buttons"]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
+toggle_mode = true
+action_mode = 0
 texture_normal = ExtResource("10_iahgp")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Button4" type="TextureButton" parent="LeftPanel/Music/HBoxContainer"]
+[node name="Loop" type="TextureButton" parent="LeftPanel/MusicPlayer/Buttons"]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 toggle_mode = true
+action_mode = 0
 texture_normal = ExtResource("12_t4kou")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="InfoLabel" type="Label" parent="LeftPanel"]
+[node name="ProgressBar" type="ProgressBar" parent="LeftPanel/MusicPlayer"]
 layout_mode = 1
-offset_top = 92.0
-offset_right = 511.0
-offset_bottom = 129.0
-text = "] Playing: The #### song - LSDog Music"
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -11.0
+offset_right = -37.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+show_percentage = false
+
+[node name="InfoLabel" type="Label" parent="LeftPanel/MusicPlayer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "] Playing: ...nothing..."
 label_settings = SubResource("LabelSettings_n6jtj")
 autowrap_mode = 3
 
@@ -580,6 +554,39 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="ButtonOption" type="Button" parent="DownPanel/DownBarVBox"]
+custom_minimum_size = Vector2(135, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
+theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
+
+[node name="Label" type="Label" parent="DownPanel/DownBarVBox/ButtonOption"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_vertical = 2
+mouse_filter = 1
+theme_override_fonts/font = ExtResource("11_38job")
+text = "Option"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonCloud" type="TextureRect" parent="DownPanel/DownBarVBox/ButtonOption"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.98
+anchor_bottom = 1.0
+grow_horizontal = 0
+texture = ExtResource("11_c1evm")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="ButtonCloud" type="Button" parent="DownPanel/DownBarVBox"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
@@ -592,8 +599,11 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.02
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.547
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 1
 theme_override_fonts/font = ExtResource("11_38job")
 text = "Cloud"
@@ -623,8 +633,10 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.02
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+grow_vertical = 2
 mouse_filter = 1
 theme_override_fonts/font = ExtResource("11_38job")
 text = "Random"
@@ -642,7 +654,7 @@ texture = ExtResource("12_jwht8")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ButtonOption" type="Button" parent="DownPanel/DownBarVBox"]
+[node name="ButtonStart" type="Button" parent="DownPanel/DownBarVBox"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
@@ -650,28 +662,18 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 
-[node name="Label" type="Label" parent="DownPanel/DownBarVBox/ButtonOption"]
+[node name="ButtonCloud" type="TextureRect" parent="DownPanel/DownBarVBox/ButtonStart"]
+show_behind_parent = true
+z_index = 1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.02
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 1
-theme_override_fonts/font = ExtResource("11_38job")
-text = "Option"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ButtonCloud" type="TextureRect" parent="DownPanel/DownBarVBox/ButtonOption"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.98
-anchor_bottom = 1.0
-grow_horizontal = 0
-texture = ExtResource("11_c1evm")
-expand_mode = 1
-stretch_mode = 5
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("18_tpegv")
+expand_mode = 5
+stretch_mode = 6
 
 [node name="<-|" type="Control" parent="DownPanel/DownBarVBox"]
 custom_minimum_size = Vector2(20, 0)

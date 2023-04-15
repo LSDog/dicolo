@@ -1,0 +1,69 @@
+[gd_scene load_steps=6 format=3 uid="uid://cg0kvu25oks3a"]
+
+[ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="2_fvuun"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_yxakl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r267s"]
+bg_color = Color(0.94902, 0.796078, 0.380392, 1)
+skew = Vector2(-0.2, 0)
+border_width_left = 1024
+border_color = Color(0, 0, 0.2, 0.45098)
+border_blend = true
+corner_radius_top_left = 20
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 0.384314)
+shadow_size = 10
+shadow_offset = Vector2(5, 5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_k2800"]
+line_spacing = 0.0
+font = ExtResource("3_yxakl")
+font_size = 37
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pe2pw"]
+line_spacing = 0.0
+font = ExtResource("3_yxakl")
+font_size = 22
+font_color = Color(0.811765, 0.811765, 0.811765, 1)
+
+[node name="Song" type="Panel"]
+modulate = Color(0.984568, 0.984568, 0.984568, 1)
+custom_minimum_size = Vector2(380, 90)
+size_flags_horizontal = 8
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_r267s")
+script = ExtResource("2_fvuun")
+
+[node name="Image" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.117647)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+offset_left = 12.0
+offset_right = 135.0
+offset_bottom = 51.0
+text = "-NULL-"
+label_settings = SubResource("LabelSettings_k2800")
+
+[node name="Info" type="Label" parent="."]
+layout_mode = 2
+offset_left = 22.0
+offset_top = 51.0
+offset_right = 81.0
+offset_bottom = 83.0
+text = "-null-"
+label_settings = SubResource("LabelSettings_pe2pw")
