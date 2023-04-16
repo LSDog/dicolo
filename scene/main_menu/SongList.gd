@@ -219,9 +219,9 @@ func load_map_of_dir(dir: DirAccess):
 		map_file.close();
 	
 	if beatmap != null:
-		print(beatmap.file_path);
+		print("    - ", beatmap.file_path);
 		add_song(beatmap, levels, readme if readme != null else "");
-		print("   ↑ Loaded: " + beatmap.title);
+		print("   ↑ Loaded: ", beatmap.title);
 
 ## 获取map中
 func find_map_value(need_keys :Array[String], map_file :FileAccess) -> Array:
@@ -247,4 +247,3 @@ func add_song(example_beatmap: BeatMap, levels: Dictionary, readme: String = "")
 	song_card.example_beatmap = example_beatmap;
 	song_card.levels = levels;
 	song_card.readme = readme;
-	print(levels);
