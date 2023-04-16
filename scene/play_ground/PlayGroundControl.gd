@@ -39,6 +39,8 @@ var started := false;
 var paused := false;
 ## 演奏是否已结束
 var ended := false;
+## 是否有音乐（?
+#var has_audio := false;
 ## 是否有背景视频
 var has_video := false;
 ## 是否为跳转后状态
@@ -98,24 +100,6 @@ signal play_end;
 
 func _ready():
 	
-	print("[PlayGround] opening map files..")
-	var map_file = FileAccess.open("res://map/HareHareYukai/map_normal.txt", FileAccess.READ);
-	print("[PlayGround] result: ", map_file, ": ", error_string(FileAccess.get_open_error()));
-	beatmap = BeatMap.new(DirAccess.open("res://map/HareHareYukai"), map_file);
-	print("[PlayGround] map_loaded: ", beatmap);
-	map_file = null;
-	
-	background.texture = load(beatmap.bg_image_path);
-	audio_player.stream = load(beatmap.audio_path);
-	video_player.stream = load(beatmap.video_path);
-	has_video = false if video_player.stream == null else true;
-	$BGPanel/DebugLabel.text = "debug text..."
-	
-	bpm = beatmap.bpm;
-	print("Default bpm = ", bpm);
-	print("One Beat = ", get_beat_time(), "s");
-	
-	
 	$MenuButton.pressed.connect(func():
 		if !paused: pause();
 		else: resume();
@@ -144,7 +128,30 @@ func _ready():
 	trackr_path = $PlayGround/TrackR/Path;
 	
 	audio_player.finished.connect(end);# 音乐结束之后进入end
-	video_player.finished.connect(end);# 或者视频结束之后进入end
+	
+	
+## 开始游戏
+func play(map_file_path: String):
+	
+	print("[PlayGround] opening map files..")
+	var map_file = FileAccess.open(map_file_path, FileAccess.READ);
+	print("[PlayGround] result: ", map_file, ": ", error_string(FileAccess.get_open_error()));
+	var dir := DirAccess.open(map_file_path.substr(0, map_file_path.rfind("/")));
+	beatmap = BeatMap.new(dir, map_file);
+	print("[PlayGround] map_loaded: ", beatmap);
+	map_file = null;
+	
+	background.texture = load(beatmap.bg_image_path);
+	#has_audio = beatmap.audio_path != "";
+	audio_player.stream = load(beatmap.audio_path);
+	has_video = beatmap.video_path != "";
+	if has_video: video_player.stream = load(beatmap.video_path);
+	has_video = false if video_player.stream == null else true;
+	$BGPanel/DebugLabel.text = "debug text..."
+	
+	bpm = beatmap.bpm;
+	print("Default bpm = ", bpm);
+	print("One Beat = ", get_beat_time(), "s");
 	
 	map_loaded.emit();
 	
@@ -503,7 +510,7 @@ func show_animation(node :Node):
 		).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD);
 
 ## 删掉waiting_note[index]的全部玩意儿
-func remove_note(wait_index :int) :
+func remove_note(wait_index :int):
 	
 	var array :Array = waiting_notes[wait_index];
 	if array == null || array.is_empty(): return;

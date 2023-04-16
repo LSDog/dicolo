@@ -488,9 +488,7 @@ label_settings = SubResource("LabelSettings_w6vl8")
 horizontal_alignment = 2
 
 [node name="VirtualJoystick" parent="." instance=ExtResource("9_sf2y2")]
-visible = false
 layout_mode = 1
-mouse_filter = 2
 
 [node name="MenuButton" type="Button" parent="."]
 layout_mode = 1

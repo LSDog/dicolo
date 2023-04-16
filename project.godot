@@ -22,7 +22,8 @@ config/windows_native_icon="res://image/icon/dicolo!_trans.ico"
 
 [autoload]
 
-Global="*res://Global.gd"
+Global="*res://scene/Global.gd"
+Debug="*res://scene/Debug.gd"
 
 [display]
 

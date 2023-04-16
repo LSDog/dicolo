@@ -12,7 +12,7 @@ var touch_scroll_speed := 0.0; # 最后一次手拖动的速度
 @export var friction := 0.08; # 缓动结束的摩擦力
 @export var max_card_width := 420; # 歌曲卡片的最大宽度(用于突出选中者)
 @export var min_card_width := 400; # 歌曲卡片的最小宽度
-var selected_card; # 选中的卡片
+var selected_card :SongCard; # 选中的卡片
 
 var is_mouse_entered := false;
 var center_song_index :int = 0; # 当前在屏幕“中间”的歌曲位数
@@ -30,13 +30,68 @@ func _ready():
 
 func _ready_later():
 	
-	print("Loading maps ...")
+	Debug.count_time("map load");
 	load_maps();
+	Debug.count_time("map load");
 	for node in $VBoxContainer.get_children():
 		node = node as SongCard;
 		node.song_selected.connect(handle_song_select.bind(node));
 		node.song_play_request.connect(handle_song_play_request.bind(node));
-		
+
+## 处理选中(点击)歌曲卡片
+func handle_song_select(song_card: SongCard):
+	print("Select song: ", song_card.example_beatmap.title);
+	# 停止滚动
+	touch_scroll_speed = 0;
+	scroll_speed = 0;
+	# 让上一个被选中的songcard缩回去
+	if selected_card != null: selected_card.unselect();
+	selected_card = song_card;
+	# 更改界面预览当前歌曲
+	var main_menu := get_parent() as MainMenu;
+	if song_card.example_beatmap.bg_image_path != "":
+		main_menu.background.texture = load(song_card.example_beatmap.bg_image_path);
+	else:
+		# 没有bg的情况下加载这个
+		main_menu.background.texture = load("res://image/background/トトリの夢の中.png");
+	main_menu.music_player.play_music(
+		load(song_card.example_beatmap.audio_path),
+		song_card.example_beatmap.title+" - "+song_card.example_beatmap.singer,
+		song_card.example_beatmap.start_time,
+		song_card.example_beatmap.bpm
+	);
+	# 设置readme文本
+	main_menu.readme_label.text = song_card.readme;
+	# 设置levels
+	for child in main_menu.levels_bar.get_children():
+		main_menu.levels_bar.remove_child(child);
+	for levelname in song_card.levels.keys():
+		var label := Label.new();
+		label.text = str(song_card.levels[levelname][0])+'/'+levelname;
+		label.add_theme_font_size_override("font_size", 28);
+		label.mouse_filter = Control.MOUSE_FILTER_PASS;
+		main_menu.levels_bar.add_child(label);
+	# 自动选择第一个level（如果有）
+	if main_menu.levels_bar.get_child_count() > 0:
+		main_menu.levels_bar.select_label(main_menu.levels_bar.get_child(0));
+	# 设置背景里面啥用也没有的透明大字
+	main_menu.bg_label.text = song_card.example_beatmap.title;
+
+## 处理请求游玩歌曲
+func handle_song_play_request(song_card: SongCard):
+	var main_menu := get_parent() as MainMenu;
+	if main_menu.levels_bar.selected_label == null:
+		return;
+	var level_name := main_menu.levels_bar.selected_label.text.split('/', 2)[1] as String;
+	print("play song: ", song_card.example_beatmap.title, ", level: ", level_name);
+	
+	var play_ground_scene := load("res://scene/play_ground/play_ground.tscn") as PackedScene;
+	var play_ground := play_ground_scene.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as PlayGroundControl;
+	Global.freeze(main_menu);
+	get_tree().root.add_child(play_ground);
+	get_tree().current_scene = play_ground;
+	play_ground.play(selected_card.levels[level_name][1]);
+	
 
 func _process(delta):
 	
@@ -114,23 +169,6 @@ func _gui_input(event):
 			else:
 				scroll_speed = touch_scroll_speed;
 
-## 处理选中歌曲
-func handle_song_select(song_card: SongCard):
-	print("selected song: ", song_card.example_beatmap.title);
-	touch_scroll_speed = 0;
-	scroll_speed = 0;
-	var main_menu := get_parent() as MainMenu;
-	main_menu.background.texture = load(song_card.example_beatmap.bg_image_path);
-	main_menu.music_player.play_music(
-		load(song_card.example_beatmap.audio_path),
-		song_card.example_beatmap.title+" - "+song_card.example_beatmap.singer
-	);
-
-## 处理开始歌曲
-func handle_song_play_request(song_card: SongCard):
-	print("play song: ", song_card.example_beatmap.title)
-	pass;
-
 func has_point(point: Vector2) -> bool:
 	return get_rect().has_point(point);
 
@@ -157,27 +195,56 @@ func load_maps_in_dir(dir: DirAccess):
 func load_map_of_dir(dir: DirAccess):
 	
 	var beatmap :BeatMap;
-	var readme;
+	var readme :String;
+	var levels :Dictionary = {};
+	var keys := ["levelname", "level"];
 	
 	for file_name in dir.get_files():
 		if !file_name.ends_with(".txt"): continue;
 		
+		var map_file := Global.get_sub_file(dir, file_name, FileAccess.READ);
+		
 		if file_name.to_lower() == "readme.txt":
-			readme = Global.get_sub_file(dir, file_name, FileAccess.READ).get_as_text();
-		elif beatmap == null:
-			var temp_beatmap := BeatMap.new(dir, Global.get_sub_file(dir, file_name, FileAccess.READ));
-			if temp_beatmap != null && temp_beatmap.loaded:
-				beatmap = temp_beatmap;
-				break;
+			readme = map_file.get_as_text();
+		else:
+			if beatmap == null:
+				var temp_beatmap := BeatMap.new(dir, map_file);
+				if temp_beatmap != null && temp_beatmap.loaded:
+					beatmap = temp_beatmap;
+				levels[beatmap.levelname] = [beatmap.level, beatmap.file_path];
+			else:
+				var level_values = find_map_value(keys, map_file);
+				levels[level_values[0]] = [level_values[1], map_file.get_path()];
+		
+		map_file.close();
 	
 	if beatmap != null:
 		print(beatmap.file_path);
-		add_song(beatmap, readme if readme != null else "");
+		add_song(beatmap, levels, readme if readme != null else "");
 		print("   ↑ Loaded: " + beatmap.title);
 
+## 获取map中
+func find_map_value(need_keys :Array[String], map_file :FileAccess) -> Array:
+	var need_count := need_keys.size();
+	var find_count := 0;
+	var values := [];
+	while find_count < need_count || map_file.get_position() < map_file.get_length():
+		var line := map_file.get_line();
+		if line.begins_with("//") || !line.contains(":"): continue;
+		var parts := line.split(":", true, 2);
+		#if parts.size() < 2: parts[1] = "null";
+		var i := 0;
+		while i < need_count:
+			if parts[0] == need_keys[i]:
+				values[i] = parts[1];
+			i += 1;
+	return values;
+
 ## 添加一首歌
-func add_song(beatmap: BeatMap, readme: String = ""):
+func add_song(example_beatmap: BeatMap, levels: Dictionary, readme: String = ""):
 	var song_card :SongCard = song_card_tscn.instantiate(PackedScene.GEN_EDIT_STATE_DISABLED) as SongCard;
 	container.add_child(song_card);
-	song_card.example_beatmap = beatmap;
+	song_card.example_beatmap = example_beatmap;
+	song_card.levels = levels;
 	song_card.readme = readme;
+	print(levels);

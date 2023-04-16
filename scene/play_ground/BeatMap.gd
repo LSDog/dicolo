@@ -8,6 +8,8 @@ enum EVENT_TYPE {None, Note, Crash, LineCrash, Slide, Start, Bpm, End};
 ## 是否加载完毕
 var loaded :bool = false;
 
+## 铺面文件夹路径
+var dir_path :String;
 ## 铺面文件路径
 var file_path :String;
 
@@ -17,8 +19,10 @@ var title :String;
 var singer :String;
 ## 作图者
 var mapper :String;
+## 难度
+var level :int;
 ## 难度名称
-var level :String;
+var levelname :String;
 ## 音频文件路径
 var audio_path :String;
 ## 视频文件路径
@@ -38,6 +42,7 @@ var start_time :float;
 func _init(dir_access :DirAccess, file :FileAccess):
 	resource_name = "BeatMap";
 	if file == null || !file.is_open(): return;
+	dir_path = dir_access.get_current_dir();
 	file_path = file.get_path();
 	# 获取第一行的标识内容并检验
 	var head_line = file.get_line();
@@ -68,19 +73,20 @@ func _init(dir_access :DirAccess, file :FileAccess):
 				"title": title = value;
 				"singer": singer = value;
 				"mapper": mapper = value;
-				"level": level = value;
+				"level": level = -1 if !value.is_valid_float() else value.to_float();
+				"levelname": levelname = value;
 				"audio":
 					audio_path = dir+value;
 				"video":
 					video_path = dir+value;
-				"bpm": bpm = 0 if !value.is_valid_int() else value.to_int();
+				"bpm": bpm = 0 if !value.is_valid_float() else value.to_float();
 				"bg":
 					bg_image_path = dir+value;
 					#bg_image = ResourceLoader.load(dir+value, "Texture2D");
 				"events":
 					in_event = true;
 	file.close();
-	start_time = 0.0 if events.size() < 0 else events[0].time;
+	start_time = 0.0 if events.is_empty() else events[0].time;
 	loaded = true;
 
 ## 接受1行带时间的event形式，如 "0.6 _start" 或 "1.93 c/l/-135 c/r/-90"

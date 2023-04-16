@@ -4,10 +4,10 @@
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_yxakl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r267s"]
-bg_color = Color(0.94902, 0.796078, 0.380392, 1)
+bg_color = Color(0.75, 0.63, 0.3, 1)
 skew = Vector2(-0.2, 0)
 border_width_left = 1024
-border_color = Color(0, 0, 0.2, 0.45098)
+border_color = Color(0, 0, 0.2, 0.8)
 border_blend = true
 corner_radius_top_left = 20
 corner_detail = 1
@@ -18,7 +18,7 @@ shadow_offset = Vector2(5, 5)
 [sub_resource type="LabelSettings" id="LabelSettings_k2800"]
 line_spacing = 0.0
 font = ExtResource("3_yxakl")
-font_size = 37
+font_size = 32
 outline_size = 7
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
@@ -27,7 +27,7 @@ shadow_offset = Vector2(0, 0)
 [sub_resource type="LabelSettings" id="LabelSettings_pe2pw"]
 line_spacing = 0.0
 font = ExtResource("3_yxakl")
-font_size = 22
+font_size = 18
 font_color = Color(0.811765, 0.811765, 0.811765, 1)
 
 [node name="Song" type="Panel"]
@@ -54,15 +54,17 @@ metadata/_edit_lock_ = true
 [node name="Title" type="Label" parent="."]
 layout_mode = 2
 offset_left = 12.0
+offset_top = 8.0
 offset_right = 135.0
-offset_bottom = 51.0
+offset_bottom = 53.0
 text = "-NULL-"
 label_settings = SubResource("LabelSettings_k2800")
+vertical_alignment = 1
 
 [node name="Info" type="Label" parent="."]
 layout_mode = 2
 offset_left = 22.0
-offset_top = 51.0
+offset_top = 57.0
 offset_right = 81.0
 offset_bottom = 83.0
 text = "-null-"

@@ -20,13 +20,17 @@ var is_mouse_entered := false;
 var pressed_pos;
 var selected = false;
 
+## 难度，结构为{ "The Normal": [4, "res://map/a_map_folder/map_normal.txt"] }
+var levels :Dictionary = {};
+
 ## 用来提供展示的beatmap对象, 并非实际用于游玩的铺面
 var example_beatmap :BeatMap = null:
 	set(value):
 		example_beatmap = value;
 		title_label.text = example_beatmap.title;
 		info_label.text = example_beatmap.singer;
-		image_rect.texture = load(example_beatmap.bg_image_path);
+		if example_beatmap.bg_image_path != "":
+			image_rect.texture = load(example_beatmap.bg_image_path);
 
 ## readme.txt 里的话
 var readme :String;
@@ -71,7 +75,6 @@ func _gui_input(event):
 			accept_event();
 			if !selected:
 				pressed_pos = event.global_position;
-				print(pressed_pos);
 		else:
 		# 在当前card上松手了
 			if !selected:
@@ -86,18 +89,22 @@ func _gui_input(event):
 				song_play_request.emit();
 
 func _input(event):
+	return;
 	if event is InputEventMouseButton:
 		if event.button_mask != MOUSE_BUTTON_LEFT: return;
 		if selected && event.pressed && !get_global_rect().has_point(event.position):
-			modulate_v_target = modulate_v_origin;
-			width_target = width_origin;
-			selected = false;
+			unselect();
 
 func select():
 	selected = true;
 	modulate_v_target = modulate_v_select;
 	width_target = width_origin * width_select_mul;
 	song_selected.emit();
+
+func unselect():
+	modulate_v_target = modulate_v_origin;
+	width_target = width_origin;
+	selected = false;
 
 func unhover():
 	if !selected: modulate_v_target = modulate_v_origin;
