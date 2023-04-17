@@ -1,0 +1,596 @@
+[gd_scene load_steps=22 format=3 uid="uid://cvonjf6lsdmlw"]
+
+[ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://image/texture/circle_white_512.svg" id="2_y71jt"]
+[ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="3_r2u63"]
+[ext_resource type="Texture2D" uid="uid://bq5vwdwd33o73" path="res://image/texture/rect_box.svg" id="4_u4lsl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r2rr1"]
+bg_color = Color(0.717647, 0.654902, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7k5vc"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 12
+
+[sub_resource type="GDScript" id="GDScript_n0i2n"]
+script/source = "extends Panel
+
+var current_joy :int= -1;
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	update_joycon_select();
+	Input.joy_connection_changed.connect(func(device: int, connected: bool):
+		print(\"joycon changed: \",device,\" \",connected);
+		update_joycon_select();
+	);
+	$Content/Select/Options.item_selected.connect(func(id):
+		current_joy = id;
+		$Content/Select/Label.text = \"Current: \" + str(current_joy);
+	)
+	$Content/Viberate/Button.pressed.connect(func():
+		var weak = $Content/Viberate/Sliders/Weak/Slider_weak.ratio;
+		var strong = $Content/Viberate/Sliders/Strong/Slider_strong.ratio;
+		Input.start_joy_vibration(current_joy,weak,strong,1)
+	);
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	$Content/Joystick/Left/Circle/Point.position = Vector2(
+		59 + Input.get_joy_axis(current_joy, JOY_AXIS_LEFT_X) * 64.0,
+		59 + Input.get_joy_axis(current_joy, JOY_AXIS_LEFT_Y) * 64.0
+	)
+	$Content/Joystick/Right/Circle/Point.position = Vector2(
+		59 + Input.get_joy_axis(current_joy, JOY_AXIS_RIGHT_X) * 64.0,
+		59 + Input.get_joy_axis(current_joy, JOY_AXIS_RIGHT_Y) * 64.0
+	)
+
+func update_joycon_select():
+	var joys = [];
+	$Content/Select/Options.clear();
+	for i in Input.get_connected_joypads():
+		$Content/Select/Options.add_item(Input.get_joy_name(i)+\" (\"+Input.get_joy_guid(i)+\")\", i);
+	if $Content/Select/Options.item_count == 0:
+		current_joy = -1;
+		$Content/Select/Label.text = \"Current: \" + str(current_joy);
+	elif current_joy == -1:
+		var id = Input.get_connected_joypads()[0]
+		current_joy = id;
+		$Content/Select/Label.text = \"Current: \" + str(current_joy);
+"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_k7s5d"]
+load_path = "res://.godot/imported/rect_white_512.svg-2ef27ecae729d864b5c058ce25d8f1d2.ctex"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6bj6v"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_aj568"]
+animation = &"appear"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_aef17"]
+animation = &"judge"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fein6"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_frsny"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_e6dkp"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dv3vs"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_amys1"]
+states/RESET/node = SubResource("AnimationNodeAnimation_6bj6v")
+states/RESET/position = Vector2(336, 100)
+states/Start/position = Vector2(192, 100)
+states/appear/node = SubResource("AnimationNodeAnimation_aj568")
+states/appear/position = Vector2(491, 100)
+states/judge/node = SubResource("AnimationNodeAnimation_aef17")
+states/judge/position = Vector2(681, 100)
+transitions = ["appear", "judge", SubResource("AnimationNodeStateMachineTransition_fein6"), "judge", "End", SubResource("AnimationNodeStateMachineTransition_frsny"), "Start", "RESET", SubResource("AnimationNodeStateMachineTransition_e6dkp"), "RESET", "appear", SubResource("AnimationNodeStateMachineTransition_dv3vs")]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_6p488"]
+
+[sub_resource type="Animation" id="Animation_h5goy"]
+resource_name = "judge"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Crash/GPUParticles2D:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Crash/RectBox:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.2, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Crash/RectBox:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.15, 1),
+"update": 0,
+"values": [0.0, 0.785398]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Crash/RectBox:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1, 0.5),
+"transitions": PackedFloat32Array(2.5, 1),
+"update": 0,
+"values": [Color(0.639216, 0.929412, 0.988235, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Crash:self_modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.7, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Crash/BackShadowCrash:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Color(1, 0.611765, 0.537255, 1), Color(0, 0.611765, 0.537255, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_8bj1y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Crash/RectBox:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Crash/RectBox:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Crash/RectBox:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.637605, 0.92997, 0.987409, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Crash/BackShadowCrash:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Crash/BackShadowCrash:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1.5, 1.5)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Crash/BackShadowCrash:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.611765, 0.537255, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Crash:self_modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_u4noe"]
+resource_name = "appear"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Crash/BackShadowCrash:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [0.0, 1.5708]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Crash/BackShadowCrash:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Crash/BackShadowCrash:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Crash:self_modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.120742, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o55fa"]
+_data = {
+"RESET": SubResource("Animation_8bj1y"),
+"appear": SubResource("Animation_u4noe"),
+"judge": SubResource("Animation_h5goy")
+}
+
+[sub_resource type="Gradient" id="Gradient_dcsir"]
+offsets = PackedFloat32Array(0.566667, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="InputTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r2rr1")
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 61.0
+offset_right = 88.0
+offset_bottom = 101.0
+
+[node name="Gamepad" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0416667
+anchor_top = 0.0941358
+anchor_right = 0.404514
+anchor_bottom = 0.606481
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7k5vc")
+script = SubResource("GDScript_n0i2n")
+metadata/_edit_use_anchors_ = true
+
+[node name="Content" type="VBoxContainer" parent="Gamepad"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = 3.0
+offset_right = -5.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Gamepad/Content"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+text = "Gamepadaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+[node name="Select" type="HBoxContainer" parent="Gamepad/Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Gamepad/Content/Select"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+text = "Current: -1 (null)"
+
+[node name="Options" type="OptionButton" parent="Gamepad/Content/Select"]
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+clip_text = true
+
+[node name="Viberate" type="HBoxContainer" parent="Gamepad/Content"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Gamepad/Content/Viberate"]
+layout_mode = 2
+text = "zZzZZz"
+
+[node name="Sliders" type="VBoxContainer" parent="Gamepad/Content/Viberate"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Weak" type="HBoxContainer" parent="Gamepad/Content/Viberate/Sliders"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Gamepad/Content/Viberate/Sliders/Weak"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+text = "weak  "
+
+[node name="Slider_weak" type="HSlider" parent="Gamepad/Content/Viberate/Sliders/Weak"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 0.2
+
+[node name="Strong" type="HBoxContainer" parent="Gamepad/Content/Viberate/Sliders"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Gamepad/Content/Viberate/Sliders/Strong"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+text = "strong"
+
+[node name="Slider_strong" type="HSlider" parent="Gamepad/Content/Viberate/Sliders/Strong"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.1
+value = 0.6
+
+[node name="Joystick" type="HBoxContainer" parent="Gamepad/Content"]
+layout_mode = 2
+
+[node name="Left" type="TextureRect" parent="Gamepad/Content/Joystick"]
+self_modulate = Color(0.85098, 0.854902, 0.670588, 1)
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_k7s5d")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Circle" type="TextureRect" parent="Gamepad/Content/Joystick/Left"]
+self_modulate = Color(1, 1, 0.784314, 1)
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 1
+offset_right = 128.0
+offset_bottom = 128.0
+texture = ExtResource("2_y71jt")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="Gamepad/Content/Joystick/Left/Circle"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -52.5
+offset_top = -13.0
+offset_right = 52.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "left ← joystick"
+
+[node name="Point" type="TextureRect" parent="Gamepad/Content/Joystick/Left/Circle"]
+self_modulate = Color(0.509804, 0.52549, 1, 1)
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_y71jt")
+expand_mode = 1
+
+[node name="Right" type="TextureRect" parent="Gamepad/Content/Joystick"]
+self_modulate = Color(0.85098, 0.854902, 0.670588, 1)
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_k7s5d")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Circle" type="TextureRect" parent="Gamepad/Content/Joystick/Right"]
+self_modulate = Color(1, 1, 0.784314, 1)
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 1
+offset_right = 128.0
+offset_bottom = 128.0
+texture = ExtResource("2_y71jt")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="Gamepad/Content/Joystick/Right/Circle"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -58.0
+offset_top = -13.0
+offset_right = 58.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "right → joystick"
+
+[node name="Point" type="TextureRect" parent="Gamepad/Content/Joystick/Right/Circle"]
+self_modulate = Color(0.509804, 0.52549, 1, 1)
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_y71jt")
+expand_mode = 1
+
+[node name="NoteExample" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 522.0
+offset_top = 101.0
+offset_right = 984.0
+offset_bottom = 318.0
+
+[node name="AnimationTree" type="AnimationTree" parent="NoteExample"]
+tree_root = SubResource("AnimationNodeStateMachine_amys1")
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource("AnimationNodeStateMachinePlayback_6p488")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="NoteExample"]
+libraries = {
+"": SubResource("AnimationLibrary_o55fa")
+}
+
+[node name="Crash" type="Sprite2D" parent="NoteExample"]
+self_modulate = Color(1, 1, 1, 0)
+position = Vector2(117, 115)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_r2u63")
+
+[node name="BackShadowCrash" type="Sprite2D" parent="NoteExample/Crash"]
+modulate = Color(1, 0.611765, 0.537255, 0)
+show_behind_parent = true
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3_r2u63")
+
+[node name="RectBox" type="Sprite2D" parent="NoteExample/Crash"]
+modulate = Color(0, 0, 0, 1)
+self_modulate = Color(0.637605, 0.92997, 0.987409, 1)
+scale = Vector2(1e-05, 1e-05)
+texture = ExtResource("4_u4lsl")
+
+[node name="GPUParticles2D" type="CPUParticles2D" parent="NoteExample/Crash"]
+emitting = false
+amount = 6
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(1, 1)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 900.0
+initial_velocity_max = 1200.0
+linear_accel_min = -750.0
+linear_accel_max = -750.0
+scale_amount_min = 8.0
+scale_amount_max = 12.0
+color = Color(0.878431, 0.94902, 0.980392, 1)
+color_ramp = SubResource("Gradient_dcsir")
