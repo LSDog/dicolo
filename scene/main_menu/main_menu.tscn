@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=51 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_rqxl5"]
 [ext_resource type="Texture2D" uid="uid://fpi44kosojgq" path="res://image/background/トトリの夢の中.png" id="2_m18n7"]
@@ -229,6 +229,9 @@ outline_color = Color(0, 0, 0, 1)
 shadow_size = 7
 shadow_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2xnof"]
+bg_color = Color(0, 0, 0, 0.72549)
+
 [node name="MainMenu" type="Control"]
 process_priority = 10
 layout_mode = 3
@@ -282,7 +285,8 @@ anchors_preset = -1
 anchor_left = 0.7
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -410.0
+offset_left = -410.4
+offset_bottom = -80.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 0
@@ -291,7 +295,6 @@ theme = SubResource("Theme_nkv8k")
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 script = ExtResource("4_7f42v")
-metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SongList"]
 layout_direction = 1
@@ -309,10 +312,14 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="Readme" type="PanelContainer" parent="LeftPanel"]
-layout_mode = 2
-offset_top = 411.0
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -237.0
 offset_right = 350.0
-offset_bottom = 435.0
+offset_bottom = -213.0
 grow_vertical = 0
 size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_vy51k")
@@ -321,8 +328,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_vy51k")
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-focus_mode = 2
-mouse_default_cursor_shape = 1
 theme_override_colors/selection_color = Color(0, 0.329412, 0.368627, 0.768627)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
@@ -334,9 +339,7 @@ theme_override_font_sizes/italics_font_size = 18
 theme_override_font_sizes/bold_italics_font_size = 18
 theme_override_font_sizes/mono_font_size = 18
 bbcode_enabled = true
-fit_content = true
 scroll_following = true
-selection_enabled = true
 
 [node name="LevelsBar" type="ScrollContainer" parent="LeftPanel"]
 clip_children = 2
@@ -675,11 +678,12 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
+text = "*这里有个超豪华开始键*"
 
 [node name="ButtonCloud" type="TextureRect" parent="DownPanel/DownBarVBox/ButtonStart"]
+visible = false
 modulate = Color(1.03, 1.3, 1.54, 1)
 show_behind_parent = true
-z_index = 1
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -729,3 +733,104 @@ label_settings = SubResource("LabelSettings_qknmj")
 layout_mode = 2
 text = "debug:"
 label_settings = SubResource("LabelSettings_8ojig")
+
+[node name="Option" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2xnof")
+
+[node name="Scroll" type="ScrollContainer" parent="Option"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_5irqw")
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="List" type="VBoxContainer" parent="Option/Scroll"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Placeholder" type="Control" parent="Option/Scroll/List"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Video" type="VBoxContainer" parent="Option/Scroll/List"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Option/Scroll/List/Video"]
+layout_mode = 2
+text = "|📺 Video"
+
+[node name="FullScreen" type="HBoxContainer" parent="Option/Scroll/List/Video"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Option/Scroll/List/Video/FullScreen"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Full screen (F11)"
+
+[node name="CheckButton" type="CheckButton" parent="Option/Scroll/List/Video/FullScreen"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="FullScreenMode" type="HBoxContainer" parent="Option/Scroll/List/Video"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Option/Scroll/List/Video/FullScreenMode"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Full screen mode"
+
+[node name="CheckButton" type="OptionButton" parent="Option/Scroll/List/Video/FullScreenMode"]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+alignment = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "FullScreen"
+popup/item_0/id = 0
+popup/item_1/text = "BordrLess"
+popup/item_1/id = 1
+
+[node name="FPS" type="HBoxContainer" parent="Option/Scroll/List/Video"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Option/Scroll/List/Video/FPS"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "FPS"
+
+[node name="CheckButton" type="LineEdit" parent="Option/Scroll/List/Video/FPS"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "60"
+placeholder_text = "I don't know maybe 60 lol"
+alignment = 1
+
+[node name="V-sync" type="HBoxContainer" parent="Option/Scroll/List/Video"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Option/Scroll/List/Video/V-sync"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "V-sync"
+
+[node name="CheckButton" type="CheckButton" parent="Option/Scroll/List/Video/V-sync"]
+layout_mode = 2
+size_flags_horizontal = 8

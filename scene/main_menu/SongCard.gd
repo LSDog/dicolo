@@ -50,15 +50,8 @@ func _ready():
 		unhover();
 	);
 	
-	title_label.resized.connect(func():
-		if title_label.size.x > size.x:
-			title_label.scale.x = maxf(0.6, size.x / title_label.size.x);
-	);
-	
-	info_label.resized.connect(func():
-		if info_label.size.x > (size.x - info_label.position.x):
-			info_label.scale.x = maxf(0.6, (size.x - info_label.position.x) / info_label.size.x);
-	);
+	title_label.resized.connect(resize_labels);
+	info_label.resized.connect(resize_labels);
 
 func _process(_delta):
 	
@@ -66,6 +59,7 @@ func _process(_delta):
 		modulate.v = Global.stick_edge(lerpf(modulate.v, modulate_v_target, 0.1));
 	if custom_minimum_size.x != width_target + width_offset:
 		custom_minimum_size.x = Global.stick_edge(lerpf(custom_minimum_size.x, width_target + width_offset, 0.2));
+		resize_labels();
 
 func _gui_input(event):
 	if event is InputEventMouseButton:
@@ -88,13 +82,6 @@ func _gui_input(event):
 			else:
 				song_play_request.emit();
 
-func _input(event):
-	return;
-	if event is InputEventMouseButton:
-		if event.button_mask != MOUSE_BUTTON_LEFT: return;
-		if selected && event.pressed && !get_global_rect().has_point(event.position):
-			unselect();
-
 func select():
 	selected = true;
 	modulate_v_target = modulate_v_select;
@@ -108,3 +95,9 @@ func unselect():
 
 func unhover():
 	if !selected: modulate_v_target = modulate_v_origin;
+
+func resize_labels():
+	if title_label.size.x > (size.x - title_label.position.x):
+		title_label.scale.x = maxf(0.6, (size.x - title_label.position.x) / title_label.size.x);
+	if info_label.size.x > (size.x - info_label.position.x):
+		info_label.scale.x = maxf(0.6, (size.x - info_label.position.x) / info_label.size.x);

@@ -1,8 +1,0 @@
-!dicolo_map_v1
-title:olemiluamavaletribal
-singer:djtry
-mapper:LSDog
-level:5
-levelname:normal
-audio:olemiluamavaletribal.mp3
-bpm:125

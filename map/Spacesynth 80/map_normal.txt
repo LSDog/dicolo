@@ -1,0 +1,9 @@
+!dicolo_map_v1
+title:Spacesynth 80
+singer:Maxim Vasilyev
+mapper:LSDog
+level:6
+levelname:normal
+audio:Spacesynth_80.mp3
+bpm:125
+bg:bg.jpg

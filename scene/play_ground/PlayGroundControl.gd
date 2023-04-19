@@ -78,10 +78,10 @@ var trackr_path :Path2D;
 @onready var background := $BGPanel/Background;
 @onready var playground := $PlayGround;
 
-var texture_crash = preload("res://image/texture/crash.svg");
-var texture_follow = preload("res://image/texture/follow.svg");
-var tecture_line_crash = preload("res://image/texture/crash_line.svg");
-var tecture_slide = preload("res://image/texture/slide_line.svg");
+var texture_crash = load("res://image/texture/crash.svg");
+var texture_follow = load("res://image/texture/follow.svg");
+var tecture_line_crash = load("res://image/texture/round_slim_rect.png");
+var tecture_slide = load("res://image/texture/slide_line.svg");
 
 ## 铺面加载完毕
 signal map_loaded;
@@ -451,7 +451,7 @@ func generate_note(note :BeatMap.Event) -> Array:
 				note.deg/360.0, note.deg_end/360.0
 			);
 			line.points = points;
-			line.width = 14;
+			line.width = 18;
 			line.texture = tecture_line_crash;
 			line.texture_mode = Line2D.LINE_TEXTURE_TILE;
 			line.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED;

@@ -59,7 +59,6 @@ func update_joycon_select():
 "
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_k7s5d"]
-load_path = "res://.godot/imported/rect_white_512.svg-2ef27ecae729d864b5c058ce25d8f1d2.ctex"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6bj6v"]
 animation = &"RESET"
@@ -97,82 +96,6 @@ states/judge/position = Vector2(681, 100)
 transitions = ["appear", "judge", SubResource("AnimationNodeStateMachineTransition_fein6"), "judge", "End", SubResource("AnimationNodeStateMachineTransition_frsny"), "Start", "RESET", SubResource("AnimationNodeStateMachineTransition_e6dkp"), "RESET", "appear", SubResource("AnimationNodeStateMachineTransition_dv3vs")]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_6p488"]
-
-[sub_resource type="Animation" id="Animation_h5goy"]
-resource_name = "judge"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Crash/GPUParticles2D:emitting")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Crash/RectBox:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.2, 1),
-"update": 0,
-"values": [Vector2(1e-05, 1e-05), Vector2(1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Crash/RectBox:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.15, 1),
-"update": 0,
-"values": [0.0, 0.785398]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Crash/RectBox:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.1, 0.5),
-"transitions": PackedFloat32Array(2.5, 1),
-"update": 0,
-"values": [Color(0.639216, 0.929412, 0.988235, 1), Color(1, 1, 1, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Crash:self_modulate:a")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.7, 1),
-"update": 0,
-"values": [1.0, 0.0]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Crash/BackShadowCrash:modulate")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.3, 1),
-"update": 0,
-"values": [Color(1, 0.611765, 0.537255, 1), Color(0, 0.611765, 0.537255, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_8bj1y"]
 length = 0.001
@@ -311,6 +234,82 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(0.120742, 1),
 "update": 0,
 "values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_h5goy"]
+resource_name = "judge"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Crash/GPUParticles2D:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Crash/RectBox:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.2, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Crash/RectBox:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.15, 1),
+"update": 0,
+"values": [0.0, 0.785398]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Crash/RectBox:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.1, 0.5),
+"transitions": PackedFloat32Array(2.5, 1),
+"update": 0,
+"values": [Color(0.639216, 0.929412, 0.988235, 1), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Crash:self_modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.7, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Crash/BackShadowCrash:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Color(1, 0.611765, 0.537255, 1), Color(0, 0.611765, 0.537255, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_o55fa"]
@@ -566,7 +565,7 @@ scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_r2u63")
 
 [node name="BackShadowCrash" type="Sprite2D" parent="NoteExample/Crash"]
-modulate = Color(1, 0.611765, 0.537255, 0)
+modulate = Color(1, 0.611765, 0.537255, 1)
 show_behind_parent = true
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_r2u63")

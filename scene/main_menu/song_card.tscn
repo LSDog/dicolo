@@ -18,7 +18,7 @@ shadow_offset = Vector2(5, 5)
 [sub_resource type="LabelSettings" id="LabelSettings_k2800"]
 line_spacing = 0.0
 font = ExtResource("3_yxakl")
-font_size = 32
+font_size = 28
 outline_size = 7
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
@@ -32,7 +32,7 @@ font_color = Color(0.811765, 0.811765, 0.811765, 1)
 
 [node name="Song" type="Panel"]
 modulate = Color(0.984568, 0.984568, 0.984568, 1)
-custom_minimum_size = Vector2(380, 90)
+custom_minimum_size = Vector2(380, 80)
 size_flags_horizontal = 8
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_r267s")
@@ -53,19 +53,19 @@ metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 2
-offset_left = 12.0
-offset_top = 8.0
-offset_right = 135.0
-offset_bottom = 53.0
+offset_left = 15.0
+offset_top = 7.0
+offset_right = 138.0
+offset_bottom = 47.0
 text = "-NULL-"
 label_settings = SubResource("LabelSettings_k2800")
 vertical_alignment = 1
 
 [node name="Info" type="Label" parent="."]
 layout_mode = 2
-offset_left = 22.0
-offset_top = 57.0
-offset_right = 81.0
-offset_bottom = 83.0
+offset_left = 21.0
+offset_top = 48.0
+offset_right = 80.0
+offset_bottom = 74.0
 text = "-null-"
 label_settings = SubResource("LabelSettings_pe2pw")

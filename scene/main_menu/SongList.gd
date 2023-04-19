@@ -86,7 +86,7 @@ func handle_song_play_request(song_card: SongCard):
 	print("play song: ", song_card.example_beatmap.title, ", level: ", level_name);
 	
 	var play_ground_scene := load("res://scene/play_ground/play_ground.tscn") as PackedScene;
-	var play_ground := play_ground_scene.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as PlayGroundControl;
+	var play_ground := play_ground_scene.instantiate(PackedScene.GEN_EDIT_STATE_DISABLED) as PlayGroundControl;
 	Global.freeze(main_menu);
 	get_tree().root.add_child(play_ground);
 	get_tree().current_scene = play_ground;
