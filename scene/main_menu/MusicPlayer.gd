@@ -18,6 +18,9 @@ var last_beat :int = 0;
 ## 每一拍发射一次信号
 signal beat();
 
+## 音乐播放结束信号，loop为true时不会触发
+signal audio_end();
+
 @export var play := true:
 	set(value):
 		if play == value: return;
@@ -45,6 +48,7 @@ func _ready():
 		if loop: audio_player.play();
 		else:
 			play = false;
+			audio_end.emit();
 	);
 	
 

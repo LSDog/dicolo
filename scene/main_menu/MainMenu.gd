@@ -22,6 +22,11 @@ func _ready():
 		tween.tween_property(stylebox, "border_width_left", 0.0, 60/music_player.bpm).from(250.0);
 		tween.tween_property(stylebox, "border_width_right", 0.0, 60/music_player.bpm).from(250.0);
 	);
+	
+	music_player.audio_end.connect(func():
+		await get_tree().create_timer(1.0).timeout;
+		song_list.choose_song_random()
+	);
 
 func _process(_delta):
 	

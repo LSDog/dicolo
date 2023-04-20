@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=52 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_rqxl5"]
 [ext_resource type="Texture2D" uid="uid://fpi44kosojgq" path="res://image/background/トトリの夢の中.png" id="2_m18n7"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://bkw2uvfq75e5p" path="res://image/ui_icon/cloud-download.svg" id="11_d6yky"]
 [ext_resource type="Texture2D" uid="uid://d25b25n5ka51" path="res://image/ui_icon/rolling-dices.svg" id="12_jwht8"]
 [ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://image/ui_icon/anticlockwise-rotation.svg" id="12_t4kou"]
+[ext_resource type="Script" path="res://scene/main_menu/DownPanel.gd" id="15_amr8j"]
 [ext_resource type="Texture2D" uid="uid://bnit1n5had4bg" path="res://image/ui_icon/cancel.svg" id="19_fj0rw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwa4q"]
@@ -504,6 +505,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_hpptf")
+script = ExtResource("15_amr8j")
 metadata/_edit_use_anchors_ = true
 
 [node name="Avatar" type="Control" parent="DownPanel"]
@@ -527,7 +529,7 @@ texture = ExtResource("9_sywfr")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="DownBarVBox" type="HBoxContainer" parent="DownPanel"]
+[node name="VBox" type="HBoxContainer" parent="DownPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -536,26 +538,26 @@ offset_left = 130.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="PlayerInfoVBox" type="VBoxContainer" parent="DownPanel/DownBarVBox"]
+[node name="PlayerInfoVBox" type="VBoxContainer" parent="DownPanel/VBox"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="DownPanel/DownBarVBox/PlayerInfoVBox"]
+[node name="Label" type="Label" parent="DownPanel/VBox/PlayerInfoVBox"]
 layout_mode = 2
 text = "Name: LSDog
 Level: -1
 Status: ONLINE"
 label_settings = SubResource("LabelSettings_ewllf")
 
-[node name="VSeparator" type="VSeparator" parent="DownPanel/DownBarVBox"]
+[node name="VSeparator" type="VSeparator" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 
-[node name="DeviceInfoVBox" type="VBoxContainer" parent="DownPanel/DownBarVBox"]
+[node name="DeviceInfoVBox" type="VBoxContainer" parent="DownPanel/VBox"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Label" type="Label" parent="DownPanel/DownBarVBox/DeviceInfoVBox"]
+[node name="Label" type="Label" parent="DownPanel/VBox/DeviceInfoVBox"]
 layout_mode = 2
 size_flags_vertical = 6
 text = "Time: 13:52:00
@@ -563,11 +565,11 @@ Battery: 99%"
 label_settings = SubResource("LabelSettings_ewllf")
 vertical_alignment = 1
 
-[node name="|<->|" type="Control" parent="DownPanel/DownBarVBox"]
+[node name="|<->|" type="Control" parent="DownPanel/VBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonOption" type="Button" parent="DownPanel/DownBarVBox"]
+[node name="ButtonOption" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
@@ -575,7 +577,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 
-[node name="Label" type="Label" parent="DownPanel/DownBarVBox/ButtonOption"]
+[node name="Label" type="Label" parent="DownPanel/VBox/ButtonOption"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.02
@@ -589,7 +591,7 @@ text = "Option"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ButtonCloud" type="TextureRect" parent="DownPanel/DownBarVBox/ButtonOption"]
+[node name="ButtonCloud" type="TextureRect" parent="DownPanel/VBox/ButtonOption"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -600,7 +602,7 @@ texture = ExtResource("11_c1evm")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ButtonCloud" type="Button" parent="DownPanel/DownBarVBox"]
+[node name="ButtonCloud" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
@@ -608,7 +610,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 
-[node name="Label" type="Label" parent="DownPanel/DownBarVBox/ButtonCloud"]
+[node name="Label" type="Label" parent="DownPanel/VBox/ButtonCloud"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.02
@@ -623,7 +625,7 @@ text = "Cloud"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ButtonCloud" type="TextureRect" parent="DownPanel/DownBarVBox/ButtonCloud"]
+[node name="ButtonCloud" type="TextureRect" parent="DownPanel/VBox/ButtonCloud"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -634,7 +636,7 @@ texture = ExtResource("11_d6yky")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ButtonRandom" type="Button" parent="DownPanel/DownBarVBox"]
+[node name="ButtonRandom" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
@@ -642,7 +644,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 
-[node name="Label" type="Label" parent="DownPanel/DownBarVBox/ButtonRandom"]
+[node name="Label" type="Label" parent="DownPanel/VBox/ButtonRandom"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.02
@@ -656,7 +658,7 @@ text = "Random"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ButtonCloud" type="TextureRect" parent="DownPanel/DownBarVBox/ButtonRandom"]
+[node name="ButtonCloud" type="TextureRect" parent="DownPanel/VBox/ButtonRandom"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -667,11 +669,11 @@ texture = ExtResource("12_jwht8")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="||" type="Control" parent="DownPanel/DownBarVBox"]
+[node name="||" type="Control" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 
-[node name="ButtonStart" type="Button" parent="DownPanel/DownBarVBox"]
+[node name="ButtonStart" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
@@ -680,7 +682,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 text = "*这里有个超豪华开始键*"
 
-[node name="ButtonCloud" type="TextureRect" parent="DownPanel/DownBarVBox/ButtonStart"]
+[node name="ButtonCloud" type="TextureRect" parent="DownPanel/VBox/ButtonStart"]
 visible = false
 modulate = Color(1.03, 1.3, 1.54, 1)
 show_behind_parent = true
@@ -694,7 +696,7 @@ texture = ExtResource("19_fj0rw")
 expand_mode = 5
 stretch_mode = 6
 
-[node name="<-|" type="Control" parent="DownPanel/DownBarVBox"]
+[node name="<-|" type="Control" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 

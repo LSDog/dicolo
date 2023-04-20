@@ -19,6 +19,8 @@ var center_song_index :int = 0; # 当前在屏幕“中间”的歌曲位数
 var center_song_index_float :float = 0.0; # 当前在屏幕“中间”的歌曲位数的小数形式
 var dragging_index := [];
 
+var randomed_index_list := []; # 随机抽取到的歌曲index，防止重复
+
 var song_card_tscn = preload("res://scene/main_menu/song_card.tscn");
 
 func _ready():
@@ -30,13 +32,16 @@ func _ready():
 
 func _ready_later():
 	
-	Debug.count_time("map load");
+	Debug.count_time("Map Load");
 	load_maps();
-	Debug.count_time("map load");
-	for node in $VBoxContainer.get_children():
+	Debug.count_time("Map Load");
+	for node in container.get_children():
 		node = node as SongCard;
 		node.song_selected.connect(handle_song_select.bind(node));
 		node.song_play_request.connect(handle_song_play_request.bind(node));
+	
+	# 载完图后随机播放歌曲
+	choose_song_random();
 
 ## 处理选中(点击)歌曲卡片
 func handle_song_select(song_card: SongCard):
@@ -45,7 +50,7 @@ func handle_song_select(song_card: SongCard):
 	touch_scroll_speed = 0;
 	scroll_speed = 0;
 	# 让上一个被选中的songcard缩回去
-	if selected_card != null: selected_card.unselect();
+	if selected_card != null && selected_card != song_card: selected_card.unselect();
 	selected_card = song_card;
 	# 更改界面预览当前歌曲
 	var main_menu := get_parent() as MainMenu;
@@ -99,17 +104,14 @@ func _process(delta):
 	if abs(scroll_speed * delta) < 0.5: scroll_speed = 0;
 	# 触底减速
 	if (scroll_speed < 0 && scroll_vertical <= 0) || \
-		(scroll_speed > 0 && scroll_vertical + size.y >= $VBoxContainer.size.y):
+		(scroll_speed > 0 && scroll_vertical + size.y >= container.size.y):
 		Global.stick_edge(lerpf(scroll_speed, 0, 0.95));
 	
 	if scroll_speed != 0:
 		
 		# 丝滑滚动
 		scroll_vertical += scroll_speed * delta;
-		if scroll_speed > 0:
-			scroll_speed = max(scroll_speed - friction*scroll_speed, 0.0);
-		else:
-			scroll_speed = min(scroll_speed - friction*scroll_speed, 0.0);
+		scroll_speed = lerp(scroll_speed, 0.0, friction);
 		
 		# 额外触发鼠标移动更新song_card
 		warp_mouse(get_local_mouse_position());
@@ -126,18 +128,17 @@ func _process(delta):
 	var ratio = (v_scroll_bar.value+v_scroll_bar.page/2)/v_scroll_bar.max_value;
 	# 0->1全覆盖的算法
 	#var ratio = v_scroll_bar.value/(v_scroll_bar.max_value-v_scroll_bar.page);
-	center_song_index_float = $VBoxContainer.get_child_count() * ratio if !is_nan(ratio) else $VBoxContainer.get_child_count()/2.0;
+	center_song_index_float = get_song_count() * ratio if !is_nan(ratio) else get_song_count()/2.0;
 	center_song_index = roundi(center_song_index_float);
 	
 	# 让靠近屏幕中间的歌曲形成向外的弧线
 	var i = 0;
 	var wide = 4 / (Global.stretch_scale); # 弧线的长度
-	for song_card in $VBoxContainer.get_children():
+	for song_card in container.get_children():
 		#song_card = song_card as ColorRect;
 		var distance = abs(i-center_song_index_float+0.5);
-		if (!song_card.is_mouse_entered):
-			var width_add = ( ((1-cos(PI/wide*distance))/2.0) if abs(distance) <= wide else 1.0 ) * 60.0;
-			song_card.width_offset = width_add;
+		var width_add = ( ((1-cos(PI/wide*distance))/2.0) if abs(distance) <= wide else 1.0 ) * 60.0;
+		song_card.width_offset = width_add;
 		i += 1;
 
 func _gui_input(event):
@@ -247,3 +248,46 @@ func add_song(example_beatmap: BeatMap, levels: Dictionary, readme: String = "")
 	song_card.example_beatmap = example_beatmap;
 	song_card.levels = levels;
 	song_card.readme = readme;
+	# 清除之前的随机
+	if !randomed_index_list.is_empty():
+		randomed_index_list.clear()
+
+## 获取总歌曲数
+func get_song_count() -> int:
+	return container.get_child_count();
+
+## 获取某个歌曲
+func get_song(index: int) -> SongCard:
+	return container.get_child(index);
+
+## 滚动到某个歌曲
+func scroll_to(index: int):
+	index = clampi(index, 0, get_song_count());
+	var distance = (index - center_song_index_float) / get_song_count() * container.size.y;
+	create_tween().tween_property(self
+		, "scroll_vertical"
+		, float(index) / get_song_count() * container.size.y - size.y / 2.0
+		, 0.75
+	).from_current().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
+
+## 选择某个曲子
+func choose_song(index: int):
+	get_song(index).select();
+
+## 随机选曲
+func choose_song_random():
+	# 防重复
+	if randomed_index_list.size() >= get_song_count():
+		randomed_index_list.clear();
+	var last_indexes = range(0, get_song_count()).filter(func(i):
+		return !randomed_index_list.has(i);
+	);
+	var index = last_indexes.pick_random();
+	randomed_index_list.append(index);
+	choose_song(index);
+	scroll_to(index);
+
+func _unhandled_input(event: InputEvent):
+	if event is InputEventKey:
+		if event.physical_keycode == KEY_R && event.pressed:
+			choose_song_random();
