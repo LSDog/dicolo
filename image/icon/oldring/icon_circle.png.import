@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqnke500v6r2x"
-path="res://.godot/imported/icon_chara.png-406e359747f23dd398964a97d58e7d6c.ctex"
+uid="uid://ck3xl3yrv1kyp"
+path="res://.godot/imported/icon_circle.png-3114c69146bc531c8ce96735725bb4ff.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/icon/icon_chara.png"
-dest_files=["res://.godot/imported/icon_chara.png-406e359747f23dd398964a97d58e7d6c.ctex"]
+source_file="res://image/icon/oldring/icon_circle.png"
+dest_files=["res://.godot/imported/icon_circle.png-3114c69146bc531c8ce96735725bb4ff.ctex"]
 
 [params]
 

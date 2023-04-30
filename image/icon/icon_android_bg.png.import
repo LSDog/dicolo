@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcvbf6la7jvtv"
-path="res://.godot/imported/dicolo!_white.png-317e33de81932edfd17d7a815669a89f.ctex"
+uid="uid://d08lwap85d32b"
+path="res://.godot/imported/icon_android_bg.png-322ffc3e0adf205b30a769626098aeea.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/icon/dicolo!_white.png"
-dest_files=["res://.godot/imported/dicolo!_white.png-317e33de81932edfd17d7a815669a89f.ctex"]
+source_file="res://image/icon/icon_android_bg.png"
+dest_files=["res://.godot/imported/icon_android_bg.png-322ffc3e0adf205b30a769626098aeea.ctex"]
 
 [params]
 

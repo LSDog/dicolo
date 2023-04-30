@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbpnxksctjt5n"
-path="res://.godot/imported/round_slim_rect.png-21797b9a3f8d9e9a3b65a289266eb3d0.ctex"
+uid="uid://dvxo22gnprgpf"
+path="res://.godot/imported/icon.svg-29eaa8dd2da56f35d46f66d76a4ff39d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/texture/round_slim_rect.png"
-dest_files=["res://.godot/imported/round_slim_rect.png-21797b9a3f8d9e9a3b65a289266eb3d0.ctex"]
+source_file="res://image/icon/icon.svg"
+dest_files=["res://.godot/imported/icon.svg-29eaa8dd2da56f35d46f66d76a4ff39d.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
