@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://deo2xvigq1mcj"]
+
+[ext_resource type="Script" path="res://scene/test/DebugInfo.gd" id="1_62dyw"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_wgxdj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_u5cu8"]
+line_spacing = 0.0
+font = ExtResource("2_wgxdj")
+font_size = 20
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="DebugInfo" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_62dyw")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -768.0
+offset_top = -128.0
+offset_right = -32.0
+offset_bottom = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "This is a Label for debug"
+label_settings = SubResource("LabelSettings_u5cu8")

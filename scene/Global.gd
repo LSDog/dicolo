@@ -9,6 +9,10 @@ var full_screen = false;
 
 ## 主界面
 var scene_MainMenu :Control = null;
+## 设置界面
+var scene_Settings :Control = null;
+## Debug界面
+var scene_DebugInfo :Control = null;
 
 ## 上次旋转屏幕方向的游戏时间
 var last_auto_rotate := 0.0;
@@ -47,9 +51,16 @@ func _ready():
 	_ready_later.call_deferred();
 
 func _ready_later():
-	var packed_scene_settings = load("res://scene/settings/settings.tscn") as PackedScene;
-	var scene_settings = packed_scene_settings.instantiate();
-	get_tree().root.add_child(scene_settings);
+	var packed_scene_Settings := load("res://scene/settings/settings.tscn") as PackedScene;
+	scene_Settings = packed_scene_Settings.instantiate() as Control;
+	scene_Settings.visible = false;
+	get_tree().root.add_child(scene_Settings);
+	scene_Settings.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
+	
+	var packed_scene_DebugInfo := load("res://scene/test/debug_info.tscn") as PackedScene;
+	scene_DebugInfo = packed_scene_DebugInfo.instantiate() as Control;
+	get_tree().root.add_child(scene_DebugInfo);
+	scene_DebugInfo.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 
 func _notification(what):
 	match what:
@@ -72,15 +83,6 @@ func _process(_delta):
 		if DisplayServer.screen_get_orientation() == DisplayServer.SCREEN_LANDSCAPE:
 			DisplayServer.screen_set_orientation(DisplayServer.SCREEN_REVERSE_LANDSCAPE);
 		else: DisplayServer.screen_set_orientation(DisplayServer.SCREEN_LANDSCAPE);
-
-func _unhandled_input(event):
-	if event.is_action_pressed("full_screen"):
-		if full_screen:
-			full_screen = false;
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);
-		else:
-			full_screen = true;
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN);
 
 ## 更新摇杆连接
 func update_joypad():

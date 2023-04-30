@@ -1,9 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://cdyhqt27mk6t3"]
+[gd_scene load_steps=6 format=3 uid="uid://cdyhqt27mk6t3"]
 
 [ext_resource type="Script" path="res://scene/settings/Settings.gd" id="1_lidja"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_vs43p"]
 [ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="3_2sjp6"]
-[ext_resource type="FontFile" uid="uid://mqvi1o7fpls2" path="res://ui/font/HuXiaoBoZhenShuaiTi.ttf" id="4_tfek4"]
 
 [sub_resource type="Theme" id="Theme_xwlyw"]
 default_font = ExtResource("2_vs43p")
@@ -11,145 +10,6 @@ default_font_size = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
 bg_color = Color(0, 0, 0, 0.8)
-
-[sub_resource type="Animation" id="Animation_qwxee"]
-resource_name = "RESET"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel:anchor_bottom")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-
-[sub_resource type="Animation" id="Animation_nxswl"]
-resource_name = "hide_settings"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel:anchor_bottom")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(2, 1),
-"update": 0,
-"values": [1.0, 0.0]
-}
-
-[sub_resource type="Animation" id="Animation_kp3no"]
-resource_name = "show_settings"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel:anchor_bottom")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.225313, 1),
-"update": 0,
-"values": [0.0, 1.0]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Panel")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.5),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"update_minimum_size"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_yc10v"]
-_data = {
-"RESET": SubResource("Animation_qwxee"),
-"hide": SubResource("Animation_nxswl"),
-"show": SubResource("Animation_kp3no")
-}
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nlk63"]
-bg_color = Color(0.160784, 0.160784, 0.160784, 1)
-skew = Vector2(0.1, 0)
-border_width_left = 28
-corner_radius_bottom_right = 26
-expand_margin_left = 28.0
-shadow_color = Color(0, 0, 0, 0.321569)
-shadow_size = 3
-shadow_offset = Vector2(0, 5)
-
-[sub_resource type="Animation" id="Animation_2shrf"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(64, -40)]
-}
-
-[sub_resource type="Animation" id="Animation_4phqr"]
-resource_name = "hide"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.2, 1),
-"update": 0,
-"values": [Vector2(64, 0), Vector2(64, -40)]
-}
-
-[sub_resource type="Animation" id="Animation_7pp4x"]
-resource_name = "show"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.435275, 1),
-"update": 0,
-"values": [Vector2(64, -40), Vector2(64, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_3u46d"]
-_data = {
-"RESET": SubResource("Animation_2shrf"),
-"hide": SubResource("Animation_4phqr"),
-"show": SubResource("Animation_7pp4x")
-}
-
-[sub_resource type="LabelSettings" id="LabelSettings_3hwmm"]
-line_spacing = 0.0
-font = ExtResource("4_tfek4")
-font_size = 27
-shadow_size = 0
 
 [node name="Setting" type="Control"]
 custom_minimum_size = Vector2(1152, 648)
@@ -159,25 +19,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 script = ExtResource("1_lidja")
 metadata/_edit_use_anchors_ = true
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.035
-anchor_right = 0.035
-offset_right = 350.0
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
 theme = SubResource("Theme_xwlyw")
 theme_override_styles/panel = SubResource("StyleBoxFlat_t55bx")
-
-[node name="Animation" type="AnimationPlayer" parent="Panel"]
-root_node = NodePath("../..")
-libraries = {
-"": SubResource("AnimationLibrary_yc10v")
-}
 
 [node name="Scroll" type="ScrollContainer" parent="Panel"]
 layout_mode = 1
@@ -219,7 +74,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Full screen (F11)"
 
-[node name="CheckButton" type="CheckButton" parent="Panel/Scroll/List/Video/FullScreen"]
+[node name="Button" type="CheckButton" parent="Panel/Scroll/List/Video/FullScreen"]
 layout_mode = 2
 size_flags_horizontal = 8
 
@@ -232,7 +87,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Full screen mode"
 
-[node name="CheckButton" type="OptionButton" parent="Panel/Scroll/List/Video/FullScreenMode"]
+[node name="Option" type="OptionButton" parent="Panel/Scroll/List/Video/FullScreenMode"]
 layout_mode = 2
 size_flags_horizontal = 3
 flat = true
@@ -241,7 +96,7 @@ item_count = 2
 selected = 0
 popup/item_0/text = "FullScreen"
 popup/item_0/id = 0
-popup/item_1/text = "BordrLess"
+popup/item_1/text = "BorderLess"
 popup/item_1/id = 1
 
 [node name="FPS" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
@@ -253,52 +108,23 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "FPS"
 
-[node name="CheckButton" type="LineEdit" parent="Panel/Scroll/List/Video/FPS"]
+[node name="Input" type="LineEdit" parent="Panel/Scroll/List/Video/FPS"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "60"
 placeholder_text = "I don't know maybe 60 lol"
 alignment = 1
 
-[node name="V-sync" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
+[node name="VSync" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Panel/Scroll/List/Video/V-sync"]
+[node name="Label" type="Label" parent="Panel/Scroll/List/Video/VSync"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "V-sync"
 
-[node name="CheckButton" type="CheckButton" parent="Panel/Scroll/List/Video/V-sync"]
+[node name="Button" type="CheckButton" parent="Panel/Scroll/List/Video/VSync"]
 layout_mode = 2
 size_flags_horizontal = 8
-
-[node name="FloatBar" type="Panel" parent="."]
-custom_minimum_size = Vector2(150, 32)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.045
-anchor_right = 0.045
-offset_left = 64.0
-offset_top = -40.0
-offset_right = 214.0
-offset_bottom = -8.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_nlk63")
-
-[node name="Animation" type="AnimationPlayer" parent="FloatBar"]
-libraries = {
-"": SubResource("AnimationLibrary_3u46d")
-}
-blend_times = [&"hide", &"show", 0.2, &"hide", &"hide", 0.2]
-
-[node name="Label" type="Label" parent="FloatBar"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -15.0
-offset_right = 122.0
-offset_bottom = 15.0
-grow_vertical = 2
-text = "⚙Settings"
-label_settings = SubResource("LabelSettings_3hwmm")
+button_pressed = true

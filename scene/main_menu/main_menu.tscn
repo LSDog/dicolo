@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=48 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_rqxl5"]
 [ext_resource type="Texture2D" uid="uid://fpi44kosojgq" path="res://image/background/トトリの夢の中.png" id="2_m18n7"]
@@ -211,28 +211,6 @@ border_color = Color(1, 1, 0.603922, 1)
 shadow_color = Color(0, 0, 0, 0.5)
 shadow_size = 16
 
-[sub_resource type="GDScript" id="GDScript_g35vr"]
-script/source = "extends HSlider
-
-func _ready():
-	value_changed.connect(func(p_value_changed):
-		if p_value_changed: get_tree().root.set_content_scale_factor(value);
-	);
-"
-
-[sub_resource type="LabelSettings" id="LabelSettings_qknmj"]
-outline_size = 4
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_8ojig"]
-font_size = 20
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 7
-shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2xnof"]
-bg_color = Color(0, 0, 0, 0.72549)
-
 [node name="MainMenu" type="Control"]
 process_priority = 10
 layout_mode = 3
@@ -344,10 +322,14 @@ scroll_following = true
 
 [node name="LevelsBar" type="ScrollContainer" parent="LeftPanel"]
 clip_children = 2
-layout_mode = 2
-offset_top = 435.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -213.0
 offset_right = 410.0
-offset_bottom = 488.0
+offset_bottom = -160.0
+grow_vertical = 0
 theme = ExtResource("9_5irqw")
 theme_override_styles/panel = SubResource("StyleBoxFlat_qbqrq")
 horizontal_scroll_mode = 2
@@ -544,9 +526,9 @@ alignment = 1
 
 [node name="Label" type="Label" parent="DownPanel/VBox/PlayerInfoVBox"]
 layout_mode = 2
-text = "Name: LSDog
-Level: -1
-Status: ONLINE"
+text = "Name: %s
+Level: %d
+Status: %s"
 label_settings = SubResource("LabelSettings_ewllf")
 
 [node name="VSeparator" type="VSeparator" parent="DownPanel/VBox"]
@@ -560,8 +542,8 @@ size_flags_horizontal = 8
 [node name="Label" type="Label" parent="DownPanel/VBox/DeviceInfoVBox"]
 layout_mode = 2
 size_flags_vertical = 6
-text = "Time: 13:52:00
-Battery: 99%"
+text = "Time: %s
+Today: %s"
 label_settings = SubResource("LabelSettings_ewllf")
 vertical_alignment = 1
 
@@ -569,7 +551,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonOption" type="Button" parent="DownPanel/VBox"]
+[node name="ButtonSetting" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
@@ -577,7 +559,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 
-[node name="Label" type="Label" parent="DownPanel/VBox/ButtonOption"]
+[node name="Label" type="Label" parent="DownPanel/VBox/ButtonSetting"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.02
@@ -587,11 +569,11 @@ anchor_bottom = 0.5
 grow_vertical = 2
 mouse_filter = 1
 theme_override_fonts/font = ExtResource("11_38job")
-text = "Option"
+text = "Setting"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ButtonCloud" type="TextureRect" parent="DownPanel/VBox/ButtonOption"]
+[node name="ButtonCloud" type="TextureRect" parent="DownPanel/VBox/ButtonSetting"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -699,140 +681,3 @@ stretch_mode = 6
 [node name="<-|" type="Control" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
-
-[node name="Debugs" type="VBoxContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.02
-anchor_top = 1.0
-anchor_right = 0.02
-anchor_bottom = 1.0
-offset_top = -51.0
-offset_right = 200.0
-grow_vertical = 0
-
-[node name="ScaleSlider" type="HSlider" parent="Debugs"]
-layout_mode = 2
-min_value = 0.2
-max_value = 2.0
-step = 0.01
-value = 1.0
-script = SubResource("GDScript_g35vr")
-
-[node name="Label" type="Label" parent="Debugs/ScaleSlider"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.1
-anchor_top = 0.5
-anchor_right = 1.1
-anchor_bottom = 0.5
-grow_vertical = 2
-text = "stretch/scale"
-label_settings = SubResource("LabelSettings_qknmj")
-
-[node name="DebugLabel" type="Label" parent="Debugs"]
-layout_mode = 2
-text = "debug:"
-label_settings = SubResource("LabelSettings_8ojig")
-
-[node name="Option" type="Panel" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_2xnof")
-
-[node name="Scroll" type="ScrollContainer" parent="Option"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("9_5irqw")
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
-
-[node name="List" type="VBoxContainer" parent="Option/Scroll"]
-texture_filter = 1
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Placeholder" type="Control" parent="Option/Scroll/List"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-
-[node name="Video" type="VBoxContainer" parent="Option/Scroll/List"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="Option/Scroll/List/Video"]
-layout_mode = 2
-text = "|📺 Video"
-
-[node name="FullScreen" type="HBoxContainer" parent="Option/Scroll/List/Video"]
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="Label" type="Label" parent="Option/Scroll/List/Video/FullScreen"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Full screen (F11)"
-
-[node name="CheckButton" type="CheckButton" parent="Option/Scroll/List/Video/FullScreen"]
-layout_mode = 2
-size_flags_horizontal = 8
-
-[node name="FullScreenMode" type="HBoxContainer" parent="Option/Scroll/List/Video"]
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="Label" type="Label" parent="Option/Scroll/List/Video/FullScreenMode"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Full screen mode"
-
-[node name="CheckButton" type="OptionButton" parent="Option/Scroll/List/Video/FullScreenMode"]
-layout_mode = 2
-size_flags_horizontal = 3
-flat = true
-alignment = 2
-item_count = 2
-selected = 0
-popup/item_0/text = "FullScreen"
-popup/item_0/id = 0
-popup/item_1/text = "BordrLess"
-popup/item_1/id = 1
-
-[node name="FPS" type="HBoxContainer" parent="Option/Scroll/List/Video"]
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="Label" type="Label" parent="Option/Scroll/List/Video/FPS"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "FPS"
-
-[node name="CheckButton" type="LineEdit" parent="Option/Scroll/List/Video/FPS"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "60"
-placeholder_text = "I don't know maybe 60 lol"
-alignment = 1
-
-[node name="V-sync" type="HBoxContainer" parent="Option/Scroll/List/Video"]
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="Label" type="Label" parent="Option/Scroll/List/Video/V-sync"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "V-sync"
-
-[node name="CheckButton" type="CheckButton" parent="Option/Scroll/List/Video/V-sync"]
-layout_mode = 2
-size_flags_horizontal = 8

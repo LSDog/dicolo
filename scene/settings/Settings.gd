@@ -1,45 +1,54 @@
 extends Control
 
-var float_bar_rect :Rect2;
-var float_bar_shown :bool = false;
 var setting_shown :bool = false;
 
+@onready var button_FullScreen := $Panel/Scroll/List/Video/FullScreen/Button;
+@onready var option_FullScreenMode := $Panel/Scroll/List/Video/FullScreenMode/Option;
+enum FullScreenMode {FullScreen, BorderLess};
+@onready var input_FPS := $Panel/Scroll/List/Video/FPS/Input;
+@onready var button_VSync := $Panel/Scroll/List/Video/VSync/Button;
+
 func _ready():
-	$FloatBar.gui_input.connect(float_bar_input);
-	$Panel/Animation.animation_finished.connect(func(anim_name):
-		match anim_name:
-			"hide":
-				setting_shown = false;
+	button_FullScreen.toggled.connect(func(pressed):
+		var id = option_FullScreenMode.get_selected_id();
+		print("full screen -> ", option_FullScreenMode.get_item_text(id), " ", pressed);
+		match id:
+			FullScreenMode.FullScreen:
+				DisplayServer.window_set_mode(
+					DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+					if pressed else 
+					DisplayServer.WINDOW_MODE_WINDOWED
+				);
+			FullScreenMode.BorderLess:
+				DisplayServer.window_set_mode(
+					DisplayServer.WINDOW_MODE_FULLSCREEN
+					if pressed else 
+					DisplayServer.WINDOW_MODE_WINDOWED
+				);
+				
+	);
+	input_FPS.text_submitted.connect(func(text: String):
+		if text.is_valid_int():
+			var fps = text.to_int();
+			Engine.max_fps = 0 if fps < 0 else fps;
+	);
+	button_VSync.toggled.connect(func(pressed: bool):
+		DisplayServer.window_set_vsync_mode(
+			DisplayServer.VSYNC_ENABLED
+			if pressed else
+			DisplayServer.VSYNC_DISABLED
+		);
 	);
 
-func _process(_delta):
-	float_bar_rect = $FloatBar.get_global_rect();
-	var mouse_pos := get_global_mouse_position();
-	if mouse_pos.y < 5.0 && mouse_pos.x >= float_bar_rect.position.x && mouse_pos.x <= float_bar_rect.position.x + float_bar_rect.size.x:
-		if !float_bar_shown:
-			float_bar_shown = true;
-			$FloatBar/Animation.play("show");
-	else:
-		if float_bar_shown && !setting_shown && !float_bar_rect.has_point(mouse_pos):
-			float_bar_shown = false;
-			$FloatBar/Animation.play("hide");
-
-func _input(event):
-	# 显示设置面板时拦截其他事件
-	if setting_shown:
-		var event_name :String = event.get_class();
-		#if event is InputEventMouse || event is InputEventScreenTouch || event is InputEventScreenDrag:
-		if (event_name.contains("InputEventMouse") && event.button_mask <= 2
-		) || event_name.contains("InputEventScreen"):
+func _input(event: InputEvent):
+	if visible && event is InputEventMouseButton:
+		if !$Panel.get_rect().has_point(event.position):
 			accept_event();
-			if event.is_pressed() && !$Panel.get_global_rect().has_point(event.position):
-				$Panel/Animation.play("hide");
-
-func float_bar_input(event: InputEvent):
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT && event.is_pressed():
-			if !setting_shown:
-				setting_shown = true;
-				$Panel/Animation.play("show");
-			else:
-				$Panel/Animation.play("hide");
+			if event.button_index == MOUSE_BUTTON_LEFT && event.pressed:
+				visible = false;
+	elif event.is_action_pressed("full_screen"):
+		DisplayServer.window_set_mode(
+			DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+			if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN else 
+			DisplayServer.WINDOW_MODE_WINDOWED
+		);

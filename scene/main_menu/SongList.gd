@@ -67,6 +67,8 @@ func handle_song_select(song_card: SongCard):
 	);
 	# 设置readme文本
 	main_menu.readme_label.text = song_card.readme;
+	main_menu.readme_label.scroll_to_line(0);
+	main_menu.readme_label.get_v_scroll_bar().value = 0.0;
 	# 设置levels
 	for child in main_menu.levels_bar.get_children():
 		main_menu.levels_bar.remove_child(child);
@@ -90,11 +92,11 @@ func handle_song_play_request(song_card: SongCard):
 	var level_name := main_menu.levels_bar.selected_label.text.split('/', 2)[1] as String;
 	print("play song: ", song_card.example_beatmap.title, ", level: ", level_name);
 	
-	var play_ground_scene := load("res://scene/play_ground/play_ground.tscn") as PackedScene;
-	var play_ground := play_ground_scene.instantiate(PackedScene.GEN_EDIT_STATE_DISABLED) as PlayGroundControl;
-	Global.freeze(main_menu);
+	var play_ground_scene := preload("res://scene/play_ground/play_ground.tscn") as PackedScene;
+	var play_ground := play_ground_scene.instantiate() as PlayGroundControl;
 	get_tree().root.add_child(play_ground);
 	get_tree().current_scene = play_ground;
+	Global.freeze(main_menu);
 	play_ground.play(selected_card.levels[level_name][1]);
 	
 

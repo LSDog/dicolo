@@ -80,7 +80,7 @@ var trackr_path :Path2D;
 
 var texture_crash = load("res://image/texture/crash.svg");
 var texture_follow = load("res://image/texture/follow.svg");
-var tecture_line_crash = load("res://image/texture/round_slim_rect.png");
+var tecture_line_crash = load("res://image/texture/round_slim_rect.svg");
 var tecture_slide = load("res://image/texture/slide_line.svg");
 
 ## 铺面加载完毕

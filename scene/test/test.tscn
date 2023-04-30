@@ -565,7 +565,7 @@ scale = Vector2(0.3, 0.3)
 texture = ExtResource("3_r2u63")
 
 [node name="BackShadowCrash" type="Sprite2D" parent="NoteExample/Crash"]
-modulate = Color(1, 0.611765, 0.537255, 1)
+modulate = Color(1, 0.611765, 0.537255, 0)
 show_behind_parent = true
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_r2u63")
