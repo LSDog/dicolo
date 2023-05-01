@@ -20,7 +20,7 @@ var singer :String;
 ## 作图者
 var mapper :String;
 ## 难度
-var level :int;
+var level :float;
 ## 难度名称
 var levelname :String;
 ## 音频文件路径
@@ -33,6 +33,8 @@ var bpm :float;
 var bg_image_path :String;
 ## 背景图片
 #var bg_image :Texture2D;
+## 歌词路径
+var lrc_path :String;
 ## 音符/事件等
 var events :Array[Event] = [];
 ## 开始时间（来自第一个event的时间）
@@ -83,6 +85,8 @@ func _init(dir_access :DirAccess, file :FileAccess):
 				"bg":
 					bg_image_path = dir+value;
 					#bg_image = ResourceLoader.load(dir+value, "Texture2D");
+				"lrc":
+					lrc_path = dir+value;
 				"events":
 					in_event = true;
 	file.close();
@@ -137,6 +141,31 @@ func add_note(time :float, note_string :String):
 				abs(p_deg - p_deg_end) / 360.0 / (bpm / 170) if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4]
 			));
 
+## 输出为格式化的String
+func to_file_string() -> String:
+	var values :PackedStringArray = [];
+	append_no_empty(values, ["!dicolo_map_v1"]);
+	append_no_empty(values, ["title: ", title]);
+	append_no_empty(values, ["singer: ", singer]);
+	append_no_empty(values, ["mapper: ", mapper]);
+	append_no_empty(values, ["level: ", str(level)]);
+	append_no_empty(values, ["levelname: ", levelname]);
+	append_no_empty(values, ["audio: ", audio_path]);
+	append_no_empty(values, ["video: ", video_path]);
+	append_no_empty(values, ["bpm: ", str(bpm)]);
+	append_no_empty(values, ["bg: ", bg_image_path]);
+	append_no_empty(values, ["lrc: ", lrc_path]);
+	
+	var event_array :PackedStringArray = [];
+	for event in events:
+		event_array.append(event.to_string());
+	values.append("events:\n" + "\n".join(event_array));
+	
+	return "\n".join(values);
+
+func append_no_empty(array: PackedStringArray, str_array: Array):
+	if str_array != null && !array.is_empty() && !str_array.has(null) && !str_array.has(""):
+		array.append("".join(str_array));
 
 class Event:
 	
@@ -158,6 +187,9 @@ class Event:
 		self.time = p_time;
 		self.side = p_side;
 		self.keep_time = p_keep_time;
+	
+	func _to_string() -> String:
+		return "{} event" % time;
 	
 	## 音符
 	class Note:

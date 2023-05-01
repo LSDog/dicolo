@@ -33,6 +33,11 @@ var bpm :float;
 ## 动画的tween们
 var anim_tweens :Array[Tween] = [];
 
+## 歌词
+var lyrics :LyricsFile;
+## 歌词到哪了
+var lrc_index :int = 0;
+
 ## 游戏是否开始，开始前不允许暂停
 var started := false;
 ## 演奏是否中途暂停
@@ -43,6 +48,8 @@ var ended := false;
 #var has_audio := false;
 ## 是否有背景视频
 var has_video := false;
+## 是否有歌词
+var has_lyrics := false;
 ## 是否为跳转后状态
 var jumped := false;
 
@@ -77,6 +84,7 @@ var trackr_path :Path2D;
 @onready var video_player := $BGPanel/VideoPlayer;
 @onready var background := $BGPanel/Background;
 @onready var playground := $PlayGround;
+@onready var lyrics_label :=  $BGPanel/LyricLabel;
 
 var texture_crash = load("res://image/texture/crash.svg");
 var texture_follow = load("res://image/texture/follow.svg");
@@ -152,6 +160,12 @@ func play(map_file_path: String):
 	bpm = beatmap.bpm;
 	print("Default bpm = ", bpm);
 	print("One Beat = ", get_beat_time(), "s");
+	
+	if beatmap.lrc_path != "":
+		var lrcfile = LyricsFile.new(FileAccess.open(beatmap.lrc_path, FileAccess.READ));
+		if lrcfile.loaded:
+			lyrics = lrcfile;
+			has_lyrics = true;
 	
 	map_loaded.emit();
 	
@@ -377,6 +391,23 @@ func _process(delta):
 							remove_note(wait_index);
 						else:
 							handle_event(event);
+				
+				# 处理歌词
+				if has_lyrics:
+					var line = "";
+					var has_line = false;
+					while lrc_index < lyrics.lyrics.size():
+						var values :Array = lyrics.lyrics[lrc_index];
+						if play_time >= values[0]-0.025:
+							has_line = true;
+							line = values[1];
+							lrc_index += 1;
+						else:
+							break;
+					if has_line:
+						lyrics_label.text = line;
+						lyrics_label.create_tween().tween_property(lyrics_label, "modulate:a", 1.0, 0.1).from(0.0);
+				
 				
 				$BGPanel/DebugLabel.text = "Play: %.2f || Audio: %.2f || Video: %.2f" % [play_time,audio_pos,video_pos];
 	

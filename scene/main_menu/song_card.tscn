@@ -1,6 +1,5 @@
-[gd_scene load_steps=8 format=3 uid="uid://cg0kvu25oks3a"]
+[gd_scene load_steps=6 format=3 uid="uid://cg0kvu25oks3a"]
 
-[ext_resource type="Shader" path="res://shader/clip.gdshader" id="1_ri461"]
 [ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="2_fvuun"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_yxakl"]
 
@@ -15,9 +14,6 @@ corner_detail = 1
 shadow_color = Color(0, 0, 0, 0.384314)
 shadow_size = 10
 shadow_offset = Vector2(5, 5)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_76qo5"]
-shader = ExtResource("1_ri461")
 
 [sub_resource type="LabelSettings" id="LabelSettings_k2800"]
 line_spacing = 0.0
@@ -35,7 +31,7 @@ font_size = 18
 font_color = Color(0.811765, 0.811765, 0.811765, 1)
 
 [node name="Song" type="Panel"]
-modulate = Color(0.984568, 0.984568, 0.984568, 1)
+modulate = Color(0.984314, 0.984314, 0.984314, 1)
 custom_minimum_size = Vector2(380, 80)
 size_flags_horizontal = 8
 mouse_filter = 1
@@ -44,9 +40,8 @@ script = ExtResource("2_fvuun")
 
 [node name="Image" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0.117647)
-material = SubResource("ShaderMaterial_76qo5")
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -54,7 +49,6 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 6
 metadata/_edit_use_anchors_ = true
-metadata/_edit_lock_ = true
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 2

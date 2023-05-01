@@ -54,7 +54,7 @@ func _ready():
 	info_label.resized.connect(resize_labels);
 
 func _process(_delta):
-	
+	if !get_global_rect().intersects(get_viewport_rect()): return;
 	if modulate.v != modulate_v_target:
 		modulate.v = Global.stick_edge(lerpf(modulate.v, modulate_v_target, 0.1));
 	if custom_minimum_size.x != width_target + width_offset:

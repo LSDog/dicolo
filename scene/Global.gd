@@ -54,11 +54,13 @@ func _ready_later():
 	var packed_scene_Settings := load("res://scene/settings/settings.tscn") as PackedScene;
 	scene_Settings = packed_scene_Settings.instantiate() as Control;
 	scene_Settings.visible = false;
+	scene_Settings.z_index = 11;
 	get_tree().root.add_child(scene_Settings);
 	scene_Settings.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 	
 	var packed_scene_DebugInfo := load("res://scene/test/debug_info.tscn") as PackedScene;
 	scene_DebugInfo = packed_scene_DebugInfo.instantiate() as Control;
+	scene_DebugInfo.z_index = 12;
 	get_tree().root.add_child(scene_DebugInfo);
 	scene_DebugInfo.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 

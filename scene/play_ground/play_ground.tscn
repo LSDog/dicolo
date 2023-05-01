@@ -1,6 +1,7 @@
-[gd_scene load_steps=37 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=45 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlayGroundControl.gd" id="1_4bxfx"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
 [ext_resource type="Shader" path="res://shader/whirl_texture.gdshader" id="3_qnmao"]
 [ext_resource type="Texture2D" uid="uid://io3fw6wy4all" path="res://image/texture/round_slim_rect.svg" id="5_bfwsh"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="7_7o5xm"]
@@ -14,6 +15,9 @@
 [ext_resource type="Script" path="res://scene/play_ground/editor/Flow.gd" id="10_5ox8q"]
 [ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="11_1w5uc"]
 [ext_resource type="ButtonGroup" uid="uid://cg56w8paqidtx" path="res://scene/play_ground/editor/button_group_note_choose.tres" id="12_w1v2b"]
+[ext_resource type="Texture2D" uid="uid://wg0701ac8o4g" path="res://image/ui_icon/hamburger-menu.svg" id="16_te6n0"]
+[ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://image/ui_icon/anticlockwise-rotation.svg" id="17_fjsf7"]
+[ext_resource type="Texture2D" uid="uid://b2p576buht6l0" path="res://image/ui_icon/exit-door.svg" id="18_eibeu"]
 
 [sub_resource type="Animation" id="Animation_4ys72"]
 resource_name = "pre_start"
@@ -48,9 +52,12 @@ line_spacing = 0.0
 outline_size = 1
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_8ceif"]
+[sub_resource type="LabelSettings" id="LabelSettings_5mju1"]
 line_spacing = 0.0
-font_size = 280
+font = ExtResource("3_27yvc")
+font_size = 34
+outline_size = 8
+outline_color = Color(0.188235, 0.188235, 0.188235, 1)
 
 [sub_resource type="Curve2D" id="Curve2D_43mu5"]
 _data = {
@@ -113,13 +120,25 @@ unicode = 51
 [sub_resource type="Shortcut" id="Shortcut_unanl"]
 events = [SubResource("InputEventKey_75ixi")]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f2n5i"]
+texture = ExtResource("16_te6n0")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lc835"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0, 0, 0, 0.8)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 1
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ja4jh"]
+texture = ExtResource("17_fjsf7")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e7ev3"]
+texture = ExtResource("16_te6n0")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q4dn4"]
+texture = ExtResource("18_eibeu")
 
 [node name="PlayGroundControl" type="Control"]
 process_priority = 10
@@ -198,23 +217,19 @@ grow_vertical = 0
 text = "Debug..."
 label_settings = SubResource("LabelSettings_w6vl8")
 
-[node name="CountDownText" type="Label" parent="BGPanel"]
-modulate = Color(1, 1, 1, 0.588235)
+[node name="LyricLabel" type="Label" parent="BGPanel"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -170.0
-offset_right = 140.0
-offset_bottom = 170.0
+anchor_bottom = 1.0
+offset_left = -0.5
+offset_top = -47.4583
+offset_right = 0.5
 grow_horizontal = 2
-grow_vertical = 2
-label_settings = SubResource("LabelSettings_8ceif")
-horizontal_alignment = 1
-vertical_alignment = 1
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_5mju1")
 
 [node name="PlayGround" type="Control" parent="."]
 layout_mode = 1
@@ -241,6 +256,7 @@ self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
 
 [node name="ExamplePath" type="Path2D" parent="PlayGround/TrackL"]
+visible = false
 self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
 
@@ -501,7 +517,7 @@ offset_right = 34.0
 offset_bottom = 27.0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 30
-text = "◈"
+theme_override_styles/normal = SubResource("StyleBoxTexture_f2n5i")
 
 [node name="Pause" type="Panel" parent="."]
 visible = false
@@ -527,27 +543,31 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 16
 alignment = 1
 
 [node name="Restart" type="Button" parent="Pause/Content"]
 modulate = Color(0, 0, 1, 1)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 75
-text = "↺"
+theme_override_styles/normal = SubResource("StyleBoxTexture_ja4jh")
 
 [node name="Back" type="Button" parent="Pause/Content"]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 75
-text = "◈"
+theme_override_styles/normal = SubResource("StyleBoxTexture_e7ev3")
 
 [node name="Quit" type="Button" parent="Pause/Content"]
 modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 60
-text = "メ"
+theme_override_styles/normal = SubResource("StyleBoxTexture_q4dn4")

@@ -67,6 +67,7 @@ func choose_note_type(type :BeatMap.EVENT_TYPE):
 	edit_note_type = type;
 
 func _unhandled_input(event):
+	if !visible: return;
 	match event.get_class():
 		"InputEventMouseButton":
 			event = event as InputEventMouseButton;
