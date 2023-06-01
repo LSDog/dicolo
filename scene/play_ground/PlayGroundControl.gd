@@ -453,44 +453,33 @@ func generate_note(note :BeatMap.Event) -> Array:
 	var path :Path2D = track.get_child(0) as Path2D; # 获取 path2D 记得放在第一位
 	match note.event_type:
 		BeatMap.EVENT_TYPE.Crash:
-			var follow := PathFollow2D.new();
-			path.add_child(follow);
-			follow.progress_ratio = note.deg/360.0;
-			var crash := Sprite2D.new();
-			crash.texture = texture_crash;
-			crash.scale.x = 0.2;
-			crash.scale.y = 0.2;
-			follow.add_child(crash);
-			show_animation(follow);
-			return [follow];
-		BeatMap.EVENT_TYPE.LineCrash:
-			var follow_start := PathFollow2D.new();
-			var follow_end := PathFollow2D.new();
-			path.add_child(follow_start);
-			path.add_child(follow_end);
-			follow_start.progress_ratio = note.deg/360.0;
-			follow_end.progress_ratio = note.deg_end/360.0;
-			var crash := Sprite2D.new();
-			crash.texture = texture_crash;
-			crash.scale.x = 0.2;
-			crash.scale.y = 0.2;
-			follow_start.add_child(crash);
-			follow_end.add_child(crash.duplicate());
 			var line := Line2D.new();
 			var points = get_points_from_curve(
 				trackl_path.curve if note.side == note.SIDE.LEFT else trackr_path.curve, 
 				note.deg/360.0, note.deg_end/360.0
 			);
 			line.points = points;
-			line.width = 18;
-			line.texture = tecture_line_crash;
-			line.texture_mode = Line2D.LINE_TEXTURE_TILE;
-			line.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED;
+			line.width = 10;
 			path.add_child(line);
-			show_animation(follow_start);
-			show_animation(follow_end);
-			show_animation(line);
-			return [follow_start, line, follow_end];
+			# crash 线条出现 下落(外扩)
+			var tween := line.create_tween();
+			tween.parallel().tween_property(line, "modulate:a", 1.0, event_before_beat*get_beat_time()/3.0
+				).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
+			tween.parallel().tween_property(line, "scale", Vector2(1,1), event_before_beat*get_beat_time()
+				).from(Vector2(0,0)).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
+			tween.parallel().tween_property(line, "width", 12.5, event_before_beat*get_beat_time()
+				).from(7.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
+			# 引导轨道（扇形）
+			var polygon = Polygon2D.new();
+			var polygon_points = [Vector2.ZERO];
+			polygon_points.append_array(points);
+			polygon_points.append(Vector2.ZERO);
+			polygon.color = Color.WHITE;
+			polygon.polygon = polygon_points;
+			path.add_child(polygon);
+			polygon.create_tween().tween_property(polygon, "modulate:a", 0.1, event_before_beat*get_beat_time()/4.0
+				).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
+			return [line, polygon];
 		BeatMap.EVENT_TYPE.Slide:
 			var follow_start := PathFollow2D.new();
 			var follow_end := PathFollow2D.new();

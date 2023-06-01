@@ -1,9 +1,8 @@
-[gd_scene load_steps=45 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=44 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlayGroundControl.gd" id="1_4bxfx"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
 [ext_resource type="Shader" path="res://shader/whirl_texture.gdshader" id="3_qnmao"]
-[ext_resource type="Texture2D" uid="uid://io3fw6wy4all" path="res://image/texture/round_slim_rect.svg" id="5_bfwsh"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="7_7o5xm"]
 [ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://image/texture/track.svg" id="7_ol0uo"]
 [ext_resource type="Script" path="res://scene/play_ground/Ct.gd" id="8_hms3c"]
@@ -256,7 +255,6 @@ self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
 
 [node name="ExamplePath" type="Path2D" parent="PlayGround/TrackL"]
-visible = false
 self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
 
@@ -300,9 +298,6 @@ texture = ExtResource("7_7o5xm")
 [node name="Line2D" type="Line2D" parent="PlayGround/TrackL/ExamplePath"]
 texture_repeat = 2
 points = PackedVector2Array(-78.5714, -243.878, -91.8367, -238.776, -106.122, -232.653, -116.327, -227.551, -126.531, -222.449, -136.735, -216.327, -146.939, -209.184, -157.143, -202.041, -167.347, -193.878, -177.551, -184.694, -186.735, -175.51, -195.918, -166.327)
-width = 18.0
-texture = ExtResource("5_bfwsh")
-texture_mode = 1
 
 [node name="PathFollow2D6" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
 position = Vector2(-78.7098, -243.645)

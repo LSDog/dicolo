@@ -3,7 +3,7 @@ class_name BeatMap
 extends Resource
 
 ## 音符类型
-enum EVENT_TYPE {None, Note, Crash, LineCrash, Slide, Start, Bpm, End};
+enum EVENT_TYPE {None, Note, Crash, Slide, Start, Bpm, End};
 
 ## 是否加载完毕
 var loaded :bool = false;
@@ -120,13 +120,6 @@ func add_note(time :float, note_string :String):
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
-				0.0 if (note_split.size() < 4 || !note_split[3].is_valid_float()) else note_split[3].to_float()
-			));
-		"l": #line-crash
-			events.append(Event.Note.LineCrash.new(
-				time, \
-				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
-				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
 				0.0 if !note_split[3].is_valid_float() else note_split[3].to_float(), \
 				0.0 if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4].to_float()
 			));
@@ -204,23 +197,13 @@ class Event:
 			extends Note;
 			
 			var deg :float;
-			
-			func _init(p_time :float, p_side :int, p_deg :float, p_keep_time :float = 0.0):
-				super._init(p_time, p_side, p_keep_time);
-				self.deg = p_deg;
-				self.event_type = EVENT_TYPE.Crash;
-		
-		class LineCrash:
-			extends Note;
-			
-			var deg :float;
 			var deg_end :float;
 			
 			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float, p_keep_time :float = 0.0):
 				super._init(p_time, p_side, p_keep_time);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				self.event_type = EVENT_TYPE.LineCrash;
+				self.event_type = EVENT_TYPE.Crash;
 		
 		class Slide:
 			extends Note;

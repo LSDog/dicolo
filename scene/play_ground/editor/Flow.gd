@@ -4,7 +4,6 @@ extends Panel
 
 @onready var editor :Editor = get_parent() as Editor;
 @onready var note_crash_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_crash.stylebox");
-@onready var note_line_crash_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_line_crash.stylebox");
 @onready var note_slide_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_slide.stylebox");
 
 @export var outline_color := Color.LIGHT_YELLOW;
@@ -171,8 +170,6 @@ func add_note(
 	match note_type:
 		BeatMap.EVENT_TYPE.Crash:
 			note.add_theme_stylebox_override("panel", note_crash_stylebox);
-		BeatMap.EVENT_TYPE.LineCrash:
-			note.add_theme_stylebox_override("panel", note_line_crash_stylebox);
 		BeatMap.EVENT_TYPE.Slide:
 			note.add_theme_stylebox_override("panel", note_slide_stylebox);
 		_:

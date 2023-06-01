@@ -1,5 +1,6 @@
-[gd_scene load_steps=22 format=3 uid="uid://cvonjf6lsdmlw"]
+[gd_scene load_steps=23 format=3 uid="uid://cvonjf6lsdmlw"]
 
+[ext_resource type="Script" path="res://scene/test/GithubAPITest.gd" id="1_n5jhp"]
 [ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://image/texture/circle_white_512.svg" id="2_y71jt"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="3_r2u63"]
 [ext_resource type="Texture2D" uid="uid://bq5vwdwd33o73" path="res://image/texture/rect_box.svg" id="4_u4lsl"]
@@ -323,13 +324,23 @@ _data = {
 offsets = PackedFloat32Array(0.566667, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="InputTest" type="Control"]
+[node name="Test" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="GithubAPITest" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 422.0
+offset_right = 287.0
+offset_bottom = 542.0
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("1_n5jhp")
 
 [node name="Background" type="Panel" parent="."]
 layout_mode = 1
@@ -593,3 +604,8 @@ scale_amount_min = 8.0
 scale_amount_max = 12.0
 color = Color(0.878431, 0.94902, 0.980392, 1)
 color_ramp = SubResource("Gradient_dcsir")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(1, 1, 1, 0.54902)
+polygon = PackedVector2Array(546, 535, 142, 473, 367, 403)
+vertex_colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1)
