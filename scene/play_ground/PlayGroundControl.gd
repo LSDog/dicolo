@@ -86,10 +86,9 @@ var trackr_path :Path2D;
 @onready var playground := $PlayGround;
 @onready var lyrics_label :=  $BGPanel/LyricLabel;
 
+var texture_slide = load("res://image/texture/slide.svg");
 var texture_crash = load("res://image/texture/crash.svg");
 var texture_follow = load("res://image/texture/follow.svg");
-var tecture_line_crash = load("res://image/texture/round_slim_rect.svg");
-var tecture_slide = load("res://image/texture/slide_line.svg");
 
 ## 铺面加载完毕
 signal map_loaded;
@@ -452,7 +451,7 @@ func generate_note(note :BeatMap.Event) -> Array:
 	var track = get_track(note);
 	var path :Path2D = track.get_child(0) as Path2D; # 获取 path2D 记得放在第一位
 	match note.event_type:
-		BeatMap.EVENT_TYPE.Crash:
+		BeatMap.EVENT_TYPE.Hit:
 			var line := Line2D.new();
 			var points = get_points_from_curve(
 				trackl_path.curve if note.side == note.SIDE.LEFT else trackr_path.curve, 
@@ -461,14 +460,14 @@ func generate_note(note :BeatMap.Event) -> Array:
 			line.points = points;
 			line.width = 10;
 			path.add_child(line);
-			# crash 线条出现 下落(外扩)
+			# Hit 线条出现 下落(外扩)
 			var tween := line.create_tween();
 			tween.parallel().tween_property(line, "modulate:a", 1.0, event_before_beat*get_beat_time()/3.0
 				).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
 			tween.parallel().tween_property(line, "scale", Vector2(1,1), event_before_beat*get_beat_time()
-				).from(Vector2(0,0)).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
+				).from(Vector2(0,0)).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
 			tween.parallel().tween_property(line, "width", 12.5, event_before_beat*get_beat_time()
-				).from(7.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
+				).from(7.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
 			# 引导轨道（扇形）
 			var polygon = Polygon2D.new();
 			var polygon_points = [Vector2.ZERO];
@@ -477,37 +476,31 @@ func generate_note(note :BeatMap.Event) -> Array:
 			polygon.color = Color.WHITE;
 			polygon.polygon = polygon_points;
 			path.add_child(polygon);
-			polygon.create_tween().tween_property(polygon, "modulate:a", 0.1, event_before_beat*get_beat_time()/4.0
+			polygon.create_tween().tween_property(polygon, "modulate:a", 0.1, event_before_beat*get_beat_time()
 				).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
 			return [line, polygon];
 		BeatMap.EVENT_TYPE.Slide:
-			var follow_start := PathFollow2D.new();
-			var follow_end := PathFollow2D.new();
-			path.add_child(follow_start);
-			path.add_child(follow_end);
-			follow_start.progress_ratio = note.deg/360.0;
-			follow_end.progress_ratio = note.deg_end/360.0;
-			var crash := Sprite2D.new();
-			crash.texture = texture_crash;
-			crash.scale.x = 0.2;
-			crash.scale.y = 0.2;
-			follow_start.add_child(crash);
-			follow_end.add_child(crash.duplicate());
+			var path_follow := PathFollow2D.new();
+			path.add_child(path_follow);
+			path_follow.progress_ratio = note.deg/360.0;
+			var slide := Sprite2D.new();
+			slide.texture = texture_slide;
+			slide.scale.x = 0.2;
+			slide.scale.y = 0.2;
+			path_follow.add_child(slide);
+			slide.create_tween().tween_property(slide, "modulate:a", 1.0, event_before_beat*get_beat_time()
+				).from(0.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
 			var line := Line2D.new();
-			var points = get_points_from_curve(
-				trackl_path.curve if note.side == note.SIDE.LEFT else trackr_path.curve, 
-				note.deg/360.0, note.deg_end/360.0
-			);
-			line.points = points;
-			line.width = 37;
-			line.texture = tecture_slide;
-			line.texture_mode = Line2D.LINE_TEXTURE_TILE;
-			line.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED;
+			line.width = 8;
+			line.points = [Vector2.ZERO, Vector2.ZERO];
+			line.default_color = Color8(255,255,255,32);
+			line.gradient = preload("res://image/texture/slide_hint_line_gradient.tres");
 			path.add_child(line);
-			show_animation(follow_start);
-			show_animation(follow_end);
-			show_animation(line);
-			return [follow_start, line, follow_end];
+			line.create_tween().tween_method(
+				func(ratio: float): line.set_point_position(1, path_follow.position * ratio),
+				0.0, 1.0, event_before_beat * get_beat_time()
+			).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
+			return [path_follow, line];
 	return [];
 
 ## 播放出现动画

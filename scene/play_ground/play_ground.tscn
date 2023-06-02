@@ -1,13 +1,14 @@
-[gd_scene load_steps=44 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=45 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlayGroundControl.gd" id="1_4bxfx"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
 [ext_resource type="Shader" path="res://shader/whirl_texture.gdshader" id="3_qnmao"]
+[ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://image/texture/slide.svg" id="4_qpcw0"]
+[ext_resource type="Gradient" uid="uid://c3y02g4d4jy7l" path="res://image/texture/slide_hint_line_gradient.tres" id="6_csvpi"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="7_7o5xm"]
 [ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://image/texture/track.svg" id="7_ol0uo"]
 [ext_resource type="Script" path="res://scene/play_ground/Ct.gd" id="8_hms3c"]
 [ext_resource type="Script" path="res://scene/play_ground/Bar.gd" id="9_0rucv"]
-[ext_resource type="Texture2D" uid="uid://bx1mw1ddu1lp5" path="res://image/texture/follow.svg" id="9_bvheb"]
 [ext_resource type="Texture2D" uid="uid://dyruh3syyydp6" path="res://image/texture/practicle.svg" id="9_q6ppy"]
 [ext_resource type="Script" path="res://scene/play_ground/editor/Editor.gd" id="9_rxls6"]
 [ext_resource type="PackedScene" uid="uid://d3uwa2so8ndgb" path="res://scene/virtual_joystick/virtual_joystick.tscn" id="9_sf2y2"]
@@ -262,9 +263,8 @@ curve = SubResource("Curve2D_43mu5")
 position = Vector2(0, -256)
 
 [node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D"]
-rotation = 1.5708
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("9_bvheb")
+texture = ExtResource("4_qpcw0")
 
 [node name="PathFollow2D2" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
 position = Vector2(29.9335, -254.264)
@@ -272,9 +272,8 @@ rotation = 0.116227
 progress = 30.0
 
 [node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D2"]
-rotation = 1.5708
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("9_bvheb")
+texture = ExtResource("4_qpcw0")
 
 [node name="PathFollow2D3" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
 position = Vector2(59.4584, -249.043)
@@ -282,9 +281,8 @@ rotation = 0.233984
 progress = 60.0
 
 [node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D3"]
-rotation = 1.5708
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("9_bvheb")
+texture = ExtResource("4_qpcw0")
 
 [node name="PathFollow2D4" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
 position = Vector2(97.4785, -236.748)
@@ -298,6 +296,7 @@ texture = ExtResource("7_7o5xm")
 [node name="Line2D" type="Line2D" parent="PlayGround/TrackL/ExamplePath"]
 texture_repeat = 2
 points = PackedVector2Array(-78.5714, -243.878, -91.8367, -238.776, -106.122, -232.653, -116.327, -227.551, -126.531, -222.449, -136.735, -216.327, -146.939, -209.184, -157.143, -202.041, -167.347, -193.878, -177.551, -184.694, -186.735, -175.51, -195.918, -166.327)
+gradient = ExtResource("6_csvpi")
 
 [node name="PathFollow2D6" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
 position = Vector2(-78.7098, -243.645)
@@ -440,6 +439,10 @@ offset_bottom = 20.28
 script = ExtResource("10_5ox8q")
 outline_color = Color(1, 1, 0.878431, 1)
 barline_color = Color(0.678431, 0.847059, 0.901961, 1)
+beatline_color = null
+note_margin_vertical = null
+bar_space = null
+beat_count = null
 metadata/_edit_use_anchors_ = true
 
 [node name="Edit" type="Panel" parent="Editor"]

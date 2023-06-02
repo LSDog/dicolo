@@ -3,7 +3,7 @@ class_name BeatMap
 extends Resource
 
 ## 音符类型
-enum EVENT_TYPE {None, Note, Crash, Slide, Start, Bpm, End};
+enum EVENT_TYPE {None, Note, Hit, Slide, Start, Bpm, End};
 
 ## 是否加载完毕
 var loaded :bool = false;
@@ -115,8 +115,8 @@ func add_note(time :float, note_string :String):
 	if note_string.is_empty(): return;
 	var note_split = note_string.split('/');
 	match note_split[0]:
-		"c": # crash
-			events.append(Event.Note.Crash.new(
+		"h": # hit
+			events.append(Event.Note.Hit.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
@@ -125,13 +125,12 @@ func add_note(time :float, note_string :String):
 			));
 		"s": # slide
 			var p_deg = 0.0 if !note_split[2].is_valid_float() else note_split[2].to_float();
-			var p_deg_end = 0.0 if !note_split[3].is_valid_float() else note_split[3].to_float();
 			events.append(Event.Note.Slide.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
-				p_deg, p_deg_end, \
+				p_deg, \
 				# 未指定时自动算slide时间
-				abs(p_deg - p_deg_end) / 360.0 / (bpm / 170) if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4]
+				abs(p_deg) / 360.0 / (bpm / 170) if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4]
 			));
 
 ## 输出为格式化的String
@@ -193,7 +192,7 @@ class Event:
 			self.event_type = EVENT_TYPE.Note;
 			self.keep_time = p_keep_time;
 		
-		class Crash:
+		class Hit:
 			extends Note;
 			
 			var deg :float;
@@ -203,18 +202,16 @@ class Event:
 				super._init(p_time, p_side, p_keep_time);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				self.event_type = EVENT_TYPE.Crash;
+				self.event_type = EVENT_TYPE.Hit;
 		
 		class Slide:
 			extends Note;
 			
 			var deg :float;
-			var deg_end :float;
 			
-			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float, p_keep_time :float = 0.0):
+			func _init(p_time :float, p_side :int, p_deg :float, p_keep_time :float = 0.0):
 				super._init(p_time, p_side, p_keep_time);
 				self.deg = p_deg;
-				self.deg_end = p_deg_end;
 				self.event_type = EVENT_TYPE.Slide;
 	
 	## 开始

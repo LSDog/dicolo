@@ -3,7 +3,7 @@ class_name EditorFlow
 extends Panel
 
 @onready var editor :Editor = get_parent() as Editor;
-@onready var note_crash_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_crash.stylebox");
+@onready var note_hit_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_hit.stylebox");
 @onready var note_slide_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_slide.stylebox");
 
 @export var outline_color := Color.LIGHT_YELLOW;
@@ -168,8 +168,8 @@ func add_note(
 	note.size = p_size;
 	
 	match note_type:
-		BeatMap.EVENT_TYPE.Crash:
-			note.add_theme_stylebox_override("panel", note_crash_stylebox);
+		BeatMap.EVENT_TYPE.Hit:
+			note.add_theme_stylebox_override("panel", note_hit_stylebox);
 		BeatMap.EVENT_TYPE.Slide:
 			note.add_theme_stylebox_override("panel", note_slide_stylebox);
 		_:
