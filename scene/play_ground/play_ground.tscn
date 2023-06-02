@@ -1,8 +1,9 @@
-[gd_scene load_steps=45 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=46 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlayGroundControl.gd" id="1_4bxfx"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
 [ext_resource type="Shader" path="res://shader/whirl_texture.gdshader" id="3_qnmao"]
+[ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://image/texture/bounce.svg" id="4_b2qtm"]
 [ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://image/texture/slide.svg" id="4_qpcw0"]
 [ext_resource type="Gradient" uid="uid://c3y02g4d4jy7l" path="res://image/texture/slide_hint_line_gradient.tres" id="6_csvpi"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="7_7o5xm"]
@@ -256,8 +257,12 @@ self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
 
 [node name="ExamplePath" type="Path2D" parent="PlayGround/TrackL"]
+visible = false
 self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
+
+[node name="Bounce" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath"]
+texture = ExtResource("4_b2qtm")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
 position = Vector2(0, -256)

@@ -86,9 +86,11 @@ var trackr_path :Path2D;
 @onready var playground := $PlayGround;
 @onready var lyrics_label :=  $BGPanel/LyricLabel;
 
-var texture_slide = load("res://image/texture/slide.svg");
-var texture_crash = load("res://image/texture/crash.svg");
-var texture_follow = load("res://image/texture/follow.svg");
+var texture_slide = preload("res://image/texture/slide.svg");
+var texture_slide_hint_gradient = preload("res://image/texture/slide_hint_line_gradient.tres");
+var texture_bounce = preload("res://image/texture/bounce.svg");
+var texture_crash = preload("res://image/texture/crash.svg");
+var texture_follow = preload("res://image/texture/follow.svg");
 
 ## 铺面加载完毕
 signal map_loaded;
@@ -311,8 +313,8 @@ func end():
 	
 	play_end.emit();
 
-func create_anim_tween() -> Tween:
-	var tween = create_tween();
+func create_anim_tween(node: Node = self) -> Tween:
+	var tween = node.create_tween();
 	anim_tweens.push_back(tween);
 	return tween;
 
@@ -461,7 +463,7 @@ func generate_note(note :BeatMap.Event) -> Array:
 			line.width = 10;
 			path.add_child(line);
 			# Hit 线条出现 下落(外扩)
-			var tween := line.create_tween();
+			var tween := create_anim_tween(line);
 			tween.parallel().tween_property(line, "modulate:a", 1.0, event_before_beat*get_beat_time()/3.0
 				).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
 			tween.parallel().tween_property(line, "scale", Vector2(1,1), event_before_beat*get_beat_time()
@@ -476,7 +478,7 @@ func generate_note(note :BeatMap.Event) -> Array:
 			polygon.color = Color.WHITE;
 			polygon.polygon = polygon_points;
 			path.add_child(polygon);
-			polygon.create_tween().tween_property(polygon, "modulate:a", 0.1, event_before_beat*get_beat_time()
+			create_anim_tween(polygon).tween_property(polygon, "modulate:a", 0.1, event_before_beat*get_beat_time()
 				).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
 			return [line, polygon];
 		BeatMap.EVENT_TYPE.Slide:
@@ -488,19 +490,31 @@ func generate_note(note :BeatMap.Event) -> Array:
 			slide.scale.x = 0.2;
 			slide.scale.y = 0.2;
 			path_follow.add_child(slide);
-			slide.create_tween().tween_property(slide, "modulate:a", 1.0, event_before_beat*get_beat_time()
+			create_anim_tween(slide).tween_property(slide, "modulate:a", 1.0, event_before_beat*get_beat_time()
 				).from(0.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
 			var line := Line2D.new();
 			line.width = 8;
 			line.points = [Vector2.ZERO, Vector2.ZERO];
 			line.default_color = Color8(255,255,255,32);
-			line.gradient = preload("res://image/texture/slide_hint_line_gradient.tres");
+			line.gradient = texture_slide_hint_gradient;
 			path.add_child(line);
-			line.create_tween().tween_method(
+			create_anim_tween(line).tween_method(
 				func(ratio: float): line.set_point_position(1, path_follow.position * ratio),
 				0.0, 1.0, event_before_beat * get_beat_time()
 			).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
 			return [path_follow, line];
+		BeatMap.EVENT_TYPE.Bounce:
+			var bounce = Sprite2D.new();
+			bounce.texture = texture_bounce;
+			path.add_child(bounce);
+			var tween = create_anim_tween(bounce);
+			tween.parallel().tween_property(bounce, "modulate:a", 1.0, event_before_beat*get_beat_time()
+				).from(0.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
+			tween.parallel().tween_property(bounce, "rotation_degrees", 0.0, event_before_beat*get_beat_time()
+				).from(-90.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
+			tween.parallel().tween_property(bounce, "scale", Vector2(0.5,0.5), event_before_beat*get_beat_time()
+				).from(Vector2(1,1)).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
+			return [bounce];
 	return [];
 
 ## 播放出现动画

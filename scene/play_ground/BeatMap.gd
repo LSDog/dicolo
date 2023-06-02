@@ -3,7 +3,7 @@ class_name BeatMap
 extends Resource
 
 ## 音符类型
-enum EVENT_TYPE {None, Note, Hit, Slide, Start, Bpm, End};
+enum EVENT_TYPE {None, Note, Hit, Slide, Bounce, Start, Bpm, End};
 
 ## 是否加载完毕
 var loaded :bool = false;
@@ -20,7 +20,7 @@ var singer :String;
 ## 作图者
 var mapper :String;
 ## 难度
-var level :float;
+var level: float;
 ## 难度名称
 var levelname :String;
 ## 音频文件路径
@@ -28,7 +28,7 @@ var audio_path :String;
 ## 视频文件路径
 var video_path :String;
 ## 默认Bpm
-var bpm :float;
+var bpm: float;
 ## 背景图片路径
 var bg_image_path :String;
 ## 背景图片
@@ -38,7 +38,7 @@ var lrc_path :String;
 ## 音符/事件等
 var events :Array[Event] = [];
 ## 开始时间（来自第一个event的时间）
-var start_time :float;
+var start_time: float;
 
 ## 构造器。需要当前铺面目录和已经打开的 [FileAccess] ([method FileAccess.open])
 func _init(dir_access :DirAccess, file :FileAccess):
@@ -111,7 +111,7 @@ func add_event(event_str :String):
 			add_note(time, event_split[i]);
 
 ## 接受单个音符形式，如 c/r/135
-func add_note(time :float, note_string :String):
+func add_note(time: float, note_string :String):
 	if note_string.is_empty(): return;
 	var note_split = note_string.split('/');
 	match note_split[0]:
@@ -131,6 +131,11 @@ func add_note(time :float, note_string :String):
 				p_deg, \
 				# 未指定时自动算slide时间
 				abs(p_deg) / 360.0 / (bpm / 170) if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4]
+			));
+		"b": # bounce
+			events.append(Event.Note.Bounce.new(
+				time, \
+				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT
 			));
 
 ## 输出为格式化的String
@@ -165,17 +170,17 @@ class Event:
 	var event_type = EVENT_TYPE.None;
 	
 	## 执行的时间(s)
-	var time :float;
+	var time: float;
 	
 	## 开始消失前保持的时间(s)
-	var keep_time :float = 0.0;
+	var keep_time: float = 0.0;
 	
 	## 所在track的位置
 	var side :int;
 	## 位置常量
 	enum SIDE {OTHER=-1, LEFT=0, RIGHT=1}
 	
-	func _init(p_time :float, p_side :int = SIDE.OTHER, p_keep_time :float = 0.0):
+	func _init(p_time: float, p_side: int = SIDE.OTHER, p_keep_time: float = 0.0):
 		self.time = p_time;
 		self.side = p_side;
 		self.keep_time = p_keep_time;
@@ -187,7 +192,7 @@ class Event:
 	class Note:
 		extends Event;
 		
-		func _init(p_time :float, p_side :int, p_keep_time :float = 0.0):
+		func _init(p_time: float, p_side: int, p_keep_time: float = 0.0):
 			super._init(p_time, p_side);
 			self.event_type = EVENT_TYPE.Note;
 			self.keep_time = p_keep_time;
@@ -195,10 +200,10 @@ class Event:
 		class Hit:
 			extends Note;
 			
-			var deg :float;
-			var deg_end :float;
+			var deg: float;
+			var deg_end: float;
 			
-			func _init(p_time :float, p_side :int, p_deg :float, p_deg_end :float, p_keep_time :float = 0.0):
+			func _init(p_time: float, p_side: int, p_deg: float, p_deg_end: float, p_keep_time: float = 0.0):
 				super._init(p_time, p_side, p_keep_time);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
@@ -207,17 +212,24 @@ class Event:
 		class Slide:
 			extends Note;
 			
-			var deg :float;
+			var deg: float;
 			
-			func _init(p_time :float, p_side :int, p_deg :float, p_keep_time :float = 0.0):
+			func _init(p_time: float, p_side: int, p_deg: float, p_keep_time: float = 0.0):
 				super._init(p_time, p_side, p_keep_time);
 				self.deg = p_deg;
 				self.event_type = EVENT_TYPE.Slide;
+		
+		class Bounce:
+			extends Note;
+			
+			func _init(p_time: float, p_side: int):
+				super._init(p_time, p_side);
+				self.event_type = EVENT_TYPE.Bounce;
 	
 	## 开始
 	class Start:
 		extends Event;
-		func _init(p_time :float):
+		func _init(p_time: float):
 			super._init(p_time, SIDE.OTHER);
 			event_type = EVENT_TYPE.Start;
 	
@@ -225,9 +237,9 @@ class Event:
 	class Bpm:
 		extends Event;
 		
-		var bpm :float;
+		var bpm: float;
 		
-		func _init(p_time :float, p_bpm :float):
+		func _init(p_time: float, p_bpm: float):
 			super._init(p_time, SIDE.OTHER);
 			self.bpm = p_bpm;
 			event_type = EVENT_TYPE.Bpm;
