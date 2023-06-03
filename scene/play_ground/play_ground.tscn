@@ -1,13 +1,13 @@
-[gd_scene load_steps=44 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=42 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlayGroundControl.gd" id="1_4bxfx"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
 [ext_resource type="Shader" path="res://shader/whirl_texture.gdshader" id="3_qnmao"]
 [ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://image/texture/bounce.svg" id="4_b2qtm"]
 [ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://image/texture/slide.svg" id="4_qpcw0"]
-[ext_resource type="Gradient" uid="uid://c3y02g4d4jy7l" path="res://image/texture/slide_hint_line_gradient.tres" id="6_csvpi"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="7_7o5xm"]
 [ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://image/texture/track.svg" id="7_ol0uo"]
+[ext_resource type="Texture2D" uid="uid://5xyvc3ec13xo" path="res://image/texture/hit_fx.svg" id="7_tkuc3"]
 [ext_resource type="Script" path="res://scene/play_ground/Ct.gd" id="8_hms3c"]
 [ext_resource type="Script" path="res://scene/play_ground/Bar.gd" id="9_0rucv"]
 [ext_resource type="Texture2D" uid="uid://dyruh3syyydp6" path="res://image/texture/practicle.svg" id="9_q6ppy"]
@@ -65,12 +65,6 @@ _data = {
 "points": PackedVector2Array(-128, 0, 141.257, 0, 0, -256, 0, -141.257, 0, 141.257, 256, 0, 141.257, 0, -141.257, 0, 0, 256, 0, 141.257, 0, -141.257, -256, 0, -141.257, 0, 0, 0, 0, -256)
 }
 point_count = 5
-
-[sub_resource type="QuadMesh" id="QuadMesh_m8f3l"]
-size = Vector2(512, 512)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_umnea"]
-radius = 256.0
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_4obor"]
 polygon = PackedVector2Array(-11, -18, 0, -12, 11, -18, 9, -5, 18, 4, 6, 6, 0, 18, -6, 6, -18, 4, -9, -5)
@@ -242,7 +236,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 metadata/_edit_horizontal_guides_ = []
 
-[node name="TrackL" type="AnimatableBody2D" parent="PlayGround"]
+[node name="TrackL" type="Sprite2D" parent="PlayGround"]
 position = Vector2(384, 324)
 
 [node name="Path" type="Path2D" parent="PlayGround/TrackL"]
@@ -294,7 +288,8 @@ texture = ExtResource("7_7o5xm")
 [node name="Line2D" type="Line2D" parent="PlayGround/TrackL/ExamplePath"]
 texture_repeat = 2
 points = PackedVector2Array(-78.5714, -243.878, -91.8367, -238.776, -106.122, -232.653, -116.327, -227.551, -126.531, -222.449, -136.735, -216.327, -146.939, -209.184, -157.143, -202.041, -167.347, -193.878, -177.551, -184.694, -186.735, -175.51, -195.918, -166.327)
-gradient = ExtResource("6_csvpi")
+texture = ExtResource("7_tkuc3")
+texture_mode = 1
 
 [node name="PathFollow2D6" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
 position = Vector2(-78.7098, -243.645)
@@ -314,32 +309,24 @@ progress = 1385.73
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("7_7o5xm")
 
-[node name="Mesh" type="MeshInstance2D" parent="PlayGround/TrackL"]
+[node name="Mesh" type="Sprite2D" parent="PlayGround/TrackL"]
 modulate = Color(1, 1, 1, 0.117647)
+rotation = -0.218166
 scale = Vector2(1.02, 1.02)
-mesh = SubResource("QuadMesh_m8f3l")
 texture = ExtResource("7_ol0uo")
 
-[node name="Shape" type="CollisionShape2D" parent="PlayGround/TrackL"]
-visible = false
-shape = SubResource("CircleShape2D_umnea")
-
-[node name="TrackR" type="AnimatableBody2D" parent="PlayGround"]
+[node name="TrackR" type="Sprite2D" parent="PlayGround"]
 position = Vector2(768, 324)
 
 [node name="Path" type="Path2D" parent="PlayGround/TrackR"]
 self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
 
-[node name="Mesh" type="MeshInstance2D" parent="PlayGround/TrackR"]
+[node name="Mesh" type="Sprite2D" parent="PlayGround/TrackR"]
 modulate = Color(1, 1, 1, 0.117647)
+rotation = -0.218166
 scale = Vector2(1.02, 1.02)
-mesh = SubResource("QuadMesh_m8f3l")
 texture = ExtResource("7_ol0uo")
-
-[node name="Shape" type="CollisionShape2D" parent="PlayGround/TrackR"]
-visible = false
-shape = SubResource("CircleShape2D_umnea")
 
 [node name="CtL" type="Sprite2D" parent="PlayGround"]
 position = Vector2(576, 324)

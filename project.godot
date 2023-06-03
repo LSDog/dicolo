@@ -23,7 +23,7 @@ config/windows_native_icon="res://image/icon/icon.ico"
 [autoload]
 
 Global="*res://scene/Global.gd"
-Debug="*res://scene/Debug.gd"
+Debugger="*res://scene/Debugger.gd"
 
 [display]
 

@@ -10,6 +10,8 @@ default_font_size = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
 bg_color = Color(0, 0, 0, 0.8)
+border_width_left = 1
+border_color = Color(1, 1, 1, 1)
 
 [node name="Setting" type="Control"]
 custom_minimum_size = Vector2(1152, 648)
@@ -39,7 +41,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 10.0
+offset_left = 16.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -55,7 +57,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 3
 
 [node name="Placeholder" type="Control" parent="Panel/Scroll/List"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
 [node name="Video" type="VBoxContainer" parent="Panel/Scroll/List"]

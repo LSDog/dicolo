@@ -8,6 +8,12 @@ var curve :Curve2D = Curve2D.new();
 var prev_position :Vector2;
 var velocity :Vector2 = Vector2.ZERO;
 
+# track中的相关变量 大部分由Playground负责计算
+var pos :Vector2;
+var distance :float;
+var degree :float;
+var velocity_degree :float;
+
 func _ready():
 	trail = $Trail;
 	$Trail.name = name + "_" + $Trail.name;
