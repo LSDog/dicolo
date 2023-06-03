@@ -32,11 +32,10 @@ func _ready():
 
 func _ready_later():
 	
-	Debug.count_time("Map Load");
+	Debugger.count_time("Map Load");
 	load_maps();
-	Debug.count_time("Map Load");
+	Debugger.count_time("Map Load");
 	for node in container.get_children():
-		node = node as SongCard;
 		node.song_selected.connect(handle_song_select.bind(node));
 		node.song_play_request.connect(handle_song_play_request.bind(node));
 	

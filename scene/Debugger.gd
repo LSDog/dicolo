@@ -4,7 +4,7 @@ extends Node
 var time_count_dic :Dictionary = {};
 
 func _ready():
-	print("Debug.gd enabled.");
+	print("Debugger.gd enabled.");
 
 ## 记录和检测某个步骤的耗时（开始的时候执行一次，后面再执行一次）
 func count_time(id :String) -> void:
