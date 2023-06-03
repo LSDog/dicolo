@@ -120,17 +120,13 @@ func add_note(time: float, note_string :String):
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
-				0.0 if !note_split[3].is_valid_float() else note_split[3].to_float(), \
-				0.0 if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4].to_float()
+				0.0 if !note_split[3].is_valid_float() else note_split[3].to_float()
 			));
 		"s": # slide
-			var p_deg = 0.0 if !note_split[2].is_valid_float() else note_split[2].to_float();
 			events.append(Event.Note.Slide.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
-				p_deg, \
-				# 未指定时自动算slide时间
-				abs(p_deg) / 360.0 / (bpm / 170) if (note_split.size() < 5 || !note_split[4].is_valid_float()) else note_split[4]
+				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(),
 			));
 		"b": # bounce
 			events.append(Event.Note.Bounce.new(
@@ -172,18 +168,14 @@ class Event:
 	## 执行的时间(s)
 	var time: float;
 	
-	## 开始消失前保持的时间(s)
-	var keep_time: float = 0.0;
-	
 	## 所在track的位置
 	var side :int;
 	## 位置常量
 	enum SIDE {OTHER=-1, LEFT=0, RIGHT=1}
 	
-	func _init(p_time: float, p_side: int = SIDE.OTHER, p_keep_time: float = 0.0):
+	func _init(p_time: float, p_side: int = SIDE.OTHER):
 		self.time = p_time;
 		self.side = p_side;
-		self.keep_time = p_keep_time;
 	
 	func _to_string() -> String:
 		return "{} event" % time;
@@ -192,10 +184,9 @@ class Event:
 	class Note:
 		extends Event;
 		
-		func _init(p_time: float, p_side: int, p_keep_time: float = 0.0):
+		func _init(p_time: float, p_side: int):
 			super._init(p_time, p_side);
 			self.event_type = EVENT_TYPE.Note;
-			self.keep_time = p_keep_time;
 		
 		class Hit:
 			extends Note;
@@ -203,8 +194,8 @@ class Event:
 			var deg: float;
 			var deg_end: float;
 			
-			func _init(p_time: float, p_side: int, p_deg: float, p_deg_end: float, p_keep_time: float = 0.0):
-				super._init(p_time, p_side, p_keep_time);
+			func _init(p_time: float, p_side: int, p_deg: float, p_deg_end: float):
+				super._init(p_time, p_side);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
 				self.event_type = EVENT_TYPE.Hit;
@@ -214,8 +205,8 @@ class Event:
 			
 			var deg: float;
 			
-			func _init(p_time: float, p_side: int, p_deg: float, p_keep_time: float = 0.0):
-				super._init(p_time, p_side, p_keep_time);
+			func _init(p_time: float, p_side: int, p_deg: float):
+				super._init(p_time, p_side);
 				self.deg = p_deg;
 				self.event_type = EVENT_TYPE.Slide;
 		

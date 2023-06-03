@@ -44,7 +44,7 @@ func loaded():
 				flow.get_note_pos_y(event.side)
 			),
 			Vector2(
-				10 + get_length_in_flow(event.keep_time),
+				10,
 				flow.size.y/2 - flow.note_margin_vertical * 2
 			)
 		);

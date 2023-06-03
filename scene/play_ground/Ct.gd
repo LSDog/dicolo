@@ -1,9 +1,12 @@
-extends RigidBody2D
+@icon("res://image/texture/practicle.svg")
+class_name Ct
+extends Sprite2D
 
 var trail :Line2D = null;
 var curve :Curve2D = Curve2D.new();
 
-var last_position :Vector2;
+var prev_position :Vector2;
+var velocity :Vector2 = Vector2.ZERO;
 
 func _ready():
 	trail = $Trail;
@@ -14,8 +17,14 @@ func _ready():
 	get_parent().move_child.call_deferred(trail, get_index());
 
 func _process(_delta):
+	
+	# 处理轨迹
 	if trail == null: return;
 	var point_count = trail.get_point_count();
 	if point_count > 10:
 		trail.remove_point(0);
 	trail.add_point(position)
+	
+	# 计算速度
+	velocity = position - prev_position;
+	prev_position = position;

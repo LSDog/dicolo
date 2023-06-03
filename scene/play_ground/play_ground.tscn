@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=44 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlayGroundControl.gd" id="1_4bxfx"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
@@ -74,13 +74,6 @@ radius = 256.0
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_4obor"]
 polygon = PackedVector2Array(-11, -18, 0, -12, 11, -18, 9, -5, 18, 4, 6, 6, 0, 18, -6, 6, -18, 4, -9, -5)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_peqsq"]
-radius = 20.0
-
-[sub_resource type="QuadMesh" id="QuadMesh_1yk10"]
-lightmap_size_hint = Vector2i(202, 202)
-size = Vector2(40, 40)
 
 [sub_resource type="Gradient" id="Gradient_ctd7h"]
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 0.8, 0.686275)
@@ -348,24 +341,15 @@ texture = ExtResource("7_ol0uo")
 visible = false
 shape = SubResource("CircleShape2D_umnea")
 
-[node name="CtL" type="RigidBody2D" parent="PlayGround"]
+[node name="CtL" type="Sprite2D" parent="PlayGround"]
 position = Vector2(576, 324)
-rotation = -3.14159
-freeze = true
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("9_q6ppy")
 script = ExtResource("8_hms3c")
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="PlayGround/CtL"]
 visible = false
 occluder = SubResource("OccluderPolygon2D_4obor")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayGround/CtL"]
-visible = false
-shape = SubResource("CircleShape2D_peqsq")
-
-[node name="MeshInstance2D" type="MeshInstance2D" parent="PlayGround/CtL"]
-modulate = Color(1, 1, 1, 0.784314)
-mesh = SubResource("QuadMesh_1yk10")
-texture = ExtResource("9_q6ppy")
 
 [node name="Trail" type="Line2D" parent="PlayGround/CtL"]
 width = 7.0
@@ -374,24 +358,15 @@ joint_mode = 2
 begin_cap_mode = 2
 antialiased = true
 
-[node name="CtR" type="RigidBody2D" parent="PlayGround"]
+[node name="CtR" type="Sprite2D" parent="PlayGround"]
 position = Vector2(576, 324)
-rotation = -3.14159
-freeze = true
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("9_q6ppy")
 script = ExtResource("8_hms3c")
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="PlayGround/CtR"]
 visible = false
 occluder = SubResource("OccluderPolygon2D_4obor")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayGround/CtR"]
-visible = false
-shape = SubResource("CircleShape2D_peqsq")
-
-[node name="MeshInstance2D" type="MeshInstance2D" parent="PlayGround/CtR"]
-modulate = Color(1, 1, 1, 0.784314)
-mesh = SubResource("QuadMesh_1yk10")
-texture = ExtResource("9_q6ppy")
 
 [node name="Trail" type="Line2D" parent="PlayGround/CtR"]
 width = 7.0
