@@ -19,10 +19,10 @@ var last_auto_rotate := 0.0;
 ## 自动旋转冷却时间
 var auto_rotate_cd := 1;
 
-## 当前使用的joypad
-var joypad_id = -1;
-#var joy_l := Vector2.ZERO;
-#var joy_r := Vector2.ZERO;
+## 当前使用的手柄
+var gamepad_id = -1;
+## 手柄个数
+var gamepad_count = 0;
 
 func _ready():
 	
@@ -40,14 +40,6 @@ func _ready():
 	print(" ");
 	print("Current user:// path: ", ProjectSettings.globalize_path(dir_user.get_current_dir()));
 	
-	# 信号
-	Input.joy_connection_changed.connect(func(device: int, connected: bool):
-		if connected:
-			joypad_id = device;
-		else:
-			update_joypad();
-	);
-	
 	_ready_later.call_deferred();
 
 func _ready_later():
@@ -63,6 +55,8 @@ func _ready_later():
 	scene_DebugInfo.z_index = 12;
 	get_tree().root.add_child(scene_DebugInfo);
 	scene_DebugInfo.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
+	
+	Notifier.container.z_index = 13;
 
 func _notification(what):
 	match what:
@@ -86,26 +80,19 @@ func _process(_delta):
 			DisplayServer.screen_set_orientation(DisplayServer.SCREEN_REVERSE_LANDSCAPE);
 		else: DisplayServer.screen_set_orientation(DisplayServer.SCREEN_LANDSCAPE);
 
-## 更新摇杆连接
-func update_joypad():
-	joypad_id = -1;
-	for i in Input.get_connected_joypads():
-		joypad_id = i;
-		break;
-
 ## 获取左摇杆Vec
 func get_joy_left() -> Vector2:
-	if joypad_id == -1: return Vector2.ZERO;
+	if gamepad_id == -1: return Vector2.ZERO;
 	return Vector2(
-		Input.get_joy_axis(joypad_id, JOY_AXIS_LEFT_X),
-		Input.get_joy_axis(joypad_id, JOY_AXIS_LEFT_Y))
+		Input.get_joy_axis(gamepad_id, JOY_AXIS_LEFT_X),
+		Input.get_joy_axis(gamepad_id, JOY_AXIS_LEFT_Y))
 
 ## 获取右侧摇杆Vec
 func get_joy_right() -> Vector2:
-	if joypad_id == -1: return Vector2.ZERO;
+	if gamepad_id == -1: return Vector2.ZERO;
 	return Vector2(
-		Input.get_joy_axis(joypad_id, JOY_AXIS_RIGHT_X),
-		Input.get_joy_axis(joypad_id, JOY_AXIS_RIGHT_Y))
+		Input.get_joy_axis(gamepad_id, JOY_AXIS_RIGHT_X),
+		Input.get_joy_axis(gamepad_id, JOY_AXIS_RIGHT_Y))
 
 ## 获取当前运行的时间 秒
 func get_elapsed_time() -> float:

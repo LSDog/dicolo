@@ -56,7 +56,7 @@ size_flags_horizontal = 3
 mouse_filter = 0
 mouse_default_cursor_shape = 3
 
-[node name="Placeholder" type="Control" parent="Panel/Scroll/List"]
+[node name="--" type="Control" parent="Panel/Scroll/List"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
@@ -130,3 +130,27 @@ text = "V-sync"
 layout_mode = 2
 size_flags_horizontal = 8
 button_pressed = true
+
+[node name="--2" type="Control" parent="Panel/Scroll/List"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Control" type="VBoxContainer" parent="Panel/Scroll/List"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Scroll/List/Control"]
+layout_mode = 2
+text = "|🎮 Control"
+
+[node name="Gamepad" type="HBoxContainer" parent="Panel/Scroll/List/Control"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Scroll/List/Control/Gamepad"]
+layout_mode = 2
+text = "Current: -1 (null)"
+
+[node name="Option" type="OptionButton" parent="Panel/Scroll/List/Control/Gamepad"]
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+clip_text = true

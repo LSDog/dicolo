@@ -7,6 +7,8 @@ var setting_shown :bool = false;
 enum FullScreenMode {FullScreen, BorderLess};
 @onready var input_FPS := $Panel/Scroll/List/Video/FPS/Input;
 @onready var button_VSync := $Panel/Scroll/List/Video/VSync/Button;
+@onready var label_Gamepad := $Panel/Scroll/List/Control/Gamepad/Label;
+@onready var option_Gamepad := $Panel/Scroll/List/Control/Gamepad/Option;
 
 func _ready():
 	button_FullScreen.toggled.connect(func(pressed):
@@ -39,6 +41,36 @@ func _ready():
 			DisplayServer.VSYNC_DISABLED
 		);
 	);
+	update_gamepad_select();
+	Input.joy_connection_changed.connect(func(device: int, connected: bool):
+		print("[Settings] gamepad changed: ",device,"\tconnected: ",connected);
+		Notifier.notif_popup(
+			"A gamepad was [b]" + ("inserted" if connected else "pulled out") + "[/b].",
+			Notifier.COLOR_OK if connected else Notifier.COLOR_BAD
+		);
+		update_gamepad_select();
+		if connected: Global.gamepad_id = device;
+	);
+	option_Gamepad.item_selected.connect(func(id):
+		Global.gamepad_id = id;
+		update_label_Gamepad();
+	)
+
+func update_gamepad_select():
+	var joys = [];
+	option_Gamepad.clear();
+	for i in Input.get_connected_joypads():
+		option_Gamepad.add_item(Input.get_joy_name(i)+" ("+Input.get_joy_guid(i)+")", i);
+	if option_Gamepad.item_count == 0:
+		Global.gamepad_id = -1;
+	elif Global.gamepad_id == -1:
+		var id = Input.get_connected_joypads()[0]
+		Global.gamepad_id = id;
+	Global.gamepad_count = Input.get_connected_joypads().size();
+	update_label_Gamepad();
+
+func update_label_Gamepad():
+	label_Gamepad.text = "Gamepad: " + str(Global.gamepad_id+1) + "/" + str(Global.gamepad_count);
 
 func _input(event: InputEvent):
 	if visible && event is InputEventMouseButton:

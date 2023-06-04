@@ -15,8 +15,8 @@ extends Control
 
 @export_category("Judge")
 enum JUDGEMENT { JUST, GOOD, MISS }
-@export var judge_just :float = 0.08;
-@export var judge_good :float = 0.16;
+@export var judge_just :float = 0.1;
+@export var judge_good :float = 0.2;
 ## 判定时最大容许的准星与轨道半径的差值
 @export var judge_radius_offset :float = 10;
 ## slide可判定的的度数
@@ -24,7 +24,7 @@ enum JUDGEMENT { JUST, GOOD, MISS }
 ## hit 最小速度
 @export var judge_hit_speed :float = 10;
 ## hit 最大容许的撞击角度偏差
-@export var judge_hit_deg_offset :float = 30;
+@export var judge_hit_deg_offset :float = 45;
 
 ## 游玩模式
 var play_mode;
@@ -531,11 +531,11 @@ func generate_note(note :BeatMap.Event.Note) -> Array:
 			path_follow.progress_ratio = note.deg/360.0;
 			var slide := Sprite2D.new();
 			slide.texture = texture_slide;
-			slide.scale.x = 0.2;
-			slide.scale.y = 0.2;
+			slide.scale.x = 0.15;
+			slide.scale.y = 0.15;
 			# 提示线
 			var line := Line2D.new();
-			line.width = 8;
+			line.width = 4;
 			line.points = [Vector2.ZERO, Vector2.ZERO];
 			line.default_color = Color8(255,255,255,32);
 			line.gradient = texture_slide_hint_gradient;
@@ -590,7 +590,7 @@ func judge_note(wait_index :int, note_array = null):
 				tween.finished.connect(func(): if polygon != null: polygon.queue_free());
 				tween.set_ease(Tween.EASE_OUT);
 				tween.set_trans(Tween.TRANS_LINEAR);
-				tween.parallel().tween_property(polygon, "modulate", Color(1,0,0,0), note_after_time);
+				tween.parallel().tween_property(polygon, "modulate", Color(0.9,0.4,0.4,0), note_after_time);
 			BeatMap.EVENT_TYPE.Slide:
 				var slide_path_follow :PathFollow2D = note_item_array[0];
 				var line :Line2D = note_item_array[1];
