@@ -24,7 +24,7 @@ config/windows_native_icon="res://image/icon/icon.ico"
 
 Global="*res://scene/Global.gd"
 Debugger="*res://scene/Debugger.gd"
-Notifier="*res://scene/Notifier.gd"
+Notifier="*res://scene/notifier/Notifier.gd"
 
 [display]
 

@@ -10,7 +10,7 @@ var full_screen = false;
 ## 主界面
 var scene_MainMenu :Control = null;
 ## 设置界面
-var scene_Settings :Control = null;
+var scene_Setting :Control = null;
 ## Debug界面
 var scene_DebugInfo :Control = null;
 
@@ -43,14 +43,14 @@ func _ready():
 	_ready_later.call_deferred();
 
 func _ready_later():
-	var packed_scene_Settings := load("res://scene/settings/settings.tscn") as PackedScene;
-	scene_Settings = packed_scene_Settings.instantiate() as Control;
-	scene_Settings.visible = false;
-	scene_Settings.z_index = 11;
-	get_tree().root.add_child(scene_Settings);
-	scene_Settings.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
+	var packed_scene_Setting := preload("res://scene/setting/Setting.tscn") as PackedScene;
+	scene_Setting = packed_scene_Setting.instantiate() as Control;
+	scene_Setting.visible = false;
+	scene_Setting.z_index = 11;
+	get_tree().root.add_child(scene_Setting);
+	scene_Setting.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 	
-	var packed_scene_DebugInfo := load("res://scene/test/debug_info.tscn") as PackedScene;
+	var packed_scene_DebugInfo := preload("res://scene/test/DebugInfo.tscn") as PackedScene;
 	scene_DebugInfo = packed_scene_DebugInfo.instantiate() as Control;
 	scene_DebugInfo.z_index = 12;
 	get_tree().root.add_child(scene_DebugInfo);

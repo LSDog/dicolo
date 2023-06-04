@@ -21,7 +21,7 @@ var dragging_index := [];
 
 var randomed_index_list := []; # 随机抽取到的歌曲index，防止重复
 
-var song_card_tscn = preload("res://scene/main_menu/song_card.tscn");
+var song_card_tscn = preload("res://scene/main_menu/SongCard.tscn");
 
 func _ready():
 	
@@ -91,7 +91,7 @@ func handle_song_play_request(song_card: SongCard):
 	var level_name := main_menu.levels_bar.selected_label.text.split('/', 2)[1] as String;
 	print("play song: ", song_card.example_beatmap.title, ", level: ", level_name);
 	
-	var play_ground_scene := preload("res://scene/play_ground/play_ground.tscn") as PackedScene;
+	var play_ground_scene := preload("res://scene/play_ground/Playground.tscn") as PackedScene;
 	var play_ground := play_ground_scene.instantiate() as PlayGroundControl;
 	get_tree().root.add_child(play_ground);
 	get_tree().current_scene = play_ground;

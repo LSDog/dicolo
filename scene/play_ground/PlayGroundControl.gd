@@ -462,8 +462,8 @@ func _process(delta):
 	if enable_control && can_control:
 		# 控制准星
 		
-		var joyl :Vector2 = $VirtualJoystick.joy_l if Global.joypad_id == -1 else Global.get_joy_left();
-		var joyr :Vector2 = $VirtualJoystick.joy_r if Global.joypad_id == -1 else Global.get_joy_right();
+		var joyl :Vector2 = $VirtualJoystick.joy_l if Global.gamepad_id == -1 else Global.get_joy_left();
+		var joyr :Vector2 = $VirtualJoystick.joy_r if Global.gamepad_id == -1 else Global.get_joy_right();
 		
 		# 手柄坐标越界则归一
 		if joyl.length_squared() > 1: joyl = joyl.normalized();
@@ -677,7 +677,10 @@ func get_ct_position(ct: Ct) -> Vector2:
 
 ## 通过与 track中心 的相对位置获取度数（顺时针，正上0°）
 func get_degree_in_track(vec: Vector2, negative_y :bool = false) -> float:
-	return abs(fposmod((float(atan2(vec.y if !negative_y else -vec.y , vec.x)/PI)*180.0-90), -360));
+	return (
+		0 if vec == Vector2.ZERO else
+		abs(fposmod((float(atan2(vec.y if !negative_y else -vec.y , vec.x)/PI)*180.0-90), -360))
+	);
 
 ## 判断此度数x是否在min~max里
 func is_in_degree(x: float, min: float, max: float) -> bool:

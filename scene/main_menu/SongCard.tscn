@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cg0kvu25oks3a"]
 
-[ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="2_fvuun"]
-[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_yxakl"]
+[ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="1_pg71e"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_6uq76"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r267s"]
 bg_color = Color(0.75, 0.63, 0.3, 1)
@@ -17,7 +17,7 @@ shadow_offset = Vector2(5, 5)
 
 [sub_resource type="LabelSettings" id="LabelSettings_k2800"]
 line_spacing = 0.0
-font = ExtResource("3_yxakl")
+font = ExtResource("2_6uq76")
 font_size = 28
 outline_size = 7
 outline_color = Color(0, 0, 0, 1)
@@ -26,7 +26,7 @@ shadow_offset = Vector2(0, 0)
 
 [sub_resource type="LabelSettings" id="LabelSettings_pe2pw"]
 line_spacing = 0.0
-font = ExtResource("3_yxakl")
+font = ExtResource("2_6uq76")
 font_size = 18
 font_color = Color(0.811765, 0.811765, 0.811765, 1)
 
@@ -36,7 +36,7 @@ custom_minimum_size = Vector2(380, 80)
 size_flags_horizontal = 8
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_r267s")
-script = ExtResource("2_fvuun")
+script = ExtResource("1_pg71e")
 
 [node name="Image" type="TextureRect" parent="."]
 modulate = Color(1, 1, 1, 0.117647)

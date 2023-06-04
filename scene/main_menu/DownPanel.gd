@@ -14,7 +14,7 @@ func _ready():
 
 func _ready_later():
 	$VBox/ButtonSetting.pressed.connect(func():
-		Global.scene_Settings.visible = !Global.scene_Settings.visible;
+		Global.scene_Setting.visible = !Global.scene_Setting.visible;
 	);
 	$VBox/ButtonRandom.pressed.connect(func():
 		main_menu.song_list.choose_song_random();

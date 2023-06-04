@@ -1,6 +1,6 @@
 [gd_scene load_steps=42 format=3 uid="uid://ogha2bnilh12"]
 
-[ext_resource type="Script" path="res://scene/play_ground/PlayGroundControl.gd" id="1_4bxfx"]
+[ext_resource type="Script" path="res://scene/play_ground/PlaygroundControl.gd" id="1_gad4f"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
 [ext_resource type="Shader" path="res://shader/whirl_texture.gdshader" id="3_qnmao"]
 [ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://image/texture/bounce.svg" id="4_b2qtm"]
@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://scene/play_ground/Bar.gd" id="9_0rucv"]
 [ext_resource type="Texture2D" uid="uid://dyruh3syyydp6" path="res://image/texture/practicle.svg" id="9_q6ppy"]
 [ext_resource type="Script" path="res://scene/play_ground/editor/Editor.gd" id="9_rxls6"]
-[ext_resource type="PackedScene" uid="uid://d3uwa2so8ndgb" path="res://scene/virtual_joystick/virtual_joystick.tscn" id="9_sf2y2"]
+[ext_resource type="PackedScene" uid="uid://d3uwa2so8ndgb" path="res://scene/virtual_joystick/VirtualJoystick.tscn" id="9_sf2y2"]
 [ext_resource type="Script" path="res://scene/play_ground/editor/Flow.gd" id="10_5ox8q"]
 [ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="11_1w5uc"]
 [ext_resource type="ButtonGroup" uid="uid://cg56w8paqidtx" path="res://scene/play_ground/editor/button_group_note_choose.tres" id="12_w1v2b"]
@@ -128,7 +128,7 @@ texture = ExtResource("16_te6n0")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q4dn4"]
 texture = ExtResource("18_eibeu")
 
-[node name="PlayGroundControl" type="Control"]
+[node name="PlaygroundControl" type="Control"]
 process_priority = 10
 layout_mode = 3
 anchors_preset = 15
@@ -137,7 +137,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_4bxfx")
+script = ExtResource("1_gad4f")
 
 [node name="Animation" type="AnimationPlayer" parent="."]
 libraries = {

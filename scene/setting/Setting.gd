@@ -43,7 +43,7 @@ func _ready():
 	);
 	update_gamepad_select();
 	Input.joy_connection_changed.connect(func(device: int, connected: bool):
-		print("[Settings] gamepad changed: ",device,"\tconnected: ",connected);
+		print("[Setting] gamepad changed: ",device,"\tconnected: ",connected);
 		Notifier.notif_popup(
 			"A gamepad was [b]" + ("inserted" if connected else "pulled out") + "[/b].",
 			Notifier.COLOR_OK if connected else Notifier.COLOR_BAD
