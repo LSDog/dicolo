@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=59 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_rqxl5"]
 [ext_resource type="Texture2D" uid="uid://fpi44kosojgq" path="res://image/background/トトリの夢の中.png" id="2_m18n7"]
@@ -20,6 +20,11 @@
 [ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://image/ui_icon/anticlockwise-rotation.svg" id="12_t4kou"]
 [ext_resource type="Script" path="res://scene/main_menu/DownPanel.gd" id="15_amr8j"]
 [ext_resource type="Texture2D" uid="uid://culfyi41m0gvm" path="res://image/texture/start.svg" id="20_re5t0"]
+[ext_resource type="Texture2D" uid="uid://485q4nyju4h0" path="res://image/icon/icon.png" id="21_1taxr"]
+[ext_resource type="AudioStream" uid="uid://bawqmljx771uq" path="res://sound/dicolo!_tsukuyomichan.wav" id="21_b7twj"]
+[ext_resource type="AudioStream" uid="uid://cmucpnk84nn63" path="res://sound/dicolo!_miku.wav" id="22_jklq2"]
+[ext_resource type="AudioStream" uid="uid://cf1f2lob8pau1" path="res://sound/dicolo!_len.wav" id="23_a35vh"]
+[ext_resource type="AudioStream" uid="uid://c0bw0kmqnvfow" path="res://sound/dicolo!_rin.wav" id="24_v77ea"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwa4q"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -210,6 +215,260 @@ border_width_right = 2
 border_color = Color(1, 1, 0.603922, 1)
 shadow_color = Color(0, 0, 0, 0.5)
 shadow_size = 16
+
+[sub_resource type="Animation" id="Animation_ct87p"]
+length = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Animations/Icon:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Animations/Icon:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-6.28319]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Animations/Icon:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Animations/Icon:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(576, 340)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Animations/Panel:theme_override_styles/panel:bg_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Animations/Title:size")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 171)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Animations/Icon_shadow:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Animations/Icon_shadow:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.4, 0.4)]
+}
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_eg2x4"]
+streams_count = 4
+random_pitch = 1.0
+random_volume_offset_db = 0.0
+stream_0/stream = ExtResource("21_b7twj")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("22_jklq2")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("23_a35vh")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("24_v77ea")
+stream_3/weight = 1.0
+
+[sub_resource type="Animation" id="Animation_3vlcs"]
+resource_name = "start"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Animations/Icon:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 1.5, 2, 3),
+"transitions": PackedFloat32Array(2, 0.15, 1, 0.3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.501961), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Animations/Icon:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(3, 1),
+"update": 0,
+"values": [1.5708, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Animations/Icon:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(3, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(0.4, 0.4)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Animations/Icon:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1, 1.5),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Vector2(576, 340), Vector2(344, 340)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Animations/Title:size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1, 1.5, 2, 3),
+"transitions": PackedFloat32Array(0.3, 1, 0.1, 1),
+"update": 0,
+"values": [Vector2(1, 171), Vector2(401, 171), Vector2(401, 171), Vector2(1, 171)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Animations/Panel:theme_override_styles/panel:bg_color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 2, 3),
+"transitions": PackedFloat32Array(1, 0.5, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Animations/Icon_shadow:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1e+06, 0.3, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.25098), Color(1, 1, 1, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Animations/Icon_shadow:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(0.3, 1),
+"update": 0,
+"values": [Vector2(0.4, 0.4), Vector2(2, 2)]
+}
+tracks/8/type = "audio"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Animations/AudioPlayer")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": SubResource("AudioStreamRandomizer_eg2x4")
+}],
+"times": PackedFloat32Array(1)
+}
+tracks/8/use_blend = true
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("SongList")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"choose_song_random"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vgp61"]
+_data = {
+"RESET": SubResource("Animation_ct87p"),
+"start": SubResource("Animation_3vlcs")
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n5see"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wwovf"]
+font = ExtResource("11_38job")
+font_size = 120
 
 [node name="MainMenu" type="Control"]
 process_priority = 10
@@ -484,6 +743,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -80.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_hpptf")
@@ -677,3 +937,61 @@ stretch_mode = 5
 [node name="<-|" type="Control" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
+
+[node name="Animations" type="Control" parent="."]
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Animations"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_vgp61")
+}
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="Animations"]
+bus = &"Voice"
+
+[node name="Panel" type="Panel" parent="Animations"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n5see")
+
+[node name="Icon_shadow" type="Sprite2D" parent="Animations"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(576, 340)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("21_1taxr")
+
+[node name="Icon" type="Sprite2D" parent="Animations"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(576, 340)
+rotation = -6.28319
+texture = ExtResource("21_1taxr")
+
+[node name="Title" type="Label" parent="Animations"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -85.0
+offset_right = 1.0
+offset_bottom = 86.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "dicolo!"
+label_settings = SubResource("LabelSettings_wwovf")
+clip_text = true

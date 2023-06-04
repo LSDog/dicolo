@@ -3,6 +3,8 @@ extends ScrollContainer
 
 @onready var container := $VBoxContainer;
 
+var map_loaded := false;
+
 var scroll_speed := 0.0; # 滚动速度，向下为正方向
 var touch_scroll_speed := 0.0; # 最后一次手拖动的速度
 @onready var v_scroll_bar := get_v_scroll_bar(); # 滚动条
@@ -23,6 +25,8 @@ var randomed_index_list := []; # 随机抽取到的歌曲index，防止重复
 
 var song_card_tscn = preload("res://scene/main_menu/SongCard.tscn");
 
+signal map_first_loaded;
+
 func _ready():
 	
 	mouse_entered.connect(func(): is_mouse_entered = true);
@@ -39,8 +43,11 @@ func _ready_later():
 		node.song_selected.connect(handle_song_select.bind(node));
 		node.song_play_request.connect(handle_song_play_request.bind(node));
 	
-	# 载完图后随机播放歌曲
-	choose_song_random();
+	map_loaded = true;
+	map_first_loaded.emit();
+	
+	# 载完图后 开场动画结束会随机播放歌曲
+	#choose_song_random();
 
 ## 处理选中(点击)歌曲卡片
 func handle_song_select(song_card: SongCard):
@@ -277,6 +284,11 @@ func choose_song(index: int):
 
 ## 随机选曲
 func choose_song_random():
+	
+	# 没加载就等
+	if !map_loaded:
+		await map_first_loaded;
+	
 	# 防重复
 	if randomed_index_list.size() >= get_song_count():
 		randomed_index_list.clear();

@@ -10,8 +10,12 @@ var debug_label_last_report = 0;
 @onready var levels_bar :Control = $LeftPanel/LevelsBar;
 @onready var bg_label :Label = $Bg_Label;
 @onready var bg_panel :Panel = $Bg_Panel;
+@onready var animation_player :AnimationPlayer = $Animations/AnimationPlayer;
 
 func _ready():
+	
+	animation_player.play("start");
+	
 	Global.scene_MainMenu = self;
 	# 跟音乐动
 	music_player.beat.connect(func():
