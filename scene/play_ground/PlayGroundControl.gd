@@ -73,22 +73,22 @@ var start_time := 0.0;
 var play_time := 0.0;
 
 ## 左侧准心
-var ctl :Ct;
+@onready var ctl :Ct = $PlayGround/CtL;
 ## 右侧准星
-var ctr :Ct;
+@onready var ctr :Ct = $PlayGround/CtR;
 
 ## 左侧轨道
-var trackl :Sprite2D;
-var trackl_diam := 512.0;
-var trackl_line :Sprite2D;
-var trackl_center :Vector2;
-var trackl_path :Path2D;
+@onready var trackl :Sprite2D = $PlayGround/TrackL;
+@onready var trackl_diam := 512.0;
+@onready var trackl_circle :Sprite2D = $PlayGround/TrackL/Circle;
+@onready var trackl_center :Vector2 = trackl.position;
+@onready var trackl_path :Path2D = $PlayGround/TrackL/Path;
 ## 右侧轨道
-var trackr :Sprite2D;
-var trackr_diam := 512.0;
-var trackr_line :Sprite2D;
-var trackr_center :Vector2;
-var trackr_path :Path2D;
+@onready var trackr :Sprite2D = $PlayGround/TrackR;
+@onready var trackr_diam := 512.0;
+@onready var trackr_circle :Sprite2D = $PlayGround/TrackR/Circle;
+@onready var trackr_center :Vector2 = trackr.position;
+@onready var trackr_path :Path2D = $PlayGround/TrackR/Path;
 
 @onready var bgpanel := $BGPanel;
 @onready var audio_player := $BGPanel/AudioPlayer;
@@ -98,6 +98,7 @@ var trackr_path :Path2D;
 @onready var lyrics_label :=  $BGPanel/LyricLabel;
 
 var texture_slide = preload("res://image/texture/slide.svg");
+var texture_slide_hint_ring = preload("res://image/texture/ring.svg");
 var texture_slide_hint_gradient = preload("res://image/texture/slide_hint_line_gradient.tres");
 var texture_bounce = preload("res://image/texture/bounce.svg");
 var texture_crash = preload("res://image/texture/crash.svg");
@@ -141,19 +142,10 @@ func _ready():
 	$Pause/Content/Back.pressed.connect(resume);
 	$Pause/Content/Restart.pressed.connect(restart);
 	
-	# 初始化控制柄
-	ctl = $PlayGround/CtL;
-	ctr = $PlayGround/CtR;
-	trackl = $PlayGround/TrackL;
-	trackl_line = $PlayGround/TrackL/Mesh;
-	trackl_path = $PlayGround/TrackL/Path;
-	trackr = $PlayGround/TrackR;
-	trackr_line = $PlayGround/TrackR/Mesh;
-	trackr_path = $PlayGround/TrackR/Path;
-	
-	audio_player.finished.connect(end);# 音乐结束之后进入end
-	
-	
+	# 音乐结束之后进入end
+	audio_player.finished.connect(end);
+
+
 ## 载入铺面并开始游戏
 func play(map_file_path: String):
 	
@@ -190,9 +182,6 @@ func play(map_file_path: String):
 
 ## 初始化游戏
 func pre_start():
-	
-	trackl_center = trackl.position;
-	trackr_center = trackr.position;
 	
 	# 为了演示加的延迟 记得删
 	await get_tree().create_timer(1).timeout;
@@ -365,9 +354,14 @@ func _process(delta):
 	
 	var can_control = false;
 	
+	var audio_pos = audio_player.get_playback_position();
+	
+	# 通过播放进度判断是否end
+	if !ended && audio_pos >= audio_player.stream.get_length():
+		end();
+	
 	if !ended: # 未结束
 		
-		var audio_pos = audio_player.get_playback_position();
 		var video_pos = video_player.stream_position;
 		
 		stream_time = video_pos if has_video else audio_pos;
@@ -388,13 +382,14 @@ func _process(delta):
 						# 更新 audio_pos
 						audio_pos = audio_pos-audio_delay;
 						audio_player.seek(audio_pos);
-						print("[audio] delay", audio_delay, " > ",max_delay," --> reset-audio=",video_pos);
+						print("[audio] delay ", audio_delay, " > ",max_delay," --> reset-audio=",video_pos);
 				
 				# 演奏总时间 <- 音频流校准
 				var play_time_delay = play_time - audio_pos;
 				if abs(play_time_delay) > max_delay:
 					play_time = play_time - play_time_delay;
-					print("[play] delay",play_time_delay," > ",max_delay," --> reset-play_time=",audio_pos);
+					print("[play] delay ",play_time_delay," > ",max_delay," --> reset-play_time=",audio_pos);
+				
 				
 				# 预处理event
 				while event_index < beatmap.events.size():
@@ -411,9 +406,11 @@ func _process(delta):
 					else:
 						break;
 				
+				
 				# 计算俩个 Ct 的值
 				update_ct(ctl);
 				update_ct(ctr);
+				
 				
 				# 处理等待中的event
 				for wait_index in waiting_notes:
@@ -425,6 +422,7 @@ func _process(delta):
 					elif play_time > event.time:
 						# 这里处理事件
 						handle_event(event);
+				
 				
 				# 处理歌词
 				if has_lyrics:
@@ -441,6 +439,7 @@ func _process(delta):
 					if has_line:
 						lyrics_label.text = line;
 						lyrics_label.create_tween().tween_property(lyrics_label, "modulate:a", 1.0, 0.1).from(0.0);
+				
 				
 				# Debug
 				$BGPanel/DebugLabel.text = (
@@ -460,20 +459,19 @@ func _process(delta):
 		can_control = true;
 	
 	if enable_control && can_control:
+		
 		# 控制准星
-		
-		var joyl :Vector2 = $VirtualJoystick.joy_l if Global.gamepad_id == -1 else Global.get_joy_left();
-		var joyr :Vector2 = $VirtualJoystick.joy_r if Global.gamepad_id == -1 else Global.get_joy_right();
-		
-		# 手柄坐标越界则归一
-		if joyl.length_squared() > 1: joyl = joyl.normalized();
-		if joyr.length_squared() > 1: joyr = joyr.normalized();
+		# limit_length 防止手柄坐标越界
+		var joyl :Vector2 = $VirtualJoystick.joy_l if Global.gamepad_id == -1 else Global.get_joy_left().limit_length(1.0);
+		var joyr :Vector2 = $VirtualJoystick.joy_r if Global.gamepad_id == -1 else Global.get_joy_right().limit_length(1.0);
 		
 		trackl.position = trackl_center + joyl * 10;
 		trackr.position = trackr_center + joyr * 10;
 		
-		ctl.position = trackl.position + joyl*trackl_line.texture.get_size()/2;
-		ctr.position = trackr.position + joyr*trackr_line.texture.get_size()/2;
+		ctl.position = trackl.position + joyl*trackl_diam/2;
+		ctr.position = trackr.position + joyr*trackr_diam/2;
+		
+
 
 ## 处理音符以外的各种事件
 func handle_event(event :BeatMap.Event):
@@ -513,7 +511,7 @@ func generate_note(note :BeatMap.Event.Note) -> Array:
 			tween.parallel().tween_property(line, "scale", Vector2(1,1), event_before_beat*get_beat_time()
 				).from(Vector2(0,0)).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
 			tween.parallel().tween_property(line, "width", 12.5, event_before_beat*get_beat_time()
-				).from(7.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
+				).from(7.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
 			# 引导轨道（扇形）
 			var polygon = Polygon2D.new();
 			var polygon_points = [Vector2.ZERO];
@@ -531,25 +529,23 @@ func generate_note(note :BeatMap.Event.Note) -> Array:
 			path_follow.progress_ratio = note.deg/360.0;
 			var slide := Sprite2D.new();
 			slide.texture = texture_slide;
-			slide.scale.x = 0.15;
-			slide.scale.y = 0.15;
-			# 提示线
-			var line := Line2D.new();
-			line.width = 4;
-			line.points = [Vector2.ZERO, Vector2.ZERO];
-			line.default_color = Color8(255,255,255,32);
-			line.gradient = texture_slide_hint_gradient;
-			path.add_child(line);
-			# 动画效果
-			create_anim_tween(line).tween_method(
-				func(ratio: float):
-					line.set_point_position(1, path_follow.position * ratio),
-				0.0, 1.0, event_before_beat * get_beat_time()
-			).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
+			slide.scale.x = 0.2;
+			slide.scale.y = 0.2;
 			path_follow.add_child(slide);
 			create_anim_tween(slide).tween_property(slide, "modulate:a", 1.0, event_before_beat*get_beat_time()
 				).from(0.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
-			return [path_follow, line];
+			# 提示圈
+			var ring := Sprite2D.new();
+			ring.texture = texture_slide_hint_ring;
+			ring.scale.x = 0.7;
+			ring.scale.y = 0.7;
+			path_follow.add_child(ring);
+			var tween_ring = create_anim_tween(ring);
+			tween_ring.parallel().tween_property(ring, "modulate:a", 0.6, event_before_beat*get_beat_time()
+				).from(0.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
+			tween_ring.parallel().tween_property(ring, "scale", Vector2(0, 0), event_before_beat*get_beat_time()
+				).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
+			return [path_follow];#, line];
 		BeatMap.EVENT_TYPE.Bounce:
 			var bounce = Sprite2D.new();
 			bounce.texture = texture_bounce;
@@ -593,14 +589,14 @@ func judge_note(wait_index :int, note_array = null):
 				tween.parallel().tween_property(polygon, "modulate", Color(0.9,0.4,0.4,0), note_after_time);
 			BeatMap.EVENT_TYPE.Slide:
 				var slide_path_follow :PathFollow2D = note_item_array[0];
-				var line :Line2D = note_item_array[1];
+				#var line :Line2D = note_item_array[1];
 				#line.color.r = 1;
-				var tween = create_anim_tween(line);
-				tween.finished.connect(func(): if line != null: line.queue_free());
+				var tween = create_anim_tween(slide_path_follow);
+				#tween.finished.connect(func():if line != null: line.queue_free());
 				tween.set_ease(Tween.EASE_OUT);
 				tween.set_trans(Tween.TRANS_LINEAR);
 				tween.parallel().tween_property(slide_path_follow, "modulate", Color(1,0,0,0), note_after_time);
-				tween.parallel().tween_property(line, "modulate", Color(1,0,0,0), note_after_time);
+				#tween.parallel().tween_property(line, "modulate", Color(1,0,0,0), note_after_time);
 			BeatMap.EVENT_TYPE.Bounce:
 				var bounce :Sprite2D = note_item_array[0];
 				var tween = create_anim_tween(bounce);

@@ -1,4 +1,7 @@
-[gd_resource type="AudioBusLayout" load_steps=3 format=3 uid="uid://cpdo0fsabufcn"]
+[gd_resource type="AudioBusLayout" load_steps=4 format=3 uid="uid://cpdo0fsabufcn"]
+
+[sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_8vs7j"]
+resource_name = "SpectrumAnalyzer"
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_37yp2"]
 resource_name = "Reverb"
@@ -15,6 +18,8 @@ time_pullout_ms = 10.0
 surround = 0.2
 
 [resource]
+bus/0/effect/0/effect = SubResource("AudioEffectSpectrumAnalyzer_8vs7j")
+bus/0/effect/0/enabled = true
 bus/1/name = &"Music"
 bus/1/solo = false
 bus/1/mute = false

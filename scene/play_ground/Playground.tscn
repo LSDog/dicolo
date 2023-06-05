@@ -1,13 +1,15 @@
-[gd_scene load_steps=42 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=44 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlaygroundControl.gd" id="1_gad4f"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
+[ext_resource type="Script" path="res://scene/play_ground/Spectrum.gd" id="3_pdtlx"]
 [ext_resource type="Shader" path="res://shader/whirl_texture.gdshader" id="3_qnmao"]
 [ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://image/texture/bounce.svg" id="4_b2qtm"]
 [ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://image/texture/slide.svg" id="4_qpcw0"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="7_7o5xm"]
 [ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://image/texture/track.svg" id="7_ol0uo"]
 [ext_resource type="Texture2D" uid="uid://5xyvc3ec13xo" path="res://image/texture/hit_fx.svg" id="7_tkuc3"]
+[ext_resource type="Texture2D" uid="uid://t0wun6q7c52f" path="res://image/texture/ring.svg" id="7_tovpw"]
 [ext_resource type="Script" path="res://scene/play_ground/Ct.gd" id="8_hms3c"]
 [ext_resource type="Script" path="res://scene/play_ground/Bar.gd" id="9_0rucv"]
 [ext_resource type="Texture2D" uid="uid://dyruh3syyydp6" path="res://image/texture/practicle.svg" id="9_q6ppy"]
@@ -154,6 +156,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_cjfdj")
 
 [node name="AudioPlayer" type="AudioStreamPlayer" parent="BGPanel"]
+bus = &"Music"
 
 [node name="Background" type="TextureRect" parent="BGPanel"]
 material = SubResource("ShaderMaterial_8lu0f")
@@ -183,6 +186,17 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 expand = true
+
+[node name="Spectrum" type="Control" parent="BGPanel"]
+process_mode = 4
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_pdtlx")
 
 [node name="Mask" type="ColorRect" parent="BGPanel"]
 layout_mode = 1
@@ -258,6 +272,11 @@ position = Vector2(0, -256)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("4_qpcw0")
 
+[node name="Ring" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D"]
+modulate = Color(1, 1, 1, 0.2)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_tovpw")
+
 [node name="PathFollow2D2" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
 position = Vector2(29.9335, -254.264)
 rotation = 0.116227
@@ -309,7 +328,7 @@ progress = 1385.73
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("7_7o5xm")
 
-[node name="Mesh" type="Sprite2D" parent="PlayGround/TrackL"]
+[node name="Circle" type="Sprite2D" parent="PlayGround/TrackL"]
 modulate = Color(1, 1, 1, 0.117647)
 rotation = -0.218166
 scale = Vector2(1.02, 1.02)
@@ -322,7 +341,7 @@ position = Vector2(768, 324)
 self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
 
-[node name="Mesh" type="Sprite2D" parent="PlayGround/TrackR"]
+[node name="Circle" type="Sprite2D" parent="PlayGround/TrackR"]
 modulate = Color(1, 1, 1, 0.117647)
 rotation = -0.218166
 scale = Vector2(1.02, 1.02)
@@ -375,7 +394,7 @@ curve = SubResource("Curve2D_lc0kg")
 script = ExtResource("9_0rucv")
 
 [node name="Editor" type="Control" parent="."]
-process_priority = 3
+process_mode = 4
 visible = false
 layout_mode = 1
 anchors_preset = 15
