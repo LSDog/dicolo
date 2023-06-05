@@ -113,7 +113,7 @@ func _process(delta):
 	# 触底减速
 	if (scroll_speed < 0 && scroll_vertical <= 0) || \
 		(scroll_speed > 0 && scroll_vertical + size.y >= container.size.y):
-		Global.stick_edge(lerpf(scroll_speed, 0, 0.95));
+		lerpf(scroll_speed, 0, 0.95);
 	
 	if scroll_speed != 0:
 		
@@ -127,7 +127,7 @@ func _process(delta):
 	if scroll_speed != 0 || offset_right != 0:
 		var speed_rate = abs(scroll_speed / base_scroll_speed);
 		# 滚动列表会使列表整体右偏（根据滚动速度）
-		offset_right = Global.stick_edge(lerp(offset_right, speed_rate, 0.5));
+		offset_right = lerp(offset_right, speed_rate, 0.5);
 		# 右移时加点儿阴影
 		v_scroll_bar_style.shadow_color = Color(1, 0.843137, 0, 0.1);
 		v_scroll_bar_style.shadow_size = 5 * speed_rate;

@@ -56,10 +56,16 @@ func _ready():
 func _process(_delta):
 	if !get_global_rect().intersects(get_viewport_rect()): return;
 	if modulate.v != modulate_v_target:
-		modulate.v = Global.stick_edge(lerpf(modulate.v, modulate_v_target, 0.1));
+		modulate.v = lerpf(modulate.v, modulate_v_target, 0.1);
 	if custom_minimum_size.x != width_target + width_offset:
-		custom_minimum_size.x = Global.stick_edge(lerpf(custom_minimum_size.x, width_target + width_offset, 0.2));
+		custom_minimum_size.x = lerpf(custom_minimum_size.x, width_target + width_offset, 0.2);
 		resize_labels();
+
+func resize_labels():
+	if title_label.size.x > (size.x - title_label.position.x):
+		title_label.scale.x = maxf(0.6, (size.x - title_label.position.x) / title_label.size.x);
+	if info_label.size.x > (size.x - info_label.position.x):
+		info_label.scale.x = maxf(0.6, (size.x - info_label.position.x) / info_label.size.x);
 
 func _gui_input(event):
 	if event is InputEventMouseButton:
@@ -96,8 +102,3 @@ func unselect():
 func unhover():
 	if !selected: modulate_v_target = modulate_v_origin;
 
-func resize_labels():
-	if title_label.size.x > (size.x - title_label.position.x):
-		title_label.scale.x = maxf(0.6, (size.x - title_label.position.x) / title_label.size.x);
-	if info_label.size.x > (size.x - info_label.position.x):
-		info_label.scale.x = maxf(0.6, (size.x - info_label.position.x) / info_label.size.x);

@@ -69,7 +69,7 @@ func _notification(what):
 
 func _process(_delta):
 	
-	stretch_scale = get_tree().root.get_content_scale_factor();
+	stretch_scale = get_tree().root.content_scale_factor;
 	
 	var elapsed_time = get_elapsed_time();
 	
@@ -97,10 +97,6 @@ func get_joy_right() -> Vector2:
 ## 获取当前运行的时间 秒
 func get_elapsed_time() -> float:
 	return Time.get_unix_time_from_system() - Time.get_ticks_msec()/1000.0;
-
-## 将浮点数贴合到dege（在value与edge距离小于等于threshold时返回edge，否则返回原value）
-func stick_edge(value:float, edge:float = 0, threshold:float = 0.01) -> float:
-	return edge if abs(value-edge) <= threshold else value;
 
 ## 弹出一个点击后关闭的窗口
 func pop_text_exit(text:String):

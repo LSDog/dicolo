@@ -7,6 +7,8 @@ var setting_shown :bool = false;
 enum FullScreenMode {FullScreen, BorderLess};
 @onready var input_FPS := $Panel/Scroll/List/Video/FPS/Input;
 @onready var button_VSync := $Panel/Scroll/List/Video/VSync/Button;
+@onready var label_Scale := $Panel/Scroll/List/Video/Scale/Label;
+@onready var slider_Scale := $Panel/Scroll/List/Video/Scale/HSlider;
 @onready var label_Gamepad := $Panel/Scroll/List/Control/Gamepad/Label;
 @onready var option_Gamepad := $Panel/Scroll/List/Control/Gamepad/Option;
 
@@ -41,6 +43,13 @@ func _ready():
 			DisplayServer.VSYNC_DISABLED
 		);
 	);
+	slider_Scale.value_changed.connect(func(value: float):
+		get_tree().root.content_scale_factor = value;
+		var event := InputEventMouseButton.new();
+		event.set_button_index(1);
+		event.set_pressed(false);
+		Input.parse_input_event(event);
+	);
 	update_gamepad_select();
 	Input.joy_connection_changed.connect(func(device: int, connected: bool):
 		print("[Setting] gamepad changed: ",device,"\tconnected: ",connected);
@@ -74,7 +83,7 @@ func update_label_Gamepad():
 
 func _input(event: InputEvent):
 	if visible && event is InputEventMouseButton:
-		if !$Panel.get_rect().has_point(event.position):
+		if !get_rect().has_point(event.position):
 			accept_event();
 			if event.button_index == MOUSE_BUTTON_LEFT && event.pressed:
 				visible = false;

@@ -15,3 +15,4 @@ func count_time(id :String) -> void:
 		print("[Debug] TIME-COUNT: \"", id, "\" started.");
 	else:
 		print("[Debug] TIME-COUNT: \"", id, "\" = ", (now - prev)/1000.0, "  ms");
+		time_count_dic.erase(id);

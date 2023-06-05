@@ -14,24 +14,20 @@ border_width_left = 1
 border_color = Color(1, 1, 1, 1)
 
 [node name="Setting" type="Control"]
-custom_minimum_size = Vector2(1152, 648)
+custom_minimum_size = Vector2(425, 0)
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_lf8gb")
-metadata/_edit_use_anchors_ = true
-
-[node name="Panel" type="Panel" parent="."]
-custom_minimum_size = Vector2(350, 0)
-layout_mode = 1
-anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 0
+script = ExtResource("1_lf8gb")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_xwlyw")
 theme_override_styles/panel = SubResource("StyleBoxFlat_t55bx")
@@ -54,7 +50,6 @@ texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 0
-mouse_default_cursor_shape = 3
 
 [node name="--" type="Control" parent="Panel/Scroll/List"]
 custom_minimum_size = Vector2(0, 10)
@@ -131,6 +126,26 @@ layout_mode = 2
 size_flags_horizontal = 8
 button_pressed = true
 
+[node name="Scale" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Panel/Scroll/List/Video/Scale"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Scale"
+
+[node name="HSlider" type="HSlider" parent="Panel/Scroll/List/Video/Scale"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.5
+max_value = 1.5
+step = 0.05
+value = 1.0
+scrollable = false
+tick_count = 5
+ticks_on_borders = true
+
 [node name="--2" type="Control" parent="Panel/Scroll/List"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
@@ -147,7 +162,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Panel/Scroll/List/Control/Gamepad"]
 layout_mode = 2
-text = "Current: -1 (null)"
+text = "Gamepad (null)"
 
 [node name="Option" type="OptionButton" parent="Panel/Scroll/List/Control/Gamepad"]
 layout_mode = 2
