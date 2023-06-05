@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scene/virtual_joystick/VirtualJoystick.gd" id="1_ef85n"]
 [ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://image/texture/circle_white_512.svg" id="2_bmrb0"]
-[ext_resource type="Texture2D" uid="uid://lkwl7qgxwc8n" path="res://image/texture/slash_left_45.svg" id="2_w0eu2"]
+[ext_resource type="Texture2D" uid="uid://crwko0stxpjul" path="res://image/texture/slash_round.svg" id="4_pf83e"]
 [ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://image/texture/track.svg" id="4_vaqr8"]
 [ext_resource type="Shader" path="res://shader/clip.gdshader" id="5_pin1r"]
 
@@ -75,7 +75,6 @@ grow_vertical = 2
 script = ExtResource("1_ef85n")
 
 [node name="LOut" type="Sprite2D" parent="."]
-clip_children = 2
 material = SubResource("ShaderMaterial_5augx")
 position = Vector2(128, 522)
 scale = Vector2(0.35, 0.35)
@@ -84,8 +83,7 @@ texture = ExtResource("2_bmrb0")
 [node name="Pattern" type="Sprite2D" parent="LOut"]
 self_modulate = Color(1, 1, 1, 0.164706)
 scale = Vector2(2, 2)
-texture = ExtResource("2_w0eu2")
-flip_h = true
+texture = ExtResource("4_pf83e")
 
 [node name="Stick" type="Sprite2D" parent="LOut"]
 modulate = Color(0.972549, 1, 0.682353, 0.607843)
@@ -98,7 +96,6 @@ texture = ExtResource("2_bmrb0")
 texture = ExtResource("4_vaqr8")
 
 [node name="ROut" type="Sprite2D" parent="."]
-clip_children = 2
 material = SubResource("ShaderMaterial_5augx")
 position = Vector2(1023, 522)
 scale = Vector2(0.35, 0.35)
@@ -107,7 +104,7 @@ texture = ExtResource("2_bmrb0")
 [node name="Pattern" type="Sprite2D" parent="ROut"]
 self_modulate = Color(1, 1, 1, 0.164706)
 scale = Vector2(2, 2)
-texture = ExtResource("2_w0eu2")
+texture = ExtResource("4_pf83e")
 flip_h = true
 
 [node name="Stick" type="Sprite2D" parent="ROut"]
