@@ -16,7 +16,6 @@ config/quit_on_go_back=false
 config/features=PackedStringArray("4.0", "Mobile")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
 boot_splash/show_image=false
-boot_splash/image="res://image/icon/icon_title.png"
 config/icon="res://image/icon/icon.svg"
 config/windows_native_icon="res://image/icon/icon.ico"
 
@@ -37,6 +36,7 @@ window/movie_file="E:/Videos/record/godot_record.avi"
 
 movie_writer/mjpeg_quality=1.0
 movie_writer/movie_file="E:/Videos/record/godot_record.avi"
+naming/scene_name_casing=1
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 
@@ -77,5 +77,5 @@ locale/locale_filter_mode=0
 [rendering]
 
 renderer/rendering_method="mobile"
-driver/threads/thread_model=2
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
