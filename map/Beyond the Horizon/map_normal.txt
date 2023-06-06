@@ -1,0 +1,8 @@
+!dicolo_map_v1
+title:Beyond the Horizon
+singer:ももぞう
+mapper:LSDog
+level:6
+levelname:normal
+audio:beyond-the-horizon.mp3
+bpm:130

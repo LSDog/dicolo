@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://drshvf0tj3un6"
+path="res://.godot/imported/beyond-the-horizon.mp3-88e5bac84138f20f7c26681173a2c880.mp3str"
+
+[deps]
+
+source_file="res://map/Beyond the Horizon/beyond-the-horizon.mp3"
+dest_files=["res://.godot/imported/beyond-the-horizon.mp3-88e5bac84138f20f7c26681173a2c880.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

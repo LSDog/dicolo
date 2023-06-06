@@ -1,0 +1,8 @@
+!dicolo_map_v1
+title:悠遠の彼方へ
+singer:てろ
+mapper:LSDog
+level:6
+levelname:normal
+audio:yuuen-no-kanata-he.mp3
+bpm:102
