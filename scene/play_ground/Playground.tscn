@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=42 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlaygroundControl.gd" id="1_gad4f"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="3_27yvc"]
@@ -21,27 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://wg0701ac8o4g" path="res://image/ui_icon/hamburger-menu.svg" id="16_te6n0"]
 [ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://image/ui_icon/anticlockwise-rotation.svg" id="17_fjsf7"]
 [ext_resource type="Texture2D" uid="uid://b2p576buht6l0" path="res://image/ui_icon/exit-door.svg" id="18_eibeu"]
-
-[sub_resource type="Animation" id="Animation_4ys72"]
-resource_name = "pre_start"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BGPanel/Mask:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.35, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.235294)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_18qae"]
-_data = {
-"pre_start": SubResource("Animation_4ys72")
-}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjfdj"]
 draw_center = false
@@ -141,11 +120,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_gad4f")
 
-[node name="Animation" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_18qae")
-}
-
 [node name="BGPanel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -172,15 +146,9 @@ stretch_mode = 6
 [node name="VideoPlayer" type="VideoStreamPlayer" parent="BGPanel"]
 process_priority = 10
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -576.0
-offset_top = -324.0
-offset_right = 576.0
-offset_bottom = 324.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -242,10 +210,11 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -576.0
 offset_top = -324.0
-offset_right = 576.0
-offset_bottom = 324.0
+offset_right = -576.0
+offset_bottom = -324.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(576, 324)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 metadata/_edit_horizontal_guides_ = []

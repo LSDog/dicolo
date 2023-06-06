@@ -4,7 +4,7 @@ var setting_shown :bool = false;
 
 @onready var button_FullScreen := $Panel/Scroll/List/Video/FullScreen/Button;
 @onready var option_FullScreenMode := $Panel/Scroll/List/Video/FullScreenMode/Option;
-enum FullScreenMode {FullScreen, BorderLess};
+var option_FullScreenMode_items = [DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN, DisplayServer.WINDOW_MODE_FULLSCREEN];
 @onready var input_FPS := $Panel/Scroll/List/Video/FPS/Input;
 @onready var button_VSync := $Panel/Scroll/List/Video/VSync/Button;
 @onready var label_Scale := $Panel/Scroll/List/Video/Scale/Label;
@@ -15,21 +15,17 @@ enum FullScreenMode {FullScreen, BorderLess};
 func _ready():
 	button_FullScreen.toggled.connect(func(pressed):
 		var id = option_FullScreenMode.get_selected_id();
-		print("full screen -> ", option_FullScreenMode.get_item_text(id), " ", pressed);
-		match id:
-			FullScreenMode.FullScreen:
-				DisplayServer.window_set_mode(
-					DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
-					if pressed else 
-					DisplayServer.WINDOW_MODE_WINDOWED
-				);
-			FullScreenMode.BorderLess:
-				DisplayServer.window_set_mode(
-					DisplayServer.WINDOW_MODE_FULLSCREEN
-					if pressed else 
-					DisplayServer.WINDOW_MODE_WINDOWED
-				);
-				
+		print("FullScreen -> ", option_FullScreenMode.get_item_text(id), ": ", pressed);
+		DisplayServer.window_set_mode(
+			DisplayServer.WINDOW_MODE_WINDOWED
+			if !pressed else
+			option_FullScreenMode_items[id]
+		);
+	);
+	option_FullScreenMode.item_selected.connect(func(index: int):
+		if button_FullScreen.button_pressed:
+			print("FullScreen -> ", option_FullScreenMode.get_item_text(index), ": ", button_FullScreen.button_pressed);
+			DisplayServer.window_set_mode(option_FullScreenMode_items[index]);
 	);
 	input_FPS.text_submitted.connect(func(text: String):
 		if text.is_valid_int():
@@ -88,8 +84,4 @@ func _input(event: InputEvent):
 			if event.button_index == MOUSE_BUTTON_LEFT && event.pressed:
 				visible = false;
 	elif event.is_action_pressed("full_screen"):
-		DisplayServer.window_set_mode(
-			DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
-			if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN else 
-			DisplayServer.WINDOW_MODE_WINDOWED
-		);
+		button_FullScreen.button_pressed = !button_FullScreen.button_pressed;

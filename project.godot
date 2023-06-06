@@ -29,8 +29,10 @@ Notifier="*res://scene/notifier/Notifier.gd"
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/vsync/vsync_mode=2
 window/mjpeg_quality=1.0
 window/movie_file="E:/Videos/record/godot_record.avi"
+window/threads/thread_model=2
 
 [editor]
 
@@ -76,6 +78,6 @@ locale/locale_filter_mode=0
 
 [rendering]
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true

@@ -16,10 +16,12 @@ border_color = Color(1, 1, 1, 1)
 [node name="Setting" type="Control"]
 custom_minimum_size = Vector2(425, 0)
 layout_mode = 3
+anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 0
+grow_vertical = 2
 script = ExtResource("1_lf8gb")
 
 [node name="Panel" type="Panel" parent="."]
@@ -46,7 +48,6 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
 [node name="List" type="VBoxContainer" parent="Panel/Scroll"]
-texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 0

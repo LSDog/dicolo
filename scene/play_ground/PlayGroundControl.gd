@@ -183,8 +183,11 @@ func play(map_file_path: String):
 ## 初始化游戏
 func pre_start():
 	
-	# 为了演示加的延迟 记得删
-	await get_tree().create_timer(1).timeout;
+	# 保证 stretch scale 更改后 track 大小不变
+	playground.scale = Vector2(1.0/Global.stretch_scale, 1.0/Global.stretch_scale);
+	
+	# 一秒延迟
+	await get_tree().create_timer(1);
 	
 	# 遮罩变暗
 	create_anim_tween().tween_property($BGPanel/Mask, "color:a", 0.4, 1.5).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
@@ -200,7 +203,7 @@ func pre_start():
 	trackr_start_tween.tween_property(trackr, "position", trackr_center, 1.5);
 	
 	# Ct移动
-	var playground_size = $PlayGround.size;
+	var playground_size = playground.size;
 	create_anim_tween(ctl).tween_property(ctl, "position", trackl_center, 1.5
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
 	var ctr_start_tween = create_anim_tween(ctr);
