@@ -1,7 +1,7 @@
 class_name Editor
 extends Control
 
-@onready var playground :PlayGroundControl = get_parent() as PlayGroundControl;
+@onready var playground :PlaygroundControl = get_parent() as PlaygroundControl;
 @onready var scroll :HScrollBar = $Scroll as HScrollBar;
 @onready var flow :EditorFlow = $Flow as EditorFlow;
 @onready var note_choose := $NoteChoose;

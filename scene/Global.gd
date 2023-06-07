@@ -8,7 +8,7 @@ var window_wide_ratio = 1.0;
 var full_screen = false;
 
 ## 主界面
-var scene_MainMenu :Control = null;
+var scene_MainMenu :MainMenu = null;
 ## 设置界面
 var scene_Setting :Control = null;
 ## Debug界面
@@ -23,6 +23,9 @@ var auto_rotate_cd := 1;
 var gamepad_id = -1;
 ## 手柄个数
 var gamepad_count = 0;
+
+## 设置已加载
+signal data_loaded_setting;
 
 func _ready():
 	
@@ -44,14 +47,14 @@ func _ready():
 
 func _ready_later():
 	var packed_scene_Setting := preload("res://scene/setting/Setting.tscn") as PackedScene;
-	scene_Setting = packed_scene_Setting.instantiate() as Control;
+	scene_Setting = packed_scene_Setting.instantiate();
 	scene_Setting.visible = false;
 	scene_Setting.z_index = 11;
 	get_tree().root.add_child(scene_Setting);
 	scene_Setting.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 	
 	var packed_scene_DebugInfo := preload("res://scene/test/DebugInfo.tscn") as PackedScene;
-	scene_DebugInfo = packed_scene_DebugInfo.instantiate() as Control;
+	scene_DebugInfo = packed_scene_DebugInfo.instantiate();
 	scene_DebugInfo.z_index = 12;
 	get_tree().root.add_child(scene_DebugInfo);
 	scene_DebugInfo.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
@@ -62,14 +65,12 @@ func _notification(what):
 	match what:
 		NOTIFICATION_WM_GO_BACK_REQUEST:
 			print("[notification] BACK (Android)");
-			var esc_event = InputEventAction.new()
-			esc_event.action = "esc"
-			esc_event.pressed = true
+			var esc_event = InputEventAction.new();
+			esc_event.action = "esc";
+			esc_event.pressed = true;
 			Input.parse_input_event(esc_event);
 
 func _process(_delta):
-	
-	stretch_scale = get_tree().root.content_scale_factor;
 	
 	var elapsed_time = get_elapsed_time();
 	

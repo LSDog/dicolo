@@ -64,7 +64,7 @@ func handle_song_select(song_card: SongCard):
 		main_menu.background.texture = load(song_card.example_beatmap.bg_image_path);
 	else:
 		# 没有bg的情况下加载这个
-		main_menu.background.texture = load("res://image/background/トトリの夢の中.png");
+		main_menu.background.texture = main_menu.default_backgrounds.pick_random();
 	main_menu.music_player.play_music(
 		load(song_card.example_beatmap.audio_path),
 		song_card.example_beatmap.title+" - "+song_card.example_beatmap.singer,
@@ -99,7 +99,7 @@ func handle_song_play_request(song_card: SongCard):
 	print("play song: ", song_card.example_beatmap.title, ", level: ", level_name);
 	
 	var play_ground_scene := preload("res://scene/play_ground/Playground.tscn") as PackedScene;
-	var play_ground := play_ground_scene.instantiate() as PlayGroundControl;
+	var play_ground := play_ground_scene.instantiate() as PlaygroundControl;
 	get_tree().root.add_child(play_ground);
 	get_tree().current_scene = play_ground;
 	Global.freeze(main_menu);

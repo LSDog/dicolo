@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fpi44kosojgq"
-path="res://.godot/imported/トトリの夢の中.png-4ac46c7ebd520559698363bd34f5c844.ctex"
+uid="uid://besj0l23codt1"
+path="res://.godot/imported/dicolo_icon_light_bubbles.png-c7a1560d1e69404d4f3a0d05c6022eaa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/background/トトリの夢の中.png"
-dest_files=["res://.godot/imported/トトリの夢の中.png-4ac46c7ebd520559698363bd34f5c844.ctex"]
+source_file="res://image/background/dicolo_icon_light_bubbles.png"
+dest_files=["res://.godot/imported/dicolo_icon_light_bubbles.png-c7a1560d1e69404d4f3a0d05c6022eaa.ctex"]
 
 [params]
 

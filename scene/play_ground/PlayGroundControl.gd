@@ -1,4 +1,4 @@
-class_name PlayGroundControl
+class_name PlaygroundControl
 extends Control
 
 @export_category("Setting")
