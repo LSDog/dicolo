@@ -110,7 +110,7 @@ text = "FPS"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "60"
-placeholder_text = "I don't know maybe 60 lol"
+placeholder_text = "60"
 alignment = 1
 
 [node name="VSync" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
