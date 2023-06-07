@@ -1,11 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://cg0kvu25oks3a"]
+[gd_scene load_steps=7 format=3 uid="uid://cg0kvu25oks3a"]
 
 [ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="1_pg71e"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_6uq76"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r267s"]
 bg_color = Color(0.75, 0.63, 0.3, 1)
-skew = Vector2(-0.2, 0)
+skew = Vector2(-0.25, 0)
 border_width_left = 1024
 border_color = Color(0, 0, 0.2, 0.8)
 border_blend = true
@@ -14,6 +14,15 @@ corner_detail = 1
 shadow_color = Color(0, 0, 0, 0.384314)
 shadow_size = 10
 shadow_offset = Vector2(5, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ingcj"]
+bg_color = Color(1, 1, 1, 1)
+skew = Vector2(-0.25, 0)
+border_width_left = 1024
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_detail = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_k2800"]
 line_spacing = 0.0
@@ -38,12 +47,23 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_r267s")
 script = ExtResource("1_pg71e")
 
-[node name="Image" type="TextureRect" parent="."]
+[node name="Mask" type="Panel" parent="."]
+modulate = Color(0.984314, 0.984314, 0.984314, 1)
+clip_children = 1
+custom_minimum_size = Vector2(380, 80)
+offset_right = 380.0
+offset_bottom = 80.0
+size_flags_horizontal = 8
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_ingcj")
+
+[node name="Image" type="TextureRect" parent="Mask"]
 modulate = Color(1, 1, 1, 0.117647)
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -5.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1

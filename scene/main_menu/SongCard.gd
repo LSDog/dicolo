@@ -3,7 +3,7 @@ extends Panel
 
 @onready var title_label := $Title;
 @onready var info_label := $Info;
-@onready var image_rect := $Image;
+@onready var image_rect := $Mask/Image;
 
 # 颜色:v的状态
 var modulate_v_origin = 1;
