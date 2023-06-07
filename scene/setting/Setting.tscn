@@ -6,7 +6,7 @@
 
 [sub_resource type="Theme" id="Theme_xwlyw"]
 default_font = ExtResource("2_ujsdn")
-default_font_size = 18
+default_font_size = 23
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
 bg_color = Color(0, 0, 0, 0.8)
