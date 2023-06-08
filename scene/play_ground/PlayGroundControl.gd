@@ -14,16 +14,25 @@ extends Control
 @export var note_after_time :float = 0.25;
 
 @export_category("Judge")
+## 判定 just 的时间
 @export var judge_just :float = 0.1;
-@export var judge_good :float = 0.2;
-## 判定时最大容许的准星与轨道半径的差值
-@export var judge_radius_offset :float = 10;
-## slide可判定的的度数
-@export var judge_slide_deg :float = 6;
+## 判定 good 的时间
+@export var judge_good :float = 0.25;
+## hit ct与轨道半径最远差值
+@export var judge_hit_radius :float = 5;
 ## hit 最小速度
 @export var judge_hit_speed :float = 10;
 ## hit 最大容许的撞击角度偏差
 @export var judge_hit_deg_offset :float = 45;
+## slide ct与轨道半径最远差值
+@export var judge_slide_radius :float = 5;
+## slide 可判定的左右度数
+@export var judge_slide_deg :float = 6;
+## bounce 回弹的最大判定半径
+@export var judge_bounce_radius :float = 10;
+## bounce 回弹的最小速度
+@export var judge_bounce_speed :float = 100;
+
 
 ## 游玩模式
 var play_mode;
@@ -101,16 +110,18 @@ var play_time := 0.0;
 @onready var playground := $PlayGround;
 @onready var lyrics_label :=  $BGPanel/LyricLabel;
 
-var texture_slide = preload("res://image/texture/slide.svg");
-var texture_slide_hint_ring = preload("res://image/texture/ring.svg");
-var texture_slide_hint_gradient = preload("res://image/texture/slide_hint_line_gradient.tres");
-var texture_bounce = preload("res://image/texture/bounce.svg");
-var texture_crash = preload("res://image/texture/crash.svg");
-var texture_follow = preload("res://image/texture/follow.svg");
 
 var texture_hit_fx = preload("res://image/texture/hit_fx.svg");
+var texture_slide = preload("res://image/texture/slide.svg");
+var texture_slide_hint_ring = preload("res://image/texture/ring.svg");
+var texture_slide_hint_point = preload("res://image/texture/circle_32.svg");
+var texture_bounce = preload("res://image/texture/bounce.svg");
+var texture_follow = preload("res://image/texture/follow.svg");
+
 
 var sound_hit = preload("res://sound/note_hihat.wav");
+var sound_slide = preload("res://sound/note_hihatclosed.wav");
+var sound_bounce = preload("res://sound/note_floortom.wav");
 
 ## 铺面加载完毕
 signal map_loaded;
@@ -194,7 +205,7 @@ func pre_start():
 	await get_tree().create_timer(1).timeout;
 	
 	# 遮罩变暗
-	create_anim_tween().tween_property($BGPanel/Mask, "color:a", 0.4, 1.5).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
+	create_anim_tween().tween_property($BGPanel/Mask, "color:a", 0.6, 1.5).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
 	
 	# Track旋转+归位
 	var trackl_start_tween = create_anim_tween();
@@ -551,7 +562,17 @@ func generate_note(note :BeatMap.Event.Note) -> Array:
 				).from(0.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
 			tween_ring.parallel().tween_property(ring, "scale", Vector2(0, 0), event_before_beat*get_beat_time()
 				).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
-			return [path_follow];#, line];
+			# 提示点
+			var point := Sprite2D.new();
+			point.texture = texture_slide_hint_ring;
+			point.scale = Vector2(0.11, 0.11);
+			path.add_child(point);
+			var tween_point = create_anim_tween(point);
+			tween_point.parallel().tween_property(point, "modulate:a", 0.8, event_before_beat*get_beat_time()
+				).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
+			tween_point.parallel().tween_property(point, "position", path_follow.position, event_before_beat*get_beat_time()
+				).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
+			return [path_follow, point];
 		BeatMap.EVENT_TYPE.Bounce:
 			var bounce = Sprite2D.new();
 			bounce.texture = texture_bounce;
@@ -562,7 +583,7 @@ func generate_note(note :BeatMap.Event.Note) -> Array:
 				).from(0.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUART);
 			tween.parallel().tween_property(bounce, "rotation_degrees", 0.0, event_before_beat*get_beat_time()
 				).from(-180.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
-			tween.parallel().tween_property(bounce, "scale", Vector2(0.5,0.5), event_before_beat*get_beat_time()
+			tween.parallel().tween_property(bounce, "scale", Vector2(0.4,0.4), event_before_beat*get_beat_time()
 				).from(Vector2(1,1)).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
 			return [bounce];
 	return [];
@@ -595,14 +616,12 @@ func judge_note(wait_index :int, note_array = null):
 				tween.parallel().tween_property(polygon, "modulate", Color(0.9,0.4,0.4,0), note_after_time);
 			BeatMap.EVENT_TYPE.Slide:
 				var slide_path_follow :PathFollow2D = note_item_array[0];
-				#var line :Line2D = note_item_array[1];
-				#line.color.r = 1;
+				var hint_point :Sprite2D = note_item_array[1];
 				var tween = create_anim_tween(slide_path_follow);
-				#tween.finished.connect(func():if line != null: line.queue_free());
 				tween.set_ease(Tween.EASE_OUT);
 				tween.set_trans(Tween.TRANS_LINEAR);
 				tween.parallel().tween_property(slide_path_follow, "modulate", Color(1,0,0,0), note_after_time);
-				#tween.parallel().tween_property(line, "modulate", Color(1,0,0,0), note_after_time);
+				tween.parallel().tween_property(hint_point, "modulate", Color(1,0,0,0), note_after_time);
 			BeatMap.EVENT_TYPE.Bounce:
 				var bounce :Sprite2D = note_item_array[0];
 				var tween = create_anim_tween(bounce);
@@ -627,22 +646,20 @@ func judge_note(wait_index :int, note_array = null):
 	var touched := false;
 	var hit := false;
 	
-	# 判断碰没碰上 然后搞特效
+	# 判断碰没碰上 然后搞特效 让判定完的东西消失啥的
 	match note.event_type:
 		BeatMap.EVENT_TYPE.Hit:
 			note = note as BeatMap.Event.Note.Hit;
 			touched = (
-				ct.distance >= radius - judge_radius_offset &&
+				ct.distance >= radius - judge_hit_radius &&
 				is_in_degree(ct.degree, note.deg, note.deg_end)
 			);
 			hit = is_in_degree(
 				get_degree_in_track(ct.velocity, true),
-				note.deg - judge_hit_deg_offset,
-				note.deg_end + judge_hit_deg_offset
+				ct.degree - judge_hit_deg_offset,
+				ct.degree + judge_hit_deg_offset
 			);
-			#print("touched %s\thit %s" % [touched, hit]);
 			if ct.velocity.length() >= judge_hit_speed && touched && hit:
-				# 速度足够而且碰上了!!
 				judged_notes[wait_index] = note_array;
 				var line :Line2D = note_item_array[0];
 				#var polygon :Polygon2D = note_item_array[1];
@@ -656,11 +673,48 @@ func judge_note(wait_index :int, note_array = null):
 				var tween = create_anim_tween(line_fx);
 				tween.parallel().tween_property(line_fx, "width", 140.0, note_after_time
 					).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
-				tween.parallel().tween_property(line_fx, "modulate:a", 0, note_after_time*2
+				tween.parallel().tween_property(line_fx, "modulate:a", 0.0, note_after_time*2
 					).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD);
 				note_item_array.append(line_fx);
 				
 				remove_note(wait_index);
+		BeatMap.EVENT_TYPE.Slide:
+			note = note as BeatMap.Event.Note.Slide;
+			touched = (
+				ct.distance >= radius - judge_slide_deg &&
+				is_in_degree(ct.degree, note.deg - judge_slide_deg/2.0, note.deg + judge_slide_deg/2.0)
+			);
+			if touched:
+				judged_notes[wait_index] = note_array;
+				var path_follow := note_item_array[0] as PathFollow2D;
+				#var slide :Sprite2D = path_follow.get_child(0);
+				var ring := path_follow.get_child(1) as Sprite2D;
+				ring.modulate = COLOR_JUST;
+				ring.queue_redraw();
+				play_sound(sound_slide);
+				var tween = create_anim_tween(ring);
+				tween.parallel().tween_property(ring, "scale", Vector2(1,1), note_after_time
+					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
+				tween.parallel().tween_property(ring, "modulate:a", 0.0, note_after_time*2
+					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
+				
+				remove_note(wait_index);
+		BeatMap.EVENT_TYPE.Bounce:
+			note = note as BeatMap.Event.Note.Bounce;
+			touched = ct.distance <= judge_bounce_radius;
+			if ct.velocity.length_squared() >= judge_bounce_speed**2 && touched:
+				judged_notes[wait_index] = note_array;
+				var bounce := note_item_array[0] as Sprite2D;
+				bounce.modulate = COLOR_JUST if judge == JUDGEMENT.JUST else COLOR_GOOD;
+				bounce.queue_redraw();
+				play_sound(sound_bounce);
+				var tween = create_anim_tween(bounce);
+				tween.parallel().tween_property(bounce, "scale", Vector2(1.5, 1.5), note_after_time
+					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
+				tween.parallel().tween_property(bounce, "modulate:a", 0.0, note_after_time*2
+					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
+				
+				remove_note(wait_index)
 
 ## 更新ct的数值
 func update_ct(ct: Ct):

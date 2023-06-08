@@ -1,7 +1,7 @@
 [gd_scene load_steps=23 format=3 uid="uid://cvonjf6lsdmlw"]
 
 [ext_resource type="Script" path="res://scene/test/GithubAPITest.gd" id="1_n5jhp"]
-[ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://image/texture/circle_white_512.svg" id="2_y71jt"]
+[ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://image/texture/circle_512.svg" id="2_vco3s"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="3_r2u63"]
 [ext_resource type="Texture2D" uid="uid://bq5vwdwd33o73" path="res://image/texture/rect_box.svg" id="4_u4lsl"]
 
@@ -455,7 +455,7 @@ custom_minimum_size = Vector2(128, 128)
 layout_mode = 1
 offset_right = 128.0
 offset_bottom = 128.0
-texture = ExtResource("2_y71jt")
+texture = ExtResource("2_vco3s")
 expand_mode = 1
 stretch_mode = 4
 
@@ -490,7 +490,7 @@ offset_right = 5.0
 offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_y71jt")
+texture = ExtResource("2_vco3s")
 expand_mode = 1
 
 [node name="Right" type="TextureRect" parent="Gamepad/Content/Joystick"]
@@ -507,7 +507,7 @@ custom_minimum_size = Vector2(128, 128)
 layout_mode = 1
 offset_right = 128.0
 offset_bottom = 128.0
-texture = ExtResource("2_y71jt")
+texture = ExtResource("2_vco3s")
 expand_mode = 1
 stretch_mode = 4
 
@@ -542,7 +542,7 @@ offset_right = 5.0
 offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_y71jt")
+texture = ExtResource("2_vco3s")
 expand_mode = 1
 
 [node name="NoteExample" type="Panel" parent="."]
