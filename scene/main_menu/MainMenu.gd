@@ -25,11 +25,11 @@ func _ready():
 	
 	animation_control.visible = true;
 	Global.data_loaded_setting.connect(func():
-		## 设定加载完成（确定界面大小）后播放开始动画
-		animation_control.size = get_tree().root.size;
-		animation_control.scale /= Global.stretch_scale;
-		animation_control.pivot_offset = get_tree().root.size/2;
-		#animation_control.position = Vector2.ZERO;
+		# 设定加载完成（确定界面大小）后播放开始动画
+		$Animations/Control.scale /= Global.stretch_scale;
+		$Animations/Control.global_position = (
+				$Animations.size-$Animations/Control.size/Global.stretch_scale
+			)/2.0*Global.stretch_scale;
 		animation_player.play("start");
 	);
 	
