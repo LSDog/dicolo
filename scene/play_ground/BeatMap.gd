@@ -75,13 +75,13 @@ func _init(dir_access :DirAccess, file :FileAccess):
 				"title": title = value;
 				"singer": singer = value;
 				"mapper": mapper = value;
-				"level": level = -1 if !value.is_valid_float() else value.to_float();
+				"level": level = -1.0 if !value.is_valid_float() else value.to_float();
 				"levelname": levelname = value;
 				"audio":
 					audio_path = dir+value;
 				"video":
 					video_path = dir+value;
-				"bpm": bpm = 0 if !value.is_valid_float() else value.to_float();
+				"bpm": bpm = 0.0 if !value.is_valid_float() else value.to_float();
 				"bg":
 					bg_image_path = dir+value;
 					#bg_image = ResourceLoader.load(dir+value, "Texture2D");

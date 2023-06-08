@@ -14,7 +14,6 @@ extends Control
 @export var note_after_time :float = 0.25;
 
 @export_category("Judge")
-enum JUDGEMENT { JUST, GOOD, MISS }
 @export var judge_just :float = 0.1;
 @export var judge_good :float = 0.2;
 ## 判定时最大容许的准星与轨道半径的差值
@@ -28,7 +27,12 @@ enum JUDGEMENT { JUST, GOOD, MISS }
 
 ## 游玩模式
 var play_mode;
+## 游玩模式
 enum PLAY_MODE {PLAY, EDIT};
+## 判定
+enum JUDGEMENT { JUST, GOOD, MISS }
+const COLOR_GOOD = Color.WHITE;
+const COLOR_JUST = Color(0.95, 0.9, 0.55);
 
 ## 铺面
 var beatmap :BeatMap;
@@ -187,7 +191,7 @@ func pre_start():
 	playground.scale = Vector2(1.0/Global.stretch_scale, 1.0/Global.stretch_scale);
 	
 	# 一秒延迟
-	await get_tree().create_timer(1);
+	await get_tree().create_timer(1).timeout;
 	
 	# 遮罩变暗
 	create_anim_tween().tween_property($BGPanel/Mask, "color:a", 0.4, 1.5).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
@@ -203,7 +207,6 @@ func pre_start():
 	trackr_start_tween.tween_property(trackr, "position", trackr_center, 1.5);
 	
 	# Ct移动
-	var playground_size = playground.size;
 	create_anim_tween(ctl).tween_property(ctl, "position", trackl_center, 1.5
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
 	var ctr_start_tween = create_anim_tween(ctr);
@@ -582,7 +585,7 @@ func judge_note(wait_index :int, note_array = null):
 		judged_notes[wait_index] = note_array;
 		match note.event_type:
 			BeatMap.EVENT_TYPE.Hit:
-				var line :Line2D = note_item_array[0];
+				#var line :Line2D = note_item_array[0];
 				var polygon :Polygon2D = note_item_array[1];
 				#polygon.color.r = 1;
 				var tween = create_anim_tween(polygon);
@@ -624,7 +627,7 @@ func judge_note(wait_index :int, note_array = null):
 	var touched := false;
 	var hit := false;
 	
-	# 判断碰没碰上
+	# 判断碰没碰上 然后搞特效
 	match note.event_type:
 		BeatMap.EVENT_TYPE.Hit:
 			note = note as BeatMap.Event.Note.Hit;
@@ -642,8 +645,8 @@ func judge_note(wait_index :int, note_array = null):
 				# 速度足够而且碰上了!!
 				judged_notes[wait_index] = note_array;
 				var line :Line2D = note_item_array[0];
-				var polygon :Polygon2D = note_item_array[1];
-				line.default_color = Color(0.95, 0.9, 0.55) if judge == JUDGEMENT.JUST else Color(0.95, 0.9, 0.75);
+				#var polygon :Polygon2D = note_item_array[1];
+				line.default_color = COLOR_JUST if judge == JUDGEMENT.JUST else COLOR_GOOD;
 				line.queue_redraw();
 				play_sound(sound_hit);
 				# 特效
@@ -651,10 +654,8 @@ func judge_note(wait_index :int, note_array = null):
 				line_fx.default_color.a = 0.3;
 				track.add_child(line_fx);
 				var tween = create_anim_tween(line_fx);
-				tween.parallel().tween_property(line_fx, "width", 140, note_after_time
-					).from(1).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
-				#tween.parallel().tween_property(line_fx, "scale", Vector2(1.2,1.2), note_after_time
-				#	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
+				tween.parallel().tween_property(line_fx, "width", 140.0, note_after_time
+					).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 				tween.parallel().tween_property(line_fx, "modulate:a", 0, note_after_time*2
 					).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD);
 				note_item_array.append(line_fx);
@@ -667,7 +668,7 @@ func update_ct(ct: Ct):
 	ct.distance = ct.pos.length();
 	ct.degree = get_degree_in_track(ct.pos, true);
 	ct.velocity_degree = (
-		0 if ct.velocity == Vector2.ZERO else get_degree_in_track(ct.velocity, true)
+		0.0 if ct.velocity == Vector2.ZERO else get_degree_in_track(ct.velocity, true)
 	);
 
 ## 获取 Ct 在 track 中的相对位置
@@ -682,24 +683,24 @@ func get_degree_in_track(vec: Vector2, negative_y :bool = false) -> float:
 	);
 
 ## 判断此度数x是否在min~max里
-func is_in_degree(x: float, min: float, max: float) -> bool:
-	if min > max:
-		var temp_min = min;
-		min = max;
-		max = temp_min;
-	x = fposmod(x, 360) + 360 * floor(min/360.0);
-	#print("min %.1f\tct %.1f\tmax %.1f" % [min, x ,max]);
-	return min <= x && x <= max;
+func is_in_degree(x: float, min_val: float, max_val: float) -> bool:
+	if min_val > max_val:
+		var temp_min = min_val;
+		min_val = max_val;
+		max_val = temp_min;
+	x = fposmod(x, 360) + 360 * floor(min_val/360.0);
+	#print("min_val %.1f\tct %.1f\tmax %.1f" % [min_val, x ,max_val]);
+	return min_val <= x && x <= max_val;
 
 func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"):	
-	var audio_player = AudioStreamPlayer.new();
-	add_child(audio_player);
-	audio_player.stream = stream;
-	audio_player.volume_db = volume
-	audio_player.pitch_scale = pitch;
-	audio_player.bus = bus;
-	audio_player.finished.connect(func(): audio_player.queue_free());
-	audio_player.play();
+	var player = AudioStreamPlayer.new();
+	add_child(player);
+	player.stream = stream;
+	player.volume_db = volume
+	player.pitch_scale = pitch;
+	player.bus = bus;
+	player.finished.connect(func(): player.queue_free());
+	player.play();
 
 ## 删掉waiting_note[index]的全部玩意儿
 func remove_note(wait_index :int):

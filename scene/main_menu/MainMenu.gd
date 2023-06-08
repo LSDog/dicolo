@@ -23,9 +23,9 @@ func _ready():
 	
 	Global.scene_MainMenu = self;
 	
-	## 设定加载完成（确定界面大小）后播放开始动画
+	animation_control.visible = true;
 	Global.data_loaded_setting.connect(func():
-		
+		## 设定加载完成（确定界面大小）后播放开始动画
 		#animation_control.pivot_offset = get_tree().root.size/2;
 		animation_control.scale /= Global.stretch_scale;
 		#animation_control.position = Vector2.ZERO;

@@ -53,7 +53,7 @@ func _ready():
 	
 
 
-func _process(delta: float):
+func _process(_delta: float):
 	if audio_player.playing:
 		# 设置进度条
 		progress_bar.ratio = audio_player.get_playback_position() / audio_player.stream.get_length();

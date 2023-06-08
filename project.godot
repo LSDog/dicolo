@@ -54,6 +54,7 @@ import/blender/enabled=false
 [gui]
 
 theme/custom_font="res://ui/font/Alibaba-PuHuiTi-Regular.ttf"
+timers/tooltip_delay_sec=0.2
 
 [input]
 

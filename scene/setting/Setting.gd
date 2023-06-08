@@ -46,7 +46,7 @@ func bind_gui_action():
 			DisplayServer.window_set_mode(option_FullScreenMode_items[index]);	
 		set_data("FullScreenMode", index);
 	);
-	input_FPS.text_changed.connect(func(text: String):
+	input_FPS.text_changed.connect(func(_text: String):
 		input_FPS.modulate = COLOR_WAITING;
 	);
 	input_FPS.text_submitted.connect(func(text: String):
@@ -71,7 +71,7 @@ func bind_gui_action():
 		get_tree().root.content_scale_factor = value;
 		Global.stretch_scale = value;
 		var event := InputEventMouseButton.new();
-		event.set_button_index(1);
+		event.set_button_index(MOUSE_BUTTON_LEFT);
 		event.set_pressed(false);
 		Input.parse_input_event(event);
 		set_data("Scale", value);
@@ -104,7 +104,6 @@ func set_setting_from_data():
 	
 
 func update_gamepad_select():
-	var joys = [];
 	option_Gamepad.clear();
 	for i in Input.get_connected_joypads():
 		option_Gamepad.add_item(Input.get_joy_name(i)+" ("+Input.get_joy_guid(i)+")", i);

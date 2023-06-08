@@ -10,12 +10,6 @@ const DATA_NAME := {
 var data_setting := {};
 var data_setting_file := "setting.json";
 
-func _ready():
-	pass
-
-
-func _process(delta: float):
-	pass
 
 func save_data(data_type: DATA_TYPE):
 	
@@ -33,7 +27,6 @@ func save_data(data_type: DATA_TYPE):
 func load_data(data_type: DATA_TYPE):
 	
 	var var_name :String = DATA_NAME.get(data_type);
-	var data :Dictionary = get(var_name);
 	var data_file :String = get(var_name + "_file");
 	
 	var file := FileAccess.open(data_path + data_file, FileAccess.READ_WRITE);

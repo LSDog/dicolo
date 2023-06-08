@@ -271,7 +271,6 @@ func get_song(index: int) -> SongCard:
 ## 滚动到某个歌曲
 func scroll_to(index: int):
 	index = clampi(index, 0, get_song_count());
-	var distance = (index - center_song_index_float) / get_song_count() * container.size.y;
 	create_tween().tween_property(self
 		, "scroll_vertical"
 		, float(index) / get_song_count() * container.size.y - size.y / 2.0

@@ -473,7 +473,7 @@ tracks/10/path = NodePath("SongList")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(3),
+"times": PackedFloat32Array(2),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -600,7 +600,6 @@ theme_override_font_sizes/italics_font_size = 18
 theme_override_font_sizes/bold_italics_font_size = 18
 theme_override_font_sizes/mono_font_size = 18
 bbcode_enabled = true
-scroll_following = true
 
 [node name="LevelsBar" type="ScrollContainer" parent="LeftPanel"]
 clip_children = 2
@@ -727,6 +726,7 @@ stretch_mode = 5
 [node name="Loop" type="TextureButton" parent="LeftPanel/MusicPlayer/Buttons"]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
+tooltip_text = "loop"
 toggle_mode = true
 button_pressed = true
 action_mode = 0
@@ -962,6 +962,8 @@ custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 
 [node name="Animations" type="Control" parent="."]
+editor_description = "如果显示出来Animations整个黑屏遮挡了后面的内容，可以点一下AnimationPlayer播放一下start动画到最后——或者简单的隐藏这个节点。"
+visible = false
 z_index = 100
 layout_mode = 1
 anchors_preset = 15
@@ -970,6 +972,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_lock_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animations"]
 root_node = NodePath("../..")

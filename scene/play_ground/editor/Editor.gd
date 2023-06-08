@@ -49,7 +49,7 @@ func loaded():
 			)
 		);
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if playground.started && !playground.ended && !playground.paused:
 		var x = get_length_in_flow(playground.play_time)
 		scroll.set_value_no_signal(x);

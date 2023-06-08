@@ -54,6 +54,7 @@ func notif_popup(text: String, border_color: Color = COLOR_NORAML, icon: Texture
 	stylebox.border_color = border_color;
 	notif_box.mouse_filter = Control.MOUSE_FILTER_IGNORE;
 	notif_box.get_child(0).find_child("Text").text = text;
+	notif_box.get_child(0).find_child("Icon").texture = icon;
 	notif_box.add_theme_stylebox_override("panel", stylebox);
 	vbox.add_child(notif_box);
 	vbox.move_child(notif_box, 0);

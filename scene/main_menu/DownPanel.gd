@@ -20,9 +20,9 @@ func _ready_later():
 		main_menu.song_list.choose_song_random();
 	);
 
-func _process(delta: float):
+func _process(_delta: float):
 	var now = Global.now_time();
-	if now - last_info_update < 1.0: return;
+	if now - last_info_update < 0.1: return;
 	var username = OS.get_environment("USERNAME") if OS.has_environment("USERNAME") else "Player";
 	label_player_info.text = label_player_text_template % [username, -255, "ALIVE"];
 	label_device_info.text = label_device_text_template % [Time.get_time_string_from_system(), Time.get_date_string_from_system()];
