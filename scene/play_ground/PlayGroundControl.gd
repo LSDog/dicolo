@@ -199,7 +199,11 @@ func play(map_file_path: String):
 func pre_start():
 	
 	# 保证 stretch scale 更改后 track 大小不变
-	playground.scale = Vector2(1.0/Global.stretch_scale, 1.0/Global.stretch_scale);
+	var keep_scale = Vector2(1.0/Global.stretch_scale, 1.0/Global.stretch_scale);
+	var center_pos = get_tree().root.size/2;
+	playground.scale = keep_scale;
+	video_player.scale = keep_scale;
+	video_player.pivot_offset = center_pos;
 	
 	# 一秒延迟
 	await get_tree().create_timer(1).timeout;

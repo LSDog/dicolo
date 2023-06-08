@@ -963,16 +963,21 @@ layout_mode = 2
 
 [node name="Animations" type="Control" parent="."]
 editor_description = "如果显示出来Animations整个黑屏遮挡了后面的内容，可以点一下AnimationPlayer播放一下start动画到最后——或者简单的隐藏这个节点。"
-visible = false
 z_index = 100
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(576, 324)
 mouse_filter = 2
-metadata/_edit_lock_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animations"]
 root_node = NodePath("../..")
@@ -1012,10 +1017,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 604.0
-offset_top = 246.0
-offset_right = 605.0
-offset_bottom = 417.0
+offset_left = 28.0
+offset_top = -78.0
+offset_right = 29.0
+offset_bottom = 93.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "dicolo!"
