@@ -16,8 +16,7 @@ config/quit_on_go_back=false
 config/features=PackedStringArray("4.0", "Mobile")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
 boot_splash/show_image=false
-config/icon="res://image/icon/icon.svg"
-config/windows_native_icon="res://image/icon/icon.ico"
+config/icon="res://visual/icon/icon.svg"
 
 [autoload]
 
@@ -53,7 +52,7 @@ import/blender/enabled=false
 
 [gui]
 
-theme/custom_font="res://ui/font/Alibaba-PuHuiTi-Regular.ttf"
+theme/custom_font="res://visual/font/Alibaba-PuHuiTi-Regular.ttf"
 timers/tooltip_delay_sec=0.2
 
 [input]

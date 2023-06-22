@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://5y7bsoic8oqp"]
 
-[ext_resource type="Texture2D" uid="uid://c5n4qnoimfksa" path="res://image/ui_icon/info.svg" id="1_gyedh"]
-[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_uu3u5"]
-[ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://ui/font/Alibaba-PuHuiTi-Bold.ttf" id="3_lhb13"]
+[ext_resource type="Texture2D" uid="uid://c5n4qnoimfksa" path="res://visual/ui_icon/info.svg" id="1_gyedh"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="2_uu3u5"]
+[ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="3_lhb13"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p4tae"]
 content_margin_left = 2.0

@@ -1,11 +1,11 @@
 [gd_scene load_steps=6 format=3 uid="uid://cdyhqt27mk6t3"]
 
 [ext_resource type="Script" path="res://scene/setting/Setting.gd" id="1_lf8gb"]
-[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_ujsdn"]
-[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="3_pxp23"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="2_3c6gh"]
+[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://visual/theme/default_theme.tres" id="3_wwley"]
 
 [sub_resource type="Theme" id="Theme_xwlyw"]
-default_font = ExtResource("2_ujsdn")
+default_font = ExtResource("2_3c6gh")
 default_font_size = 23
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
@@ -43,7 +43,7 @@ offset_left = 16.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_pxp23")
+theme = ExtResource("3_wwley")
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 

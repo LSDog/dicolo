@@ -1,30 +1,30 @@
 [gd_scene load_steps=59 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_rqxl5"]
-[ext_resource type="Texture2D" uid="uid://besj0l23codt1" path="res://image/background/dicolo_icon_light_bubbles.png" id="2_sit7e"]
+[ext_resource type="Texture2D" uid="uid://besj0l23codt1" path="res://visual/background/dicolo_icon_light_bubbles.png" id="2_icru0"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="3_dfl3h"]
 [ext_resource type="Script" path="res://scene/main_menu/SongList.gd" id="4_7f42v"]
-[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="7_lnhgj"]
+[ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="5_uo1ib"]
+[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://visual/theme/default_theme.tres" id="6_u7omh"]
 [ext_resource type="Script" path="res://scene/main_menu/LevelsBar.gd" id="7_p305f"]
-[ext_resource type="Texture2D" uid="uid://b4gdb06jpschw" path="res://image/ui_icon/pause-button.svg" id="7_qh8sl"]
-[ext_resource type="Texture2D" uid="uid://djconwornocsa" path="res://image/ui_icon/hearts.svg" id="8_4bcqp"]
-[ext_resource type="FontFile" uid="uid://mqvi1o7fpls2" path="res://ui/font/HuXiaoBoZhenShuaiTi.ttf" id="8_n53jo"]
-[ext_resource type="Texture2D" uid="uid://bmqfuuro17srb" path="res://image/ui_icon/fast-backward-button.svg" id="8_wwbqy"]
+[ext_resource type="FontFile" uid="uid://mqvi1o7fpls2" path="res://visual/font/HuXiaoBoZhenShuaiTi.ttf" id="8_rcab5"]
 [ext_resource type="Script" path="res://scene/main_menu/MusicPlayer.gd" id="8_yb02d"]
-[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://ui/theme/default_theme.tres" id="9_5irqw"]
-[ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://image/partner/avatar_trans-1024x.png" id="9_sywfr"]
-[ext_resource type="Texture2D" uid="uid://sv03cqt1sa2u" path="res://image/ui_icon/fast-forward-button.svg" id="10_iahgp"]
-[ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://ui/font/Alibaba-PuHuiTi-Bold.ttf" id="11_38job"]
-[ext_resource type="Texture2D" uid="uid://crtsduk7s68wn" path="res://image/ui_icon/cog.svg" id="11_c1evm"]
-[ext_resource type="Texture2D" uid="uid://bkw2uvfq75e5p" path="res://image/ui_icon/cloud-download.svg" id="11_d6yky"]
-[ext_resource type="Texture2D" uid="uid://d25b25n5ka51" path="res://image/ui_icon/rolling-dices.svg" id="12_jwht8"]
-[ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://image/ui_icon/anticlockwise-rotation.svg" id="12_t4kou"]
+[ext_resource type="Texture2D" uid="uid://djconwornocsa" path="res://visual/ui_icon/hearts.svg" id="10_4acwk"]
+[ext_resource type="Texture2D" uid="uid://bmqfuuro17srb" path="res://visual/ui_icon/fast-backward-button.svg" id="11_ljx8y"]
+[ext_resource type="Texture2D" uid="uid://b4gdb06jpschw" path="res://visual/ui_icon/pause-button.svg" id="12_jkdm2"]
+[ext_resource type="Texture2D" uid="uid://sv03cqt1sa2u" path="res://visual/ui_icon/fast-forward-button.svg" id="13_ysy5o"]
+[ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://visual/ui_icon/anticlockwise-rotation.svg" id="14_1h8i6"]
 [ext_resource type="Script" path="res://scene/main_menu/DownPanel.gd" id="15_amr8j"]
-[ext_resource type="Texture2D" uid="uid://culfyi41m0gvm" path="res://image/texture/start.svg" id="20_re5t0"]
-[ext_resource type="Texture2D" uid="uid://485q4nyju4h0" path="res://image/icon/icon.png" id="21_1taxr"]
+[ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://visual/partner/avatar_trans-1024x.png" id="16_4iwnq"]
+[ext_resource type="Texture2D" uid="uid://crtsduk7s68wn" path="res://visual/ui_icon/cog.svg" id="17_qwgnl"]
+[ext_resource type="Texture2D" uid="uid://bkw2uvfq75e5p" path="res://visual/ui_icon/cloud-download.svg" id="18_j0m76"]
+[ext_resource type="Texture2D" uid="uid://d25b25n5ka51" path="res://visual/ui_icon/rolling-dices.svg" id="19_ii7mx"]
+[ext_resource type="Texture2D" uid="uid://culfyi41m0gvm" path="res://visual/texture/start.svg" id="20_n381w"]
 [ext_resource type="AudioStream" uid="uid://bawqmljx771uq" path="res://sound/dicolo!_tsukuyomichan.wav" id="21_b7twj"]
 [ext_resource type="AudioStream" uid="uid://cmucpnk84nn63" path="res://sound/dicolo!_miku.wav" id="22_jklq2"]
 [ext_resource type="AudioStream" uid="uid://cf1f2lob8pau1" path="res://sound/dicolo!_len.wav" id="23_a35vh"]
 [ext_resource type="AudioStream" uid="uid://c0bw0kmqnvfow" path="res://sound/dicolo!_rin.wav" id="24_v77ea"]
+[ext_resource type="Texture2D" uid="uid://485q4nyju4h0" path="res://visual/icon/icon.png" id="25_ujnxu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwa4q"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -33,7 +33,7 @@ border_blend = true
 
 [sub_resource type="LabelSettings" id="LabelSettings_o8td5"]
 line_spacing = 0.0
-font = ExtResource("7_lnhgj")
+font = ExtResource("3_dfl3h")
 font_size = 280
 font_color = Color(1, 1, 1, 0.0941176)
 outline_color = Color(0, 0, 0, 1)
@@ -131,7 +131,7 @@ corner_detail = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_cxrir"]
 line_spacing = 0.0
-font = ExtResource("8_n53jo")
+font = ExtResource("8_rcab5")
 font_size = 62
 shadow_size = 3
 shadow_color = Color(0.854902, 0.478431, 0.364706, 0.729412)
@@ -152,7 +152,7 @@ anti_aliasing = false
 
 [sub_resource type="LabelSettings" id="LabelSettings_6erxh"]
 line_spacing = 0.0
-font = ExtResource("11_38job")
+font = ExtResource("5_uo1ib")
 font_size = 52
 font_color = Color(0, 0, 0, 0.0980392)
 shadow_size = 0
@@ -168,7 +168,7 @@ thickness = 3
 
 [sub_resource type="LabelSettings" id="LabelSettings_n6jtj"]
 line_spacing = 0.0
-font = ExtResource("7_lnhgj")
+font = ExtResource("3_dfl3h")
 font_size = 20
 font_color = Color(0.92549, 0.956863, 0.929412, 1)
 outline_size = 1
@@ -186,7 +186,7 @@ border_blend = true
 
 [sub_resource type="LabelSettings" id="LabelSettings_ewllf"]
 line_spacing = 0.0
-font = ExtResource("7_lnhgj")
+font = ExtResource("3_dfl3h")
 font_size = 18
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p6fnm"]
@@ -492,7 +492,7 @@ bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_wwovf"]
 line_spacing = 0.0
-font = ExtResource("11_38job")
+font = ExtResource("5_uo1ib")
 font_size = 120
 
 [node name="MainMenu" type="Control"]
@@ -514,7 +514,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_sit7e")
+texture = ExtResource("2_icru0")
 expand_mode = 1
 stretch_mode = 6
 metadata/_edit_lock_ = true
@@ -593,8 +593,8 @@ size_flags_horizontal = 0
 theme_override_colors/selection_color = Color(0, 0.329412, 0.368627, 0.768627)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-theme_override_fonts/normal_font = ExtResource("7_lnhgj")
-theme_override_fonts/bold_font = ExtResource("11_38job")
+theme_override_fonts/normal_font = ExtResource("3_dfl3h")
+theme_override_fonts/bold_font = ExtResource("5_uo1ib")
 theme_override_font_sizes/normal_font_size = 18
 theme_override_font_sizes/bold_font_size = 18
 theme_override_font_sizes/italics_font_size = 18
@@ -612,7 +612,7 @@ offset_top = -213.0
 offset_right = 410.0
 offset_bottom = -160.0
 grow_vertical = 0
-theme = ExtResource("9_5irqw")
+theme = ExtResource("6_u7omh")
 theme_override_styles/panel = SubResource("StyleBoxFlat_qbqrq")
 horizontal_scroll_mode = 2
 vertical_scroll_mode = 0
@@ -693,7 +693,7 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 toggle_mode = true
 action_mode = 0
-texture_normal = ExtResource("8_4bcqp")
+texture_normal = ExtResource("10_4acwk")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -702,7 +702,7 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 toggle_mode = true
 action_mode = 0
-texture_normal = ExtResource("8_wwbqy")
+texture_normal = ExtResource("11_ljx8y")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -711,7 +711,7 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 toggle_mode = true
 action_mode = 0
-texture_normal = ExtResource("7_qh8sl")
+texture_normal = ExtResource("12_jkdm2")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -720,7 +720,7 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 toggle_mode = true
 action_mode = 0
-texture_normal = ExtResource("10_iahgp")
+texture_normal = ExtResource("13_ysy5o")
 ignore_texture_size = true
 stretch_mode = 5
 
@@ -731,7 +731,7 @@ tooltip_text = "loop"
 toggle_mode = true
 button_pressed = true
 action_mode = 0
-texture_normal = ExtResource("12_t4kou")
+texture_normal = ExtResource("14_1h8i6")
 ignore_texture_size = true
 stretch_mode = 5
 flip_h = true
@@ -791,7 +791,7 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
 pivot_offset = Vector2(0, 128)
-texture = ExtResource("9_sywfr")
+texture = ExtResource("16_4iwnq")
 expand_mode = 1
 stretch_mode = 5
 
@@ -852,7 +852,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_vertical = 2
 mouse_filter = 1
-theme_override_fonts/font = ExtResource("11_38job")
+theme_override_fonts/font = ExtResource("5_uo1ib")
 text = "Setting"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -864,7 +864,7 @@ anchor_left = 0.5
 anchor_right = 0.98
 anchor_bottom = 1.0
 grow_horizontal = 0
-texture = ExtResource("11_c1evm")
+texture = ExtResource("17_qwgnl")
 expand_mode = 1
 stretch_mode = 5
 
@@ -886,7 +886,7 @@ anchor_bottom = 0.547
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-theme_override_fonts/font = ExtResource("11_38job")
+theme_override_fonts/font = ExtResource("5_uo1ib")
 text = "Cloud"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -898,7 +898,7 @@ anchor_left = 0.5
 anchor_right = 0.98
 anchor_bottom = 1.0
 grow_horizontal = 0
-texture = ExtResource("11_d6yky")
+texture = ExtResource("18_j0m76")
 expand_mode = 1
 stretch_mode = 5
 
@@ -919,7 +919,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_vertical = 2
 mouse_filter = 1
-theme_override_fonts/font = ExtResource("11_38job")
+theme_override_fonts/font = ExtResource("5_uo1ib")
 text = "Random"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -931,7 +931,7 @@ anchor_left = 0.5
 anchor_right = 0.98
 anchor_bottom = 1.0
 grow_horizontal = 0
-texture = ExtResource("12_jwht8")
+texture = ExtResource("19_ii7mx")
 expand_mode = 1
 stretch_mode = 5
 
@@ -954,7 +954,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("20_re5t0")
+texture = ExtResource("20_n381w")
 expand_mode = 1
 stretch_mode = 5
 
@@ -1003,13 +1003,13 @@ mouse_filter = 2
 modulate = Color(1, 1, 1, 0)
 position = Vector2(576, 325)
 scale = Vector2(0.4, 0.4)
-texture = ExtResource("21_1taxr")
+texture = ExtResource("25_ujnxu")
 
 [node name="Icon" type="Sprite2D" parent="Animations/Control"]
 modulate = Color(1, 1, 1, 0)
 position = Vector2(576, 324)
 rotation = -6.28319
-texture = ExtResource("21_1taxr")
+texture = ExtResource("25_ujnxu")
 
 [node name="Title" type="Label" parent="Animations/Control"]
 layout_mode = 1
@@ -1018,10 +1018,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 28.0
-offset_top = -82.0
-offset_right = 29.0
-offset_bottom = 89.0
+offset_left = 604.0
+offset_top = 242.0
+offset_right = 605.0
+offset_bottom = 413.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "dicolo!"

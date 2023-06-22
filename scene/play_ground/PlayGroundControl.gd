@@ -111,12 +111,12 @@ var play_time := 0.0;
 @onready var lyrics_label :=  $BGPanel/LyricLabel;
 
 
-var texture_hit_fx = preload("res://image/texture/hit_fx.svg");
-var texture_slide = preload("res://image/texture/slide.svg");
-var texture_slide_hint_ring = preload("res://image/texture/ring.svg");
-var texture_slide_hint_point = preload("res://image/texture/circle_32.svg");
-var texture_bounce = preload("res://image/texture/bounce.svg");
-var texture_follow = preload("res://image/texture/follow.svg");
+var texture_hit_fx = preload("res://visual/texture/hit_fx.svg");
+var texture_slide = preload("res://visual/texture/slide.svg");
+var texture_slide_hint_ring = preload("res://visual/texture/ring.svg");
+var texture_slide_hint_point = preload("res://visual/texture/circle_32.svg");
+var texture_bounce = preload("res://visual/texture/bounce.svg");
+var texture_follow = preload("res://visual/texture/follow.svg");
 
 
 var sound_hit = preload("res://sound/note_hihat.wav");

@@ -1,4 +1,4 @@
-@icon("res://image/texture/practicle.svg")
+@icon("res://visual/texture/practicle.svg")
 class_name Ct
 extends Sprite2D
 

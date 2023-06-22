@@ -16,7 +16,7 @@ var debug_label_last_report = 0;
 @onready var bg_panel_stylebox := bg_panel.get_theme_stylebox("panel") as StyleBoxFlat;
 
 @onready var default_backgrounds :Array[Texture2D] = [
-	preload("res://image/background/dicolo_icon_light_bubbles.png"),
+	preload("res://visual/background/dicolo_icon_light_bubbles.png"),
 ];
 
 func _ready():

@@ -1,7 +1,7 @@
 @tool
 extends Path2D
 
-var slash_right_texture := preload("res://image/texture/slash_right.svg");
+var slash_right_texture := preload("res://visual/texture/slash_right.svg");
 var width_curve := preload("res://scene/play_ground/bar_width_curve.tres");
 
 func _ready() -> void:

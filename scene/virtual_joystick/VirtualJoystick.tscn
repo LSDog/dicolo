@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=3 uid="uid://d3uwa2so8ndgb"]
 
 [ext_resource type="Script" path="res://scene/virtual_joystick/VirtualJoystick.gd" id="1_ef85n"]
-[ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://image/texture/circle_512.svg" id="2_bmrb0"]
-[ext_resource type="Texture2D" uid="uid://crwko0stxpjul" path="res://image/texture/slash_round.svg" id="4_pf83e"]
-[ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://image/texture/track.svg" id="4_vaqr8"]
+[ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://visual/texture/circle_512.svg" id="2_bmrb0"]
+[ext_resource type="Texture2D" uid="uid://crwko0stxpjul" path="res://visual/texture/slash_round.svg" id="4_pf83e"]
+[ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://visual/texture/track.svg" id="4_vaqr8"]
 [ext_resource type="Shader" path="res://shader/clip.gdshader" id="5_pin1r"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5augx"]

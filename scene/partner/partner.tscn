@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scene/partner/partner.gd" id="1_kyea8"]
 [ext_resource type="Shader" path="res://shader/acrylic_plate.gdshader" id="1_mdplh"]
-[ext_resource type="Texture2D" uid="uid://c04oxkkh6fnky" path="res://image/partner/杏由里.png" id="1_pkh46"]
-[ext_resource type="Texture2D" uid="uid://bqnke500v6r2x" path="res://image/icon/icon_chara.png" id="3_b82ao"]
+[ext_resource type="Texture2D" uid="uid://c04oxkkh6fnky" path="res://visual/partner/杏由里.png" id="1_pkh46"]
+[ext_resource type="Texture2D" path="res://image/icon/icon_chara.png" id="3_b82ao"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l5mhg"]
 shader = ExtResource("1_mdplh")

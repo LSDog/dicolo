@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cg0kvu25oks3a"]
 
 [ext_resource type="Script" path="res://scene/main_menu/SongCard.gd" id="1_pg71e"]
-[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_6uq76"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="2_6uq76"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r267s"]
 bg_color = Color(0.75, 0.63, 0.3, 1)

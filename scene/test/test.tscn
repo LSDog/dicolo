@@ -1,9 +1,9 @@
 [gd_scene load_steps=23 format=3 uid="uid://cvonjf6lsdmlw"]
 
 [ext_resource type="Script" path="res://scene/test/GithubAPITest.gd" id="1_n5jhp"]
-[ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://image/texture/circle_512.svg" id="2_vco3s"]
-[ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://image/texture/crash.svg" id="3_r2u63"]
-[ext_resource type="Texture2D" uid="uid://bq5vwdwd33o73" path="res://image/texture/rect_box.svg" id="4_u4lsl"]
+[ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://visual/texture/circle_512.svg" id="2_e4efk"]
+[ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://visual/texture/crash.svg" id="3_shmos"]
+[ext_resource type="Texture2D" uid="uid://bq5vwdwd33o73" path="res://visual/texture/rect_box.svg" id="4_yslnx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r2rr1"]
 bg_color = Color(0.717647, 0.654902, 0.6, 1)
@@ -455,7 +455,7 @@ custom_minimum_size = Vector2(128, 128)
 layout_mode = 1
 offset_right = 128.0
 offset_bottom = 128.0
-texture = ExtResource("2_vco3s")
+texture = ExtResource("2_e4efk")
 expand_mode = 1
 stretch_mode = 4
 
@@ -490,7 +490,7 @@ offset_right = 5.0
 offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_vco3s")
+texture = ExtResource("2_e4efk")
 expand_mode = 1
 
 [node name="Right" type="TextureRect" parent="Gamepad/Content/Joystick"]
@@ -507,7 +507,7 @@ custom_minimum_size = Vector2(128, 128)
 layout_mode = 1
 offset_right = 128.0
 offset_bottom = 128.0
-texture = ExtResource("2_vco3s")
+texture = ExtResource("2_e4efk")
 expand_mode = 1
 stretch_mode = 4
 
@@ -542,7 +542,7 @@ offset_right = 5.0
 offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_vco3s")
+texture = ExtResource("2_e4efk")
 expand_mode = 1
 
 [node name="NoteExample" type="Panel" parent="."]
@@ -567,19 +567,19 @@ libraries = {
 self_modulate = Color(1, 1, 1, 0)
 position = Vector2(117, 115)
 scale = Vector2(0.3, 0.3)
-texture = ExtResource("3_r2u63")
+texture = ExtResource("3_shmos")
 
 [node name="BackShadowCrash" type="Sprite2D" parent="NoteExample/Crash"]
 modulate = Color(1, 0.611765, 0.537255, 1)
 show_behind_parent = true
 scale = Vector2(1.5, 1.5)
-texture = ExtResource("3_r2u63")
+texture = ExtResource("3_shmos")
 
 [node name="RectBox" type="Sprite2D" parent="NoteExample/Crash"]
 modulate = Color(0, 0, 0, 1)
 self_modulate = Color(0.637605, 0.92997, 0.987409, 1)
 scale = Vector2(1e-05, 1e-05)
-texture = ExtResource("4_u4lsl")
+texture = ExtResource("4_yslnx")
 
 [node name="GPUParticles2D" type="CPUParticles2D" parent="NoteExample/Crash"]
 emitting = false

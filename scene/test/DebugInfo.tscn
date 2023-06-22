@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://deo2xvigq1mcj"]
 
 [ext_resource type="Script" path="res://scene/test/DebugInfo.gd" id="1_62dyw"]
-[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://ui/font/Alibaba-PuHuiTi-Regular.ttf" id="2_wgxdj"]
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="2_hu172"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_u5cu8"]
 line_spacing = 0.0
-font = ExtResource("2_wgxdj")
+font = ExtResource("2_hu172")
 font_size = 20
 shadow_color = Color(0, 0, 0, 1)
 

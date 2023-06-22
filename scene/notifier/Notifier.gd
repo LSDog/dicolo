@@ -7,7 +7,7 @@ var vbox :VBoxContainer;
 @onready var scene_notif = preload("res://scene/notifier/notif_box.tscn");
 @onready var notif_box_copy = scene_notif.instantiate() as PanelContainer;
 @onready var notif_stylebox :StyleBoxFlat;
-@onready var default_icon = preload("res://image/ui_icon/info.svg");
+@onready var default_icon = preload("res://visual/ui_icon/info.svg");
 
 var show_time :float = 0.25;
 var keep_time :float = 5;
