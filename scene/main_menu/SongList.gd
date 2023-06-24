@@ -103,7 +103,7 @@ func handle_song_play_request(song_card: SongCard):
 	get_tree().root.add_child(play_ground);
 	get_tree().current_scene = play_ground;
 	Global.freeze(main_menu);
-	play_ground.play(selected_card.levels[level_name][1]);
+	play_ground.load_map(selected_card.levels[level_name][1], true);
 	
 
 func _process(delta):

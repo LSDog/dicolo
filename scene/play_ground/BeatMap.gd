@@ -177,8 +177,8 @@ class Event:
 		self.time = p_time;
 		self.side = p_side;
 	
-	func _to_string() -> String:
-		return "{} event" % time;
+	#func _to_string() -> String:
+	#	return str(get_property_list());
 	
 	## 音符
 	class Note:

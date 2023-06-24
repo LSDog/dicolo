@@ -20,11 +20,11 @@ var loading_data := true;
 
 func _ready():
 	
-	bind_gui_action();
-	
 	DataManager.load_data(DataManager.DATA_TYPE.SETTING);
 	
 	set_setting_from_data();
+	
+	bind_gui_action();
 	
 
 
@@ -81,7 +81,8 @@ func bind_gui_action():
 		print("[Setting] gamepad changed: ",device,"\tconnected: ",connected);
 		Notifier.notif_popup(
 			"A gamepad was [b]" + ("inserted" if connected else "pulled out") + "[/b].",
-			Notifier.COLOR_OK if connected else Notifier.COLOR_BAD
+			Notifier.COLOR_OK if connected else Notifier.COLOR_BAD,
+			preload("res://visual/ui_icon/gamepad.svg")
 		);
 		update_gamepad_select();
 		if connected: Global.gamepad_id = device;

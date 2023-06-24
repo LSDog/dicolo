@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=32 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlaygroundControl.gd" id="1_gad4f"]
 [ext_resource type="Script" path="res://scene/play_ground/Spectrum.gd" id="3_pdtlx"]
@@ -11,13 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://visual/texture/crash.svg" id="8_iolya"]
 [ext_resource type="Script" path="res://scene/play_ground/Bar.gd" id="9_0rucv"]
 [ext_resource type="Texture2D" uid="uid://5xyvc3ec13xo" path="res://visual/texture/hit_fx.svg" id="9_7c6u5"]
-[ext_resource type="Script" path="res://scene/play_ground/editor/Editor.gd" id="9_rxls6"]
 [ext_resource type="PackedScene" uid="uid://d3uwa2so8ndgb" path="res://scene/virtual_joystick/VirtualJoystick.tscn" id="9_sf2y2"]
-[ext_resource type="Script" path="res://scene/play_ground/editor/Flow.gd" id="10_5ox8q"]
 [ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://visual/texture/track.svg" id="10_45kpj"]
 [ext_resource type="Texture2D" uid="uid://dyruh3syyydp6" path="res://visual/texture/ct.svg" id="11_wmq73"]
-[ext_resource type="ButtonGroup" uid="uid://cg56w8paqidtx" path="res://scene/play_ground/editor/button_group_note_choose.tres" id="12_w1v2b"]
-[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://visual/theme/default_theme.tres" id="15_h5m74"]
 [ext_resource type="Texture2D" uid="uid://wg0701ac8o4g" path="res://visual/ui_icon/hamburger-menu.svg" id="19_om31v"]
 [ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://visual/ui_icon/anticlockwise-rotation.svg" id="20_ilokw"]
 [ext_resource type="Texture2D" uid="uid://b2p576buht6l0" path="res://visual/ui_icon/exit-door.svg" id="21_2h86f"]
@@ -64,30 +60,6 @@ _data = {
 "points": PackedVector2Array(0, 0, 0, 0, 1032, 486, 0, 100, 0, -100, 1082, 324, 0, 0, 0, 0, 1032, 162)
 }
 point_count = 3
-
-[sub_resource type="InputEventKey" id="InputEventKey_fvht2"]
-device = -1
-physical_keycode = 49
-unicode = 49
-
-[sub_resource type="Shortcut" id="Shortcut_wnkq3"]
-events = [SubResource("InputEventKey_fvht2")]
-
-[sub_resource type="InputEventKey" id="InputEventKey_hu3lb"]
-device = -1
-physical_keycode = 50
-unicode = 50
-
-[sub_resource type="Shortcut" id="Shortcut_4o111"]
-events = [SubResource("InputEventKey_hu3lb")]
-
-[sub_resource type="InputEventKey" id="InputEventKey_75ixi"]
-device = -1
-physical_keycode = 51
-unicode = 51
-
-[sub_resource type="Shortcut" id="Shortcut_unanl"]
-events = [SubResource("InputEventKey_75ixi")]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f2n5i"]
 texture = ExtResource("19_om31v")
@@ -362,100 +334,6 @@ modulate = Color(0.87, 1, 1, 0.5)
 self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_lc0kg")
 script = ExtResource("9_0rucv")
-
-[node name="Editor" type="Control" parent="."]
-process_mode = 4
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("9_rxls6")
-
-[node name="Scroll" type="HScrollBar" parent="Editor"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 10.0
-grow_horizontal = 2
-scale = Vector2(1, 2)
-theme = ExtResource("15_h5m74")
-
-[node name="Flow" type="Panel" parent="Editor"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.265
-offset_top = 20.0
-offset_right = 2048.0
-offset_bottom = 20.28
-script = ExtResource("10_5ox8q")
-outline_color = Color(1, 1, 0.878431, 1)
-barline_color = Color(0.678431, 0.847059, 0.901961, 1)
-beatline_color = null
-note_margin_vertical = null
-bar_space = null
-beat_count = null
-metadata/_edit_use_anchors_ = true
-
-[node name="Edit" type="Panel" parent="Editor"]
-visible = false
-layout_mode = 0
-offset_left = 1024.0
-offset_right = 1152.0
-offset_bottom = 648.0
-
-[node name="NoteChoose" type="VBoxContainer" parent="Editor"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -20.0
-offset_bottom = 20.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="Crash" type="Button" parent="Editor/NoteChoose"]
-layout_mode = 2
-toggle_mode = true
-button_pressed = true
-button_group = ExtResource("12_w1v2b")
-shortcut = SubResource("Shortcut_wnkq3")
-text = "[1] Crash"
-
-[node name="LineCrash" type="Button" parent="Editor/NoteChoose"]
-layout_mode = 2
-toggle_mode = true
-button_group = ExtResource("12_w1v2b")
-shortcut = SubResource("Shortcut_4o111")
-text = "[2] Line Crash"
-
-[node name="Slide" type="Button" parent="Editor/NoteChoose"]
-layout_mode = 2
-toggle_mode = true
-button_group = ExtResource("12_w1v2b")
-shortcut = SubResource("Shortcut_unanl")
-text = "[3] Slide"
-
-[node name="DebugLabel2" type="Label" parent="Editor"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -46.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "※ 视频进度更改在编辑器中不受支持！
-（如需预览请拖动进度到第0秒再播放）"
-label_settings = SubResource("LabelSettings_w6vl8")
-horizontal_alignment = 2
 
 [node name="VirtualJoystick" parent="." instance=ExtResource("9_sf2y2")]
 layout_mode = 1

@@ -8,11 +8,11 @@ var window_wide_ratio = 1.0;
 var full_screen = false;
 
 ## 主界面
-var scene_MainMenu :MainMenu = null;
+var scene_MainMenu :MainMenu;
 ## 设置界面
-var scene_Setting :Control = null;
+var scene_Setting :Control;
 ## Debug界面
-var scene_DebugInfo :Control = null;
+var scene_DebugInfo :Control;
 
 ## 上次旋转屏幕方向的游戏时间
 var last_auto_rotate := 0.0;
@@ -26,6 +26,7 @@ var gamepad_count = 0;
 
 ## 设置已加载
 signal data_loaded_setting;
+var data_has_loaded_setting: bool;
 
 func _ready():
 	
