@@ -3,12 +3,11 @@ extends Control
 @onready var sprite :Sprite2D = $Control/Sprite;
 @onready var sprite_shader :ShaderMaterial = sprite.material;
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready():
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	$Control.rotation = sin(Global.elapsed_time*1.5)/20.0;
 	sprite.skew = sin(Global.elapsed_time*1.5)/100;
