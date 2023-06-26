@@ -5,7 +5,8 @@ extends Control
 @onready var song_list :SongList = $SongList as SongList;
 @onready var music_player :MusicPlayer = $LeftPanel/MusicPlayer as MusicPlayer;
 @onready var readme_label :RichTextLabel = $LeftPanel/Readme/Label;
-@onready var levels_bar :Control = $LeftPanel/LevelsBar;
+#@onready var levels_bar :Control = $LeftPanel/LevelsBar;
+#(此方案弃用)
 @onready var bg_label :Label = $Bg_Label;
 @onready var bg_panel :Panel = $Bg_Panel;
 @onready var animation_control :Control = $Animations;
@@ -46,3 +47,13 @@ func _ready():
 		if !music_player.play:
 			song_list.choose_song_random();
 	);
+
+
+func play_song(map_path: String):
+	print("play song: ", map_path);
+	var play_ground_scene := preload("res://scene/play_ground/Playground.tscn") as PackedScene;
+	var play_ground := play_ground_scene.instantiate() as PlaygroundControl;
+	get_tree().root.add_child(play_ground);
+	get_tree().current_scene = play_ground;
+	Global.freeze(self);
+	play_ground.load_map(map_path, true);

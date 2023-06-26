@@ -1,9 +1,12 @@
 class_name SongCard
 extends Panel
 
-@onready var title_label := $Title;
-@onready var info_label := $Info;
+@onready var labelTitle := $LabelTitle;
+@onready var labelInfo := $LabelInfo;
 @onready var image_rect := $Mask/Image;
+@onready var scroll_map := $ScrollMap;
+@onready var map_box := $ScrollMap/VBox;
+@onready var stylebox := get_theme_stylebox("panel") as StyleBoxFlat;
 
 # 颜色:v的状态
 var modulate_v_origin = 1;
@@ -18,17 +21,24 @@ var width_offset := 0.0;
 
 var is_mouse_entered := false;
 var pressed_pos;
-var selected = false;
+var selected := false;
+
+## 是否在ScrollMap的VBox里生成了对应的MapCard
+var map_card_generated := false;
 
 ## 难度，结构为{ "The Normal": [4, "res://map/a_map_folder/map_normal.txt"] }
 var levels :Dictionary = {};
+
+
+var scene_MapCard :PackedScene = preload("res://scene/main_menu/MapCard.tscn");
+
 
 ## 用来提供展示的beatmap对象, 并非实际用于游玩的铺面
 var example_beatmap :BeatMap = null:
 	set(value):
 		example_beatmap = value;
-		title_label.text = example_beatmap.title;
-		info_label.text = example_beatmap.singer;
+		labelTitle.text = example_beatmap.title;
+		labelInfo.text = example_beatmap.singer;
 		if example_beatmap.bg_image_path != "":
 			image_rect.texture = load(example_beatmap.bg_image_path);
 
@@ -40,6 +50,10 @@ signal song_play_request;
 
 func _ready():
 	
+	# 资源唯一化
+	stylebox = stylebox.duplicate(true);
+	add_theme_stylebox_override("panel", stylebox);
+	
 	mouse_entered.connect(func():
 		is_mouse_entered = true;
 		modulate_v_target = modulate_v_hover;
@@ -50,8 +64,8 @@ func _ready():
 		unhover();
 	);
 	
-	title_label.resized.connect(resize_labels);
-	info_label.resized.connect(resize_labels);
+	labelTitle.resized.connect(resize_labels);
+	labelInfo.resized.connect(resize_labels);
 
 func _process(_delta):
 	if !get_global_rect().intersects(get_viewport_rect()): return;
@@ -62,10 +76,10 @@ func _process(_delta):
 		resize_labels();
 
 func resize_labels():
-	if title_label.size.x > (size.x - title_label.position.x):
-		title_label.scale.x = maxf(0.6, (size.x - title_label.position.x) / title_label.size.x);
-	if info_label.size.x > (size.x - info_label.position.x):
-		info_label.scale.x = maxf(0.6, (size.x - info_label.position.x) / info_label.size.x);
+	if labelTitle.size.x > (size.x - labelTitle.position.x):
+		labelTitle.scale.x = maxf(0.6, (size.x - labelTitle.position.x) / labelTitle.size.x);
+	if labelInfo.size.x > (size.x - labelInfo.position.x):
+		labelInfo.scale.x = maxf(0.6, (size.x - labelInfo.position.x) / labelInfo.size.x);
 
 func _gui_input(event):
 	if event is InputEventMouseButton:
@@ -92,12 +106,56 @@ func select():
 	selected = true;
 	modulate_v_target = modulate_v_select;
 	width_target = width_origin * width_select_mul;
+	
+	if !map_card_generated:
+		generate_map_cards();
+	
+	# map_box.size 无法正常更新 采用计算方法
+	var vbox_height := 0.0;
+	var separation := map_box.get_theme_constant("separation", "int") as int;
+	for node in map_box.get_children():
+		vbox_height += node.size.y + separation;
+	vbox_height -= separation;
+	
+	var total_height :float = size.y + vbox_height;
+	custom_minimum_size.y = 500 if total_height >= 500 else total_height;
+	size.y = total_height;
+	image_rect.visible = false;
+	stylebox.skew.x = 0;
+	stylebox.border_color.a = 0.2;
+	#stylebox.shadow_color.a = 0;
+	
 	song_selected.emit();
 
 func unselect():
 	modulate_v_target = modulate_v_origin;
 	width_target = width_origin;
+	
+	custom_minimum_size.y = 80;
+	image_rect.visible = true;
+	stylebox.skew.x = -0.25;
+	stylebox.border_color.a = 0.8;
+	stylebox.shadow_color.a = 0.3;
+	
 	selected = false;
+
+func generate_map_cards():
+	for node in map_box.get_children():
+		map_box.remove_child(node);
+		node.queue_free();
+	for level_name in levels.keys():
+		var data = levels.get(level_name);
+		add_map(data[0], level_name, ['C','B','A','S','SS'].pick_random(), data[1]);
+	map_card_generated = true;
+
+
+func add_map(diff: float, info: String, rating: String, map_path: String):
+	var map_card := scene_MapCard.instantiate() as MapCard;
+	map_box.add_child(map_card);
+	map_card.set_diff(diff);
+	map_card.set_info(info);
+	map_card.set_rating(rating);
+	map_card.map_path = map_path;
 
 func unhover():
 	if !selected: modulate_v_target = modulate_v_origin;

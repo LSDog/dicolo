@@ -23,7 +23,7 @@ var dragging_index := [];
 
 var randomed_index_list := []; # 随机抽取到的歌曲index，防止重复
 
-var song_card_tscn = preload("res://scene/main_menu/SongCard.tscn");
+var scene_SongCard :PackedScene= preload("res://scene/main_menu/SongCard.tscn");
 
 signal map_first_loaded;
 
@@ -75,35 +75,26 @@ func handle_song_select(song_card: SongCard):
 	main_menu.readme_label.text = song_card.readme;
 	main_menu.readme_label.scroll_to_line(0);
 	main_menu.readme_label.get_v_scroll_bar().value = 0.0;
-	# 设置levels
-	for child in main_menu.levels_bar.get_children():
-		main_menu.levels_bar.remove_child(child);
-	for levelname in song_card.levels.keys():
-		var label := Label.new();
-		label.text = str(song_card.levels[levelname][0])+'/'+levelname;
-		label.add_theme_font_size_override("font_size", 28);
-		label.mouse_filter = Control.MOUSE_FILTER_PASS;
-		main_menu.levels_bar.add_child(label);
-	# 自动选择第一个level（如果有）
-	if main_menu.levels_bar.get_child_count() > 0:
-		main_menu.levels_bar.select_label(main_menu.levels_bar.get_child(0));
+	
+	# 设置levels (此方案弃用)
+	#for child in main_menu.levels_bar.get_children():
+	#	main_menu.levels_bar.remove_child(child);
+	#for levelname in song_card.levels.keys():
+	#	var label := Label.new();
+	#	label.text = str(song_card.levels[levelname][0])+'/'+levelname;
+	#	label.add_theme_font_size_override("font_size", 28);
+	#	label.mouse_filter = Control.MOUSE_FILTER_PASS;
+	#	main_menu.levels_bar.add_child(label);
+	## 自动选择第一个level（如果有）
+	#if main_menu.levels_bar.get_child_count() > 0:
+	#	main_menu.levels_bar.select_label(main_menu.levels_bar.get_child(0));
+	
 	# 设置背景里面啥用也没有的透明大字
 	main_menu.bg_label.text = song_card.example_beatmap.title;
 
-## 处理请求游玩歌曲
+## 【TODO: 改成再次点击出现菜单】处理请求游玩歌曲
 func handle_song_play_request(song_card: SongCard):
-	var main_menu := get_parent() as MainMenu;
-	if main_menu.levels_bar.selected_label == null:
-		return;
-	var level_name := main_menu.levels_bar.selected_label.text.split('/', 2)[1] as String;
-	print("play song: ", song_card.example_beatmap.title, ", level: ", level_name);
-	
-	var play_ground_scene := preload("res://scene/play_ground/Playground.tscn") as PackedScene;
-	var play_ground := play_ground_scene.instantiate() as PlaygroundControl;
-	get_tree().root.add_child(play_ground);
-	get_tree().current_scene = play_ground;
-	Global.freeze(main_menu);
-	play_ground.load_map(selected_card.levels[level_name][1], true);
+	return; 
 	
 
 func _process(delta):
@@ -233,7 +224,7 @@ func load_map_of_dir(dir: DirAccess):
 		print("   ↑ Loaded: ", beatmap.title);
 
 ## 获取map中
-func find_map_value(need_keys :Array[String], map_file :FileAccess) -> Array:
+func find_map_value(need_keys :Array, map_file :FileAccess) -> Array:
 	var need_count := need_keys.size();
 	var find_count := 0;
 	var values := [];
@@ -251,7 +242,7 @@ func find_map_value(need_keys :Array[String], map_file :FileAccess) -> Array:
 
 ## 添加一首歌
 func add_song(example_beatmap: BeatMap, levels: Dictionary, readme: String = ""):
-	var song_card :SongCard = song_card_tscn.instantiate(PackedScene.GEN_EDIT_STATE_DISABLED) as SongCard;
+	var song_card :SongCard = scene_SongCard.instantiate(PackedScene.GEN_EDIT_STATE_DISABLED) as SongCard;
 	container.add_child(song_card);
 	song_card.example_beatmap = example_beatmap;
 	song_card.levels = levels;

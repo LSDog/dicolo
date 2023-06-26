@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="dicolo!"
-run/main_scene="res://scene/main_menu/main_menu.tscn"
+run/main_scene="res://scene/main_menu/MainMenu.tscn"
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.0", "GL Compatibility")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)

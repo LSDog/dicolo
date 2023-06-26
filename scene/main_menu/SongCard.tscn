@@ -11,7 +11,7 @@ border_color = Color(0, 0, 0.2, 0.8)
 border_blend = true
 corner_radius_top_left = 20
 corner_detail = 1
-shadow_color = Color(0, 0, 0, 0.384314)
+shadow_color = Color(0, 0, 0, 0.3)
 shadow_size = 10
 shadow_offset = Vector2(5, 5)
 
@@ -39,9 +39,11 @@ font = ExtResource("2_6uq76")
 font_size = 18
 font_color = Color(0.811765, 0.811765, 0.811765, 1)
 
-[node name="Song" type="Panel"]
+[node name="SongCard" type="Panel"]
 modulate = Color(0.984314, 0.984314, 0.984314, 1)
 custom_minimum_size = Vector2(380, 80)
+offset_right = 380.0
+offset_bottom = 80.0
 size_flags_horizontal = 8
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_r267s")
@@ -74,7 +76,7 @@ expand_mode = 1
 stretch_mode = 6
 metadata/_edit_use_anchors_ = true
 
-[node name="Title" type="Label" parent="."]
+[node name="LabelTitle" type="Label" parent="."]
 layout_mode = 2
 offset_left = 15.0
 offset_top = 7.0
@@ -84,7 +86,7 @@ text = "-NULL-"
 label_settings = SubResource("LabelSettings_k2800")
 vertical_alignment = 1
 
-[node name="Info" type="Label" parent="."]
+[node name="LabelInfo" type="Label" parent="."]
 layout_mode = 2
 offset_left = 21.0
 offset_top = 48.0
@@ -92,3 +94,19 @@ offset_right = 80.0
 offset_bottom = 74.0
 text = "-null-"
 label_settings = SubResource("LabelSettings_pe2pw")
+
+[node name="ScrollMap" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="ScrollMap"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0

@@ -12,9 +12,17 @@ func _ready():
 	last_info_update = Global.now_time() + 1 - fmod(Global.now_time(), 1.0);
 	_ready_later.call_deferred();
 
+func _enter_tree() -> void:
+	pass
+
 func _ready_later():
+	var setting_init_x = Global.scene_Setting.position.x;
 	$VBox/ButtonSetting.pressed.connect(func():
-		Global.scene_Setting.visible = !Global.scene_Setting.visible;
+		var setting := Global.scene_Setting;
+		if !setting.visible:
+			setting.anim_show();
+		else:
+			setting.anim_hide();
 	);
 	$VBox/ButtonRandom.pressed.connect(func():
 		main_menu.song_list.choose_song_random();
