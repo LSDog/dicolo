@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" load_steps=3 format=3 uid="uid://u26le3u7mxuh"]
+
+[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="1_w0kca"]
+[ext_resource type="FontFile" uid="uid://cx5hjr13poljn" path="res://visual/font/NotoEmoji-VariableFont_wght.ttf" id="2_nnjky"]
+
+[resource]
+base_font = ExtResource("1_w0kca")
+fallbacks = Array[Font]([ExtResource("2_nnjky")])

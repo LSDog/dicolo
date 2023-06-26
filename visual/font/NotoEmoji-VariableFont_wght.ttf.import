@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://mqvi1o7fpls2"
-path="res://.godot/imported/HuXiaoBoZhenShuaiTi.ttf-e449bce5a4ad00baac1ab675f2ff8e83.fontdata"
+uid="uid://cx5hjr13poljn"
+path="res://.godot/imported/NotoEmoji-VariableFont_wght.ttf-0242932b6dfa7abbac06b50492bd5880.fontdata"
 
 [deps]
 
-source_file="res://visual/font/HuXiaoBoZhenShuaiTi.ttf"
-dest_files=["res://.godot/imported/HuXiaoBoZhenShuaiTi.ttf-e449bce5a4ad00baac1ab675f2ff8e83.fontdata"]
+source_file="res://visual/font/NotoEmoji-VariableFont_wght.ttf"
+dest_files=["res://.godot/imported/NotoEmoji-VariableFont_wght.ttf-0242932b6dfa7abbac06b50492bd5880.fontdata"]
 
 [params]
 

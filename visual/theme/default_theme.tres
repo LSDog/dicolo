@@ -1,4 +1,6 @@
-[gd_resource type="Theme" load_steps=11 format=3 uid="uid://d3m8pmhle7d8r"]
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://d3m8pmhle7d8r"]
+
+[sub_resource type="FontVariation" id="FontVariation_qg2ew"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_71cnt"]
 color = Color(1, 1, 1, 1)
@@ -66,6 +68,7 @@ thickness = 10
 vertical = true
 
 [resource]
+Fonts/fonts/large = SubResource("FontVariation_qg2ew")
 HScrollBar/styles/grabber = SubResource("StyleBoxLine_71cnt")
 HScrollBar/styles/grabber_highlight = SubResource("StyleBoxLine_iajem")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxLine_lf42l")

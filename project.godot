@@ -13,7 +13,7 @@ config_version=5
 config/name="dicolo!"
 run/main_scene="res://scene/main_menu/main_menu.tscn"
 config/quit_on_go_back=false
-config/features=PackedStringArray("4.0", "Mobile")
+config/features=PackedStringArray("4.0", "GL Compatibility")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
 boot_splash/show_image=false
 config/icon="res://visual/icon/icon.svg"
@@ -53,7 +53,8 @@ import/blender/enabled=false
 [gui]
 
 theme/custom="res://visual/theme/default_theme.tres"
-theme/custom_font="res://visual/font/Alibaba-PuHuiTi-Regular.ttf"
+theme/custom_font="res://visual/font/default_font_variation.tres"
+theme/default_font_multichannel_signed_distance_field=true
 timers/tooltip_delay_sec=0.2
 
 [input]
