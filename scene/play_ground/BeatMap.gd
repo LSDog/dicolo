@@ -17,12 +17,12 @@ var file_path :String;
 var title :String;
 ## 演唱者
 var singer :String;
+## 铺面名称
+var mapname :String;
 ## 作图者
 var mapper :String;
 ## 难度
-var level: float;
-## 难度名称
-var levelname :String;
+var diff: float;
 ## 音频文件路径
 var audio_path :String;
 ## 视频文件路径
@@ -75,8 +75,8 @@ func _init(dir_access :DirAccess, file :FileAccess):
 				"title": title = value;
 				"singer": singer = value;
 				"mapper": mapper = value;
-				"level": level = -1.0 if !value.is_valid_float() else value.to_float();
-				"levelname": levelname = value;
+				"diff": diff = -1.0 if !value.is_valid_float() else value.to_float();
+				"mapname": mapname = value;
 				"audio":
 					audio_path = dir+value;
 				"video":
@@ -140,9 +140,9 @@ func to_file_string() -> String:
 	append_no_empty(values, ["!dicolo_map_v1"]);
 	append_no_empty(values, ["title: ", title]);
 	append_no_empty(values, ["singer: ", singer]);
+	append_no_empty(values, ["mapname: ", mapname]);
 	append_no_empty(values, ["mapper: ", mapper]);
-	append_no_empty(values, ["level: ", str(level)]);
-	append_no_empty(values, ["levelname: ", levelname]);
+	append_no_empty(values, ["diff: ", str(diff)]);
 	append_no_empty(values, ["audio: ", audio_path]);
 	append_no_empty(values, ["video: ", video_path]);
 	append_no_empty(values, ["bpm: ", str(bpm)]);

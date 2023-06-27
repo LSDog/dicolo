@@ -2,8 +2,8 @@
 title:Spacesynth 80
 singer:Maxim Vasilyev
 mapper:LSDog
-level:6
-levelname:normal
+diff:6
+mapname:normal
 audio:Spacesynth_80.mp3
 bpm:125
 bg:bg.jpg

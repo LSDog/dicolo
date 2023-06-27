@@ -2,8 +2,8 @@
 title:きみとであえたことが
 singer:Naoki Hirai
 mapper:LSDog
-level:6
-levelname:normal
+diff:6
+mapname:normal
 audio:kimi-to-deaetakoto-ga.mp3
 bpm:109
 

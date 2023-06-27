@@ -40,7 +40,7 @@ func _ready_later():
 	load_maps();
 	Debugger.count_time("Map Load");
 	for node in container.get_children():
-		node.song_selected.connect(handle_song_select.bind(node));
+		node.song_select.connect(handle_song_select.bind(node));
 		node.song_play_request.connect(handle_song_play_request.bind(node));
 	
 	map_loaded = true;
@@ -75,19 +75,6 @@ func handle_song_select(song_card: SongCard):
 	main_menu.readme_label.text = song_card.readme;
 	main_menu.readme_label.scroll_to_line(0);
 	main_menu.readme_label.get_v_scroll_bar().value = 0.0;
-	
-	# 设置levels (此方案弃用)
-	#for child in main_menu.levels_bar.get_children():
-	#	main_menu.levels_bar.remove_child(child);
-	#for levelname in song_card.levels.keys():
-	#	var label := Label.new();
-	#	label.text = str(song_card.levels[levelname][0])+'/'+levelname;
-	#	label.add_theme_font_size_override("font_size", 28);
-	#	label.mouse_filter = Control.MOUSE_FILTER_PASS;
-	#	main_menu.levels_bar.add_child(label);
-	## 自动选择第一个level（如果有）
-	#if main_menu.levels_bar.get_child_count() > 0:
-	#	main_menu.levels_bar.select_label(main_menu.levels_bar.get_child(0));
 	
 	# 设置背景里面啥用也没有的透明大字
 	main_menu.bg_label.text = song_card.example_beatmap.title;
@@ -196,8 +183,8 @@ func load_map_of_dir(dir: DirAccess):
 	
 	var beatmap :BeatMap;
 	var readme :String;
-	var levels :Dictionary = {};
-	var keys := ["levelname", "level"];
+	var maps :Dictionary = {};
+	var need_keys := ["mapname", "diff"];
 	
 	for file_name in dir.get_files():
 		if !file_name.ends_with(".txt"): continue;
@@ -211,41 +198,45 @@ func load_map_of_dir(dir: DirAccess):
 				var temp_beatmap := BeatMap.new(dir, map_file);
 				if temp_beatmap != null && temp_beatmap.loaded:
 					beatmap = temp_beatmap;
-				levels[beatmap.levelname] = [beatmap.level, beatmap.file_path];
+				maps[beatmap.mapname] = [beatmap.diff, beatmap.file_path];
 			else:
-				var level_values = find_map_value(keys, map_file);
-				levels[level_values[0]] = [level_values[1], map_file.get_path()];
+				var map_values = find_map_value(need_keys, map_file);
+				var diff = need_keys[1];
+				diff = -1.0 if !diff.is_valid_float() else diff.to_float();
+				maps[map_values[0]] = [diff, map_file.get_path()];
 		
 		map_file.close();
 	
 	if beatmap != null:
 		print("    - ", beatmap.file_path);
-		add_song(beatmap, levels, readme if readme != null else "");
+		add_song(beatmap, maps, readme if readme != null else "");
 		print("   ↑ Loaded: ", beatmap.title);
 
-## 获取map中
+## 获取map中的特定信息
 func find_map_value(need_keys :Array, map_file :FileAccess) -> Array:
 	var need_count := need_keys.size();
 	var find_count := 0;
 	var values := [];
-	while find_count < need_count || map_file.get_position() < map_file.get_length():
+	values.resize(need_keys.size());
+	while find_count < need_count:
 		var line := map_file.get_line();
 		if line.begins_with("//") || !line.contains(":"): continue;
 		var parts := line.split(":", true, 2);
-		#if parts.size() < 2: parts[1] = "null";
-		var i := 0;
-		while i < need_count:
-			if parts[0] == need_keys[i]:
-				values[i] = parts[1];
-			i += 1;
+		var need_index := need_keys.find(parts[0]);
+		if need_index != -1:
+			values[need_index] = parts[1];
+			find_count += 1;
+		# 找到头了就走
+		if map_file.get_position() >= map_file.get_length():
+			break;
 	return values;
 
 ## 添加一首歌
-func add_song(example_beatmap: BeatMap, levels: Dictionary, readme: String = ""):
+func add_song(example_beatmap: BeatMap, maps: Dictionary, readme: String = ""):
 	var song_card :SongCard = scene_SongCard.instantiate(PackedScene.GEN_EDIT_STATE_DISABLED) as SongCard;
 	container.add_child(song_card);
 	song_card.example_beatmap = example_beatmap;
-	song_card.levels = levels;
+	song_card.maps = maps;
 	song_card.readme = readme;
 	# 清除之前的随机
 	if !randomed_index_list.is_empty():

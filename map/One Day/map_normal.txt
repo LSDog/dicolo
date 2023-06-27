@@ -2,8 +2,8 @@
 title:One Day
 singer:I. D. F. X./Anton Delorosa
 mapper:LSDog
-level:6
-levelname:normal
+diff:6
+mapname:normal
 audio:One_Day.mp3
 bpm:129
 bg:bg.jpg

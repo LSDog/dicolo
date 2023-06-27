@@ -2,8 +2,8 @@
 title:君が扉をあけるとき
 singer:LA MARINA BRISA
 mapper:LSDog
-level:6
-levelname:normal
+diff:6
+mapname:normal
 audio:君が扉をあけるとき.mp3
 bpm:100
 bg:bg.jpg

@@ -2,7 +2,7 @@
 title:屋台灯
 singer:四家 和彦
 mapper:LSDog
-level:6
-levelname:normal
+diff:6
+mapname:normal
 audio:yatai-akari.mp3
 bpm:120

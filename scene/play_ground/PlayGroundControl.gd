@@ -117,6 +117,7 @@ var play_time := 0.0;
 @onready var playground := $PlayGround;
 @onready var lyricsLabel :=  $BGPanel/LyricLabel;
 @onready var virtualJoystick := $VirtualJoystick;
+@onready var manuButton := $MenuButton;
 
 
 var texture_hit_fx = preload("res://visual/texture/hit_fx.svg");
@@ -301,6 +302,11 @@ func jump(time :float, pause :bool = true):
 		if event.time >= play_time: break;
 		last_index += 1;
 	event_index = last_index;
+	
+	# 防止超过
+	var audio_length = get_audio_length();
+	if time > audio_length:
+		time = audio_length;
 	
 	# 跳转音乐
 	if paused:

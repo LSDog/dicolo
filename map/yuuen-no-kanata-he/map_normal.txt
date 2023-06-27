@@ -2,7 +2,7 @@
 title:悠遠の彼方へ
 singer:てろ
 mapper:LSDog
-level:6
-levelname:normal
+diff:6
+mapname:normal
 audio:yuuen-no-kanata-he.mp3
 bpm:102

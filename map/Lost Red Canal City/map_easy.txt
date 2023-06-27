@@ -2,8 +2,8 @@
 title:Lost Red Canal City
 singer:GRÜNEMUSIK/初音ミク
 mapper:LSDog
-level:3.5
-levelname:hard
+diff:3.5
+mapname:hard
 audio:Lost_Red_Canal_City.mp3
 bpm:150
 bg:bg.jpg

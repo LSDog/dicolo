@@ -27,11 +27,12 @@ var selected := false;
 var map_card_generated := false;
 
 ## 难度，结构为{ "The Normal": [4, "res://map/a_map_folder/map_normal.txt"] }
-var levels :Dictionary = {};
+var maps :Dictionary = {};
 
 
 var scene_MapCard :PackedScene = preload("res://scene/main_menu/MapCard.tscn");
 
+var mapCard_copy :MapCard = scene_MapCard.instantiate();
 
 ## 用来提供展示的beatmap对象, 并非实际用于游玩的铺面
 var example_beatmap :BeatMap = null:
@@ -45,7 +46,7 @@ var example_beatmap :BeatMap = null:
 ## readme.txt 里的话
 var readme :String;
 
-signal song_selected;
+signal song_select;
 signal song_play_request;
 
 func _ready():
@@ -102,6 +103,10 @@ func _gui_input(event):
 			else:
 				song_play_request.emit();
 
+func unhover():
+	if !selected: modulate_v_target = modulate_v_origin;
+
+
 func select():
 	selected = true;
 	modulate_v_target = modulate_v_select;
@@ -125,7 +130,7 @@ func select():
 	stylebox.border_color.a = 0.2;
 	#stylebox.shadow_color.a = 0;
 	
-	song_selected.emit();
+	song_select.emit();
 
 func unselect():
 	modulate_v_target = modulate_v_origin;
@@ -139,24 +144,29 @@ func unselect():
 	
 	selected = false;
 
+func unselect_mapCards(new_selected_card: MapCard = null):
+	for node in map_box.get_children():
+		if node is MapCard && node.selected && node != new_selected_card:
+			node.unselect();
+
 func generate_map_cards():
 	for node in map_box.get_children():
 		map_box.remove_child(node);
 		node.queue_free();
-	for level_name in levels.keys():
-		var data = levels.get(level_name);
-		add_map(data[0], level_name, ['C','B','A','S','SS'].pick_random(), data[1]);
+	for map_name in maps.keys():
+		var data = maps.get(map_name);
+		add_mapCard(data[0], map_name, ['C','B','A','S','SS'].pick_random(), map_name, data[1]);
 	map_card_generated = true;
 
 
-func add_map(diff: float, info: String, rating: String, map_path: String):
-	var map_card := scene_MapCard.instantiate() as MapCard;
+func add_mapCard(diff: float, info: String, rating: String, map_name: String, map_path: String):
+	var map_card := mapCard_copy.duplicate() as MapCard;
 	map_box.add_child(map_card);
 	map_card.set_diff(diff);
 	map_card.set_info(info);
 	map_card.set_rating(rating);
+	map_card.map_name = map_name;
 	map_card.map_path = map_path;
-
-func unhover():
-	if !selected: modulate_v_target = modulate_v_origin;
+	map_card.map_play_request.connect(Global.scene_MainMenu.play_map);
+	map_card.map_select.connect(unselect_mapCards.bind(map_card));
 

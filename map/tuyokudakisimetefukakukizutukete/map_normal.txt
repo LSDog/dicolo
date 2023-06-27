@@ -2,8 +2,8 @@
 title:tuyokudakisimetefukakukizutukete
 singer:SATO Takashi/初音ミク
 mapper:LSDog
-level:5
-levelname:normal
+diff:5
+mapname:normal
 audio:tuyokudakisimetefukakukizutukete.mp3
 bpm:90
 bg:bg.jpg

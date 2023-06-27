@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="2_ka65d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2iw3a"]
-bg_color = Color(0, 0, 0, 0.4)
+bg_color = Color(0, 0, 0, 0.2)
 border_width_right = 5
 border_color = Color(0.360784, 0.298039, 0, 1)
 
@@ -24,7 +24,7 @@ font = ExtResource("2_ka65d")
 font_size = 47
 shadow_size = 4
 shadow_color = Color(0.854902, 0.478431, 0.364706, 0.729412)
-shadow_offset = Vector2(-3, 1)
+shadow_offset = Vector2(3, 1)
 
 [node name="MapCard" type="Panel"]
 custom_minimum_size = Vector2(300, 70)
@@ -51,14 +51,14 @@ label_settings = SubResource("LabelSettings_eysa6")
 
 [node name="LabelRating" type="Label" parent="."]
 layout_mode = 1
-anchors_preset = 6
+anchors_preset = -1
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -71.0
+offset_left = -54.0
 offset_top = -33.0
-offset_right = -17.0
+offset_right = -20.0
 offset_bottom = 33.0
 grow_horizontal = 0
 grow_vertical = 2

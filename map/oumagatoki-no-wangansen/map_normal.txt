@@ -2,7 +2,7 @@
 title:逢魔ガ時ノ湾岸線
 singer:nir
 mapper:LSDog
-level:6
-levelname:normal
+diff:6
+mapname:normal
 audio:oumagatoki-no-wangansen.mp3
 bpm:93

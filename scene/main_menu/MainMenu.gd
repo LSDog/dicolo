@@ -48,8 +48,10 @@ func _ready():
 			song_list.choose_song_random();
 	);
 
+func select_map(song_name: String, map_name: String):
+	print("select map: ", song_name, " -- ", map_name);
 
-func play_song(map_path: String):
+func play_map(map_path: String):
 	print("play song: ", map_path);
 	var play_ground_scene := preload("res://scene/play_ground/Playground.tscn") as PackedScene;
 	var play_ground := play_ground_scene.instantiate() as PlaygroundControl;

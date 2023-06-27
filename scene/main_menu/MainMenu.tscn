@@ -1,12 +1,10 @@
-[gd_scene load_steps=60 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=57 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_1m2wa"]
 [ext_resource type="Texture2D" uid="uid://besj0l23codt1" path="res://visual/background/dicolo_icon_light_bubbles.png" id="2_tlhgm"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="3_xct3g"]
 [ext_resource type="Script" path="res://scene/main_menu/SongList.gd" id="4_c0nrc"]
 [ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="5_etfut"]
-[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://visual/theme/default_theme.tres" id="6_ipxhe"]
-[ext_resource type="Script" path="res://scene/main_menu/LevelsBar.gd" id="7_fq2c4"]
 [ext_resource type="FontFile" uid="uid://dy4m6l0n1c0kk" path="res://visual/font/LettersLaughingAtTheirExecution-WJLG.ttf" id="8_y52a2"]
 [ext_resource type="Script" path="res://scene/main_menu/MusicPlayer.gd" id="9_wxa4b"]
 [ext_resource type="Texture2D" uid="uid://djconwornocsa" path="res://visual/ui_icon/hearts.svg" id="10_bpfdy"]
@@ -110,15 +108,6 @@ border_blend = true
 corner_detail = 1
 shadow_color = Color(0, 0, 0, 0.180392)
 anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qbqrq"]
-content_margin_left = 26.0
-content_margin_right = 22.0
-bg_color = Color(0, 0.0784314, 0.12549, 1)
-border_width_left = 16
-border_color = Color(0, 0.642427, 0.642427, 1)
-corner_radius_top_right = 7
-corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uipoy"]
 content_margin_left = 27.0
@@ -610,29 +599,6 @@ theme_override_font_sizes/bold_italics_font_size = 18
 theme_override_font_sizes/mono_font_size = 18
 bbcode_enabled = true
 
-[node name="LevelsBar" type="ScrollContainer" parent="LeftPanel"]
-visible = false
-clip_children = 2
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -213.0
-offset_right = 410.0
-offset_bottom = -160.0
-grow_vertical = 0
-theme = ExtResource("6_ipxhe")
-theme_override_styles/panel = SubResource("StyleBoxFlat_qbqrq")
-horizontal_scroll_mode = 2
-vertical_scroll_mode = 0
-script = ExtResource("7_fq2c4")
-
-[node name="Container" type="HBoxContainer" parent="LeftPanel/LevelsBar"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 14
-
 [node name="Score" type="Panel" parent="LeftPanel"]
 custom_minimum_size = Vector2(420, 80)
 layout_mode = 1
@@ -1045,10 +1011,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 28.0
-offset_top = -82.0
-offset_right = 29.0
-offset_bottom = 89.0
+offset_left = 604.0
+offset_top = 242.0
+offset_right = 605.0
+offset_bottom = 413.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "dicolo!"

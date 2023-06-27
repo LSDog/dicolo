@@ -2,7 +2,7 @@
 title:青白い炎に想いを乗せて
 singer:セントラルパ吉田
 mapper:LSDog
-diff:6
-mapname:normal
+diff:2
+mapname:easy
 audio:aojiroi-honoo-ni-omoi-wo-nosete.mp3
 bpm:99

@@ -2,8 +2,8 @@
 title:Close Your Eyes
 singer:GRÜNEMUSIK/初音ミク
 mapper:LSDog
-level:4
-levelname:normal
+diff:4
+mapname:normal
 audio:Close_Your_Eyes.mp3
 bpm:164
 bg:bg.jpg
