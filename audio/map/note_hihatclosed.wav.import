@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bsx7nti4hvj3n"
-path="res://.godot/imported/note_hihatclosed.wav-9a994a51bbdc19c4121e006623fea9f6.sample"
+path="res://.godot/imported/note_hihatclosed.wav-e908abe438b04950dfd00ae91ffeea77.sample"
 
 [deps]
 
-source_file="res://sound/note_hihatclosed.wav"
-dest_files=["res://.godot/imported/note_hihatclosed.wav-9a994a51bbdc19c4121e006623fea9f6.sample"]
+source_file="res://audio/map/note_hihatclosed.wav"
+dest_files=["res://.godot/imported/note_hihatclosed.wav-e908abe438b04950dfd00ae91ffeea77.sample"]
 
 [params]
 

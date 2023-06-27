@@ -128,9 +128,9 @@ var texture_bounce = preload("res://visual/texture/bounce.svg");
 var texture_follow = preload("res://visual/texture/follow.svg");
 
 
-var sound_hit = preload("res://sound/note_hihat.wav");
-var sound_slide = preload("res://sound/note_hihatclosed.wav");
-var sound_bounce = preload("res://sound/note_floortom.wav");
+var sound_hit = preload("res://audio/map/note_hihat.wav");
+var sound_slide = preload("res://audio/map/note_hihatclosed.wav");
+var sound_bounce = preload("res://audio/map/note_floortom.wav");
 
 ## 铺面加载完毕
 signal map_loaded;
@@ -289,12 +289,12 @@ func resume():
 	play_resume.emit();
 
 ## 跳转到时间
-func jump(time :float, pause :bool = true):
+func jump(time :float, do_pause :bool = true):
 	
 	if ended: ended = false;
 	if !started: start();
 	
-	if pause: pause();
+	if do_pause: pause();
 	
 	# 获取跳转到的下一个event
 	var last_index := 0;

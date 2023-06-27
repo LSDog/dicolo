@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://cf1f2lob8pau1"
-path="res://.godot/imported/dicolo!_len.wav-b6f5f593ec921a5f84e432984a74645f.sample"
+uid="uid://cc60a617w8hs7"
+path="res://.godot/imported/notif_1.wav-9f33621153365e32001143c8fcb77983.sample"
 
 [deps]
 
-source_file="res://sound/dicolo!_len.wav"
-dest_files=["res://.godot/imported/dicolo!_len.wav-b6f5f593ec921a5f84e432984a74645f.sample"]
+source_file="res://audio/ui/notif_1.wav"
+dest_files=["res://.godot/imported/notif_1.wav-9f33621153365e32001143c8fcb77983.sample"]
 
 [params]
 

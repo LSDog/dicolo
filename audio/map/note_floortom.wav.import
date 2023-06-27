@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://cgic25i07hym1"
-path="res://.godot/imported/note_floortom.wav-9e056a7ab947bff1ff9fd5f7f1337094.sample"
+path="res://.godot/imported/note_floortom.wav-f4bff2d23ff2757e66a4643cac6c98aa.sample"
 
 [deps]
 
-source_file="res://sound/note_floortom.wav"
-dest_files=["res://.godot/imported/note_floortom.wav-9e056a7ab947bff1ff9fd5f7f1337094.sample"]
+source_file="res://audio/map/note_floortom.wav"
+dest_files=["res://.godot/imported/note_floortom.wav-f4bff2d23ff2757e66a4643cac6c98aa.sample"]
 
 [params]
 

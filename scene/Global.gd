@@ -128,3 +128,14 @@ func get_sub_dir(parent_dir: DirAccess, sub_dir_name: String) -> DirAccess:
 ## 获取一个文件夹内的文件
 func get_sub_file(parent_dir: DirAccess, sub_file_name: String, flags: FileAccess.ModeFlags) -> FileAccess:
 	return FileAccess.open(parent_dir.get_current_dir()+'/'+sub_file_name, flags);
+
+## 播放声音
+func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"):	
+	var player = AudioStreamPlayer.new();
+	add_child(player);
+	player.stream = stream;
+	player.volume_db = volume
+	player.pitch_scale = pitch;
+	player.bus = bus;
+	player.finished.connect(func(): player.queue_free());
+	player.play();

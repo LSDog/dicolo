@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bawqmljx771uq"
-path="res://.godot/imported/dicolo!_tsukuyomichan.wav-8a4b13d34dfc4750f2149405c78e96aa.sample"
+path="res://.godot/imported/dicolo!_tsukuyomichan.wav-13c505bae92cd54798ff935955387111.sample"
 
 [deps]
 
-source_file="res://sound/dicolo!_tsukuyomichan.wav"
-dest_files=["res://.godot/imported/dicolo!_tsukuyomichan.wav-8a4b13d34dfc4750f2149405c78e96aa.sample"]
+source_file="res://audio/intro/dicolo!_tsukuyomichan.wav"
+dest_files=["res://.godot/imported/dicolo!_tsukuyomichan.wav-13c505bae92cd54798ff935955387111.sample"]
 
 [params]
 

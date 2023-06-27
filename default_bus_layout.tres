@@ -1,7 +1,14 @@
-[gd_resource type="AudioBusLayout" load_steps=4 format=3 uid="uid://cpdo0fsabufcn"]
+[gd_resource type="AudioBusLayout" load_steps=5 format=3 uid="uid://cpdo0fsabufcn"]
 
 [sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_8vs7j"]
 resource_name = "SpectrumAnalyzer"
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_p27xc"]
+resource_name = "Reverb"
+predelay_feedback = 0.0
+room_size = 0.4
+damping = 0.15
+hipass = 0.23
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_37yp2"]
 resource_name = "Reverb"
@@ -32,6 +39,8 @@ bus/2/mute = false
 bus/2/bypass_fx = false
 bus/2/volume_db = 0.0
 bus/2/send = &"Master"
+bus/2/effect/0/effect = SubResource("AudioEffectReverb_p27xc")
+bus/2/effect/0/enabled = true
 bus/3/name = &"Voice"
 bus/3/solo = false
 bus/3/mute = false

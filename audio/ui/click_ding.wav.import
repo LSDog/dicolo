@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://cjfwcmmbuwnh1"
-path="res://.godot/imported/note_hihat.wav-dce21f470167bc82e58a36714eafd9ae.sample"
+uid="uid://b3tsarniuikx0"
+path="res://.godot/imported/click_ding.wav-6854c716e64092c06e7a768eaf0d4c82.sample"
 
 [deps]
 
-source_file="res://sound/note_hihat.wav"
-dest_files=["res://.godot/imported/note_hihat.wav-dce21f470167bc82e58a36714eafd9ae.sample"]
+source_file="res://audio/ui/click_ding.wav"
+dest_files=["res://.godot/imported/click_ding.wav-6854c716e64092c06e7a768eaf0d4c82.sample"]
 
 [params]
 

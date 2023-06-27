@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=58 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_1m2wa"]
 [ext_resource type="Texture2D" uid="uid://besj0l23codt1" path="res://visual/background/dicolo_icon_light_bubbles.png" id="2_tlhgm"]
@@ -16,12 +16,13 @@
 [ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://visual/partner/avatar_trans-1024x.png" id="16_16t2a"]
 [ext_resource type="Texture2D" uid="uid://crtsduk7s68wn" path="res://visual/ui_icon/cog.svg" id="17_yvf60"]
 [ext_resource type="Texture2D" uid="uid://bkw2uvfq75e5p" path="res://visual/ui_icon/cloud-download.svg" id="18_j3jtp"]
+[ext_resource type="AudioStream" uid="uid://crod6cfe1nqid" path="res://audio/intro/Arcane_Beacon.wav" id="19_jw5he"]
 [ext_resource type="Texture2D" uid="uid://d25b25n5ka51" path="res://visual/ui_icon/rolling-dices.svg" id="19_n270n"]
+[ext_resource type="AudioStream" uid="uid://bawqmljx771uq" path="res://audio/intro/dicolo!_tsukuyomichan.wav" id="20_gpahj"]
 [ext_resource type="Texture2D" uid="uid://culfyi41m0gvm" path="res://visual/texture/start.svg" id="20_xn3j1"]
-[ext_resource type="AudioStream" uid="uid://bawqmljx771uq" path="res://sound/dicolo!_tsukuyomichan.wav" id="21_72j2a"]
-[ext_resource type="AudioStream" uid="uid://cmucpnk84nn63" path="res://sound/dicolo!_miku.wav" id="22_5fc7c"]
-[ext_resource type="AudioStream" uid="uid://cf1f2lob8pau1" path="res://sound/dicolo!_len.wav" id="23_2fmc2"]
-[ext_resource type="AudioStream" uid="uid://c0bw0kmqnvfow" path="res://sound/dicolo!_rin.wav" id="24_aeui8"]
+[ext_resource type="AudioStream" uid="uid://cmucpnk84nn63" path="res://audio/intro/dicolo!_miku.wav" id="21_4we1j"]
+[ext_resource type="AudioStream" uid="uid://c0bw0kmqnvfow" path="res://audio/intro/dicolo!_rin.wav" id="22_ghic7"]
+[ext_resource type="AudioStream" uid="uid://cf1f2lob8pau1" path="res://audio/intro/dicolo!_len.wav" id="23_jg7m8"]
 [ext_resource type="Texture2D" uid="uid://485q4nyju4h0" path="res://visual/icon/icon.png" id="25_2hpux"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwa4q"]
@@ -328,13 +329,13 @@ tracks/8/keys = {
 streams_count = 4
 random_pitch = 1.0
 random_volume_offset_db = 0.0
-stream_0/stream = ExtResource("21_72j2a")
+stream_0/stream = ExtResource("20_gpahj")
 stream_0/weight = 1.0
-stream_1/stream = ExtResource("22_5fc7c")
+stream_1/stream = ExtResource("21_4we1j")
 stream_1/weight = 1.0
-stream_2/stream = ExtResource("23_2fmc2")
+stream_2/stream = ExtResource("22_ghic7")
 stream_2/weight = 1.0
-stream_3/stream = ExtResource("24_aeui8")
+stream_3/stream = ExtResource("23_jg7m8")
 stream_3/weight = 1.0
 
 [sub_resource type="Animation" id="Animation_3vlcs"]
@@ -458,9 +459,13 @@ tracks/9/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
+"stream": ExtResource("19_jw5he")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
 "stream": SubResource("AudioStreamRandomizer_eg2x4")
 }],
-"times": PackedFloat32Array(1.1)
+"times": PackedFloat32Array(0.5, 1)
 }
 tracks/9/use_blend = true
 tracks/10/type = "method"

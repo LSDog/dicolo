@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://cmucpnk84nn63"
-path="res://.godot/imported/dicolo!_miku.wav-1f0b55bc6edc0fa94e1a0bdb36e787d9.sample"
+uid="uid://cwir7hgqu63mi"
+path="res://.godot/imported/click_hat.wav-c2ef9d19eddcdde4c03778d602b4e540.sample"
 
 [deps]
 
-source_file="res://sound/dicolo!_miku.wav"
-dest_files=["res://.godot/imported/dicolo!_miku.wav-1f0b55bc6edc0fa94e1a0bdb36e787d9.sample"]
+source_file="res://audio/ui/click_hat.wav"
+dest_files=["res://.godot/imported/click_hat.wav-c2ef9d19eddcdde4c03778d602b4e540.sample"]
 
 [params]
 

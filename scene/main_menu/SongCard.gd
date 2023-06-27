@@ -58,6 +58,7 @@ func _ready():
 	mouse_entered.connect(func():
 		is_mouse_entered = true;
 		modulate_v_target = modulate_v_hover;
+		Global.play_sound(preload("res://audio/ui/click_kak.wav"), -20, 1.25, "Effect");
 	);
 	
 	mouse_exited.connect(func():
@@ -112,6 +113,9 @@ func select():
 	modulate_v_target = modulate_v_select;
 	width_target = width_origin * width_select_mul;
 	
+	Global.play_sound(preload("res://audio/ui/click_dvb.wav"), -20, 1, "Effect");
+	Global.play_sound(preload("res://audio/ui/click_kak.wav"), -20, 1, "Effect");
+	
 	if !map_card_generated:
 		generate_map_cards();
 	
@@ -122,7 +126,7 @@ func select():
 		vbox_height += node.size.y + separation;
 	vbox_height -= separation;
 	
-	var total_height :float = size.y + vbox_height;
+	var total_height :int = size.y + vbox_height;
 	custom_minimum_size.y = 500 if total_height >= 500 else total_height;
 	size.y = total_height;
 	image_rect.visible = false;
