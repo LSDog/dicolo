@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=12 format=3 uid="uid://d3m8pmhle7d8r"]
+[gd_resource type="Theme" load_steps=20 format=3 uid="uid://d3m8pmhle7d8r"]
 
 [sub_resource type="FontVariation" id="FontVariation_qg2ew"]
 
@@ -31,6 +31,20 @@ color = Color(0, 0, 0, 0.5)
 grow_begin = 0.0
 grow_end = 0.0
 thickness = 10
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_rvf08"]
+size = Vector2(0, 0)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_okgsi"]
+color = Color(1, 1, 1, 0.75)
+thickness = 16
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_3kta4"]
+color = Color(1, 1, 1, 1)
+thickness = 16
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_gogtd"]
+thickness = 20
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_opqm8"]
 color = Color(1, 1, 1, 1)
@@ -67,6 +81,22 @@ grow_end = 0.0
 thickness = 10
 vertical = true
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mmiou"]
+size = Vector2(0, 0)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_fctui"]
+color = Color(1, 1, 1, 0.75)
+thickness = 16
+vertical = true
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_4uman"]
+thickness = 16
+vertical = true
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_3ta10"]
+thickness = 16
+vertical = true
+
 [resource]
 Fonts/fonts/large = SubResource("FontVariation_qg2ew")
 HScrollBar/styles/grabber = SubResource("StyleBoxLine_71cnt")
@@ -74,9 +104,21 @@ HScrollBar/styles/grabber_highlight = SubResource("StyleBoxLine_iajem")
 HScrollBar/styles/grabber_pressed = SubResource("StyleBoxLine_lf42l")
 HScrollBar/styles/scroll = SubResource("StyleBoxLine_aabyw")
 HScrollBar/styles/scroll_focus = SubResource("StyleBoxLine_k5buq")
+HSlider/icons/grabber = SubResource("PlaceholderTexture2D_rvf08")
+HSlider/icons/grabber_disabled = SubResource("PlaceholderTexture2D_rvf08")
+HSlider/icons/grabber_highlight = SubResource("PlaceholderTexture2D_rvf08")
+HSlider/styles/grabber_area = SubResource("StyleBoxLine_okgsi")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxLine_3kta4")
+HSlider/styles/slider = SubResource("StyleBoxLine_gogtd")
 RichTextLabel/colors/selection_color = Color(0, 0.419608, 0.462745, 0.266667)
 VScrollBar/styles/grabber = SubResource("StyleBoxLine_opqm8")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxLine_e7s47")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxLine_7p6dj")
 VScrollBar/styles/scroll = SubResource("StyleBoxLine_8j3h5")
 VScrollBar/styles/scroll_focus = SubResource("StyleBoxLine_bd5mp")
+VSlider/icons/grabber = SubResource("PlaceholderTexture2D_mmiou")
+VSlider/icons/grabber_disabled = SubResource("PlaceholderTexture2D_mmiou")
+VSlider/icons/grabber_highlight = SubResource("PlaceholderTexture2D_mmiou")
+VSlider/styles/grabber_area = SubResource("StyleBoxLine_fctui")
+VSlider/styles/grabber_area_highlight = SubResource("StyleBoxLine_4uman")
+VSlider/styles/slider = SubResource("StyleBoxLine_3ta10")

@@ -127,13 +127,12 @@ shadow_size = 3
 shadow_color = Color(0.854902, 0.478431, 0.364706, 0.729412)
 shadow_offset = Vector2(-4, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_xm8gu"]
-line_spacing = 0.0
-font = ExtResource("5_etfut")
-font_size = 61
+[sub_resource type="LabelSettings" id="LabelSettings_jq1ug"]
+font = ExtResource("8_y52a2")
+font_size = 20
 shadow_size = 4
-shadow_color = Color(0.854902, 0.478431, 0.364706, 0.729412)
-shadow_offset = Vector2(-3, 1)
+shadow_color = Color(0.721569, 0.203922, 0.309804, 0.427451)
+shadow_offset = Vector2(-1, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sdias"]
 content_margin_left = 27.0
@@ -629,21 +628,24 @@ label_settings = SubResource("LabelSettings_cxrir")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Level" type="Label" parent="LeftPanel/Score"]
+[node name="Label" type="Label" parent="LeftPanel/Score"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -85.0
-offset_top = -40.0
-offset_right = -15.0
-offset_bottom = 46.0
+offset_left = -90.0
+offset_top = -20.0
+offset_right = -6.0
+offset_bottom = 26.0
 grow_horizontal = 0
 grow_vertical = 2
-text = "SS"
-label_settings = SubResource("LabelSettings_xm8gu")
+text = "99.76 A
+1048 C"
+label_settings = SubResource("LabelSettings_jq1ug")
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="MusicPlayer" type="Panel" parent="LeftPanel"]
 layout_mode = 2

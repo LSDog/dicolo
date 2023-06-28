@@ -1,4 +1,12 @@
-[gd_resource type="AudioBusLayout" load_steps=5 format=3 uid="uid://cpdo0fsabufcn"]
+[gd_resource type="AudioBusLayout" load_steps=6 format=3 uid="uid://cpdo0fsabufcn"]
+
+[sub_resource type="AudioEffectDelay" id="AudioEffectDelay_k85s3"]
+resource_name = "Delay"
+dry = 0.0
+tap1_delay_ms = 0.0
+tap1_level_db = 0.0
+tap1_pan = 0.0
+tap2_active = false
 
 [sub_resource type="AudioEffectSpectrumAnalyzer" id="AudioEffectSpectrumAnalyzer_8vs7j"]
 resource_name = "SpectrumAnalyzer"
@@ -6,7 +14,7 @@ resource_name = "SpectrumAnalyzer"
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_p27xc"]
 resource_name = "Reverb"
 predelay_feedback = 0.0
-room_size = 0.4
+room_size = 0.2
 damping = 0.15
 hipass = 0.23
 
@@ -25,8 +33,10 @@ time_pullout_ms = 10.0
 surround = 0.2
 
 [resource]
-bus/0/effect/0/effect = SubResource("AudioEffectSpectrumAnalyzer_8vs7j")
+bus/0/effect/0/effect = SubResource("AudioEffectDelay_k85s3")
 bus/0/effect/0/enabled = true
+bus/0/effect/1/effect = SubResource("AudioEffectSpectrumAnalyzer_8vs7j")
+bus/0/effect/1/enabled = true
 bus/1/name = &"Music"
 bus/1/solo = false
 bus/1/mute = false

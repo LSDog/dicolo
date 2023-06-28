@@ -1,20 +1,57 @@
-[gd_scene load_steps=6 format=3 uid="uid://cdyhqt27mk6t3"]
+[gd_scene load_steps=12 format=3 uid="uid://cdyhqt27mk6t3"]
 
 [ext_resource type="Script" path="res://scene/setting/Setting.gd" id="1_lf8gb"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="2_3c6gh"]
 [ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://visual/theme/default_theme.tres" id="3_wwley"]
+[ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="4_hbsjn"]
+
+[sub_resource type="Animation" id="Animation_g3ys8"]
+resource_name = "show"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4yea4"]
+_data = {
+"show": SubResource("Animation_g3ys8")
+}
 
 [sub_resource type="Theme" id="Theme_xwlyw"]
 default_font = ExtResource("2_3c6gh")
 default_font_size = 23
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
-bg_color = Color(0, 0, 0, 0.8)
-border_width_left = 1
-border_color = Color(1, 1, 1, 1)
+bg_color = Color(0, 0, 0, 0.901961)
+shadow_color = Color(0, 0, 0, 0.1)
+shadow_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_xlwvw"]
+line_spacing = 28.0
+font = ExtResource("4_hbsjn")
+font_size = 25
+
+[sub_resource type="LabelSettings" id="LabelSettings_dw6j7"]
+line_spacing = 28.0
+font = ExtResource("4_hbsjn")
+font_size = 25
+
+[sub_resource type="LabelSettings" id="LabelSettings_bxv0c"]
+line_spacing = 28.0
+font = ExtResource("4_hbsjn")
+font_size = 25
 
 [node name="Setting" type="Control"]
-custom_minimum_size = Vector2(425, 0)
+custom_minimum_size = Vector2(450, 0)
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -23,6 +60,11 @@ anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_lf8gb")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4yea4")
+}
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -35,57 +77,65 @@ theme = SubResource("Theme_xwlyw")
 theme_override_styles/panel = SubResource("StyleBoxFlat_t55bx")
 
 [node name="Scroll" type="ScrollContainer" parent="Panel"]
+clip_contents = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_wwley")
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="List" type="VBoxContainer" parent="Panel/Scroll"]
+[node name="Margin" type="MarginContainer" parent="Panel/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 0
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_right = 18
 
-[node name="--" type="Control" parent="Panel/Scroll/List"]
+[node name="List" type="VBoxContainer" parent="Panel/Scroll/Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="--" type="Control" parent="Panel/Scroll/Margin/List"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="Video" type="VBoxContainer" parent="Panel/Scroll/List"]
+[node name="Video" type="VBoxContainer" parent="Panel/Scroll/Margin/List"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Panel/Scroll/List/Video"]
+[node name="Title" type="Label" parent="Panel/Scroll/Margin/List/Video"]
 layout_mode = 2
-text = "|📺 Video"
+size_flags_horizontal = 4
+text = "📺 Video"
+label_settings = SubResource("LabelSettings_xlwvw")
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="FullScreen" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
+[node name="FullScreen" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Video"]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Panel/Scroll/List/Video/FullScreen"]
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Video/FullScreen"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Full screen (F11)"
 
-[node name="Button" type="CheckButton" parent="Panel/Scroll/List/Video/FullScreen"]
+[node name="Button" type="CheckButton" parent="Panel/Scroll/Margin/List/Video/FullScreen"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="FullScreenMode" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
+[node name="FullScreenMode" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Video"]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Panel/Scroll/List/Video/FullScreenMode"]
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Video/FullScreenMode"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Full screen mode"
 
-[node name="Option" type="OptionButton" parent="Panel/Scroll/List/Video/FullScreenMode"]
+[node name="Option" type="OptionButton" parent="Panel/Scroll/Margin/List/Video/FullScreenMode"]
 layout_mode = 2
 size_flags_horizontal = 3
 flat = true
@@ -97,48 +147,50 @@ popup/item_0/id = 0
 popup/item_1/text = "BorderLess"
 popup/item_1/id = 1
 
-[node name="FPS" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
+[node name="FPS" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Video"]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Panel/Scroll/List/Video/FPS"]
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Video/FPS"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "FPS"
 
-[node name="Input" type="LineEdit" parent="Panel/Scroll/List/Video/FPS"]
+[node name="Input" type="LineEdit" parent="Panel/Scroll/Margin/List/Video/FPS"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "60"
 placeholder_text = "60"
 alignment = 1
 
-[node name="VSync" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
+[node name="VSync" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Video"]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Panel/Scroll/List/Video/VSync"]
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Video/VSync"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "V-sync"
 
-[node name="Button" type="CheckButton" parent="Panel/Scroll/List/Video/VSync"]
+[node name="Button" type="CheckButton" parent="Panel/Scroll/Margin/List/Video/VSync"]
 layout_mode = 2
 size_flags_horizontal = 8
 button_pressed = true
 
-[node name="Scale" type="HBoxContainer" parent="Panel/Scroll/List/Video"]
+[node name="Scale" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Video"]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Panel/Scroll/List/Video/Scale"]
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Video/Scale"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Scale"
 
-[node name="HSlider" type="HSlider" parent="Panel/Scroll/List/Video/Scale"]
+[node name="HSlider" type="HSlider" parent="Panel/Scroll/Margin/List/Video/Scale"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
 min_value = 0.5
 max_value = 1.5
 step = 0.05
@@ -147,26 +199,151 @@ scrollable = false
 tick_count = 5
 ticks_on_borders = true
 
-[node name="--2" type="Control" parent="Panel/Scroll/List"]
-custom_minimum_size = Vector2(0, 10)
+[node name="Audio" type="VBoxContainer" parent="Panel/Scroll/Margin/List"]
 layout_mode = 2
 
-[node name="Control" type="VBoxContainer" parent="Panel/Scroll/List"]
+[node name="Title" type="Label" parent="Panel/Scroll/Margin/List/Audio"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "🎵 Audio"
+label_settings = SubResource("LabelSettings_dw6j7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VolumeMaster" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Audio"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Panel/Scroll/List/Control"]
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Audio/VolumeMaster"]
 layout_mode = 2
-text = "|🎮 Control"
+size_flags_horizontal = 3
+text = "Master"
 
-[node name="Gamepad" type="HBoxContainer" parent="Panel/Scroll/List/Control"]
+[node name="HSlider" type="HSlider" parent="Panel/Scroll/Margin/List/Audio/VolumeMaster"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+min_value = -50.0
+max_value = 1.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="VolumeMusic" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Audio"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/Scroll/List/Control/Gamepad"]
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Audio/VolumeMusic"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Music"
+
+[node name="HSlider" type="HSlider" parent="Panel/Scroll/Margin/List/Audio/VolumeMusic"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+min_value = -50.0
+max_value = 17.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="VolumeEffect" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Audio"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Audio/VolumeEffect"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Effect"
+
+[node name="HSlider" type="HSlider" parent="Panel/Scroll/Margin/List/Audio/VolumeEffect"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+min_value = -50.0
+max_value = 17.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="VolumeVoice" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Audio"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Audio/VolumeVoice"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Voice"
+
+[node name="HSlider" type="HSlider" parent="Panel/Scroll/Margin/List/Audio/VolumeVoice"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.0
+min_value = -50.0
+max_value = 17.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="Device" type="VBoxContainer" parent="Panel/Scroll/Margin/List"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Scroll/Margin/List/Device"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "🎮 Device"
+label_settings = SubResource("LabelSettings_bxv0c")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Gamepad" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Device"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Device/Gamepad"]
 layout_mode = 2
 text = "Gamepad (null)"
 
-[node name="Option" type="OptionButton" parent="Panel/Scroll/List/Control/Gamepad"]
+[node name="Option" type="OptionButton" parent="Panel/Scroll/Margin/List/Device/Gamepad"]
 layout_mode = 2
 size_flags_horizontal = 3
 text_overrun_behavior = 3
 clip_text = true
+
+[node name="Gameplay" type="VBoxContainer" parent="Panel/Scroll/Margin/List"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Scroll/Margin/List/Gameplay"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "🥁 GamePlay"
+label_settings = SubResource("LabelSettings_bxv0c")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AudioOffset" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Gameplay"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Gameplay/AudioOffset"]
+layout_mode = 2
+text = "Audio Offset"
+
+[node name="ButtonSub" type="Button" parent="Panel/Scroll/Margin/List/Gameplay/AudioOffset"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = ExtResource("4_hbsjn")
+text = "-"
+
+[node name="LabelOffset" type="Label" parent="Panel/Scroll/Margin/List/Gameplay/AudioOffset"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+horizontal_alignment = 1
+
+[node name="ButtonAdd" type="Button" parent="Panel/Scroll/Margin/List/Gameplay/AudioOffset"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_fonts/font = ExtResource("4_hbsjn")
+text = "+"
+
+[node name="__" type="Control" parent="Panel/Scroll/Margin/List"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
