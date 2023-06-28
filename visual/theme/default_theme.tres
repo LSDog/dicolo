@@ -75,7 +75,7 @@ thickness = 10
 vertical = true
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_bd5mp"]
-color = Color(0, 0, 0, 0.5)
+color = Color(1, 1, 1, 0.5)
 grow_begin = 0.0
 grow_end = 0.0
 thickness = 10
@@ -90,6 +90,7 @@ thickness = 16
 vertical = true
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_4uman"]
+color = Color(1, 1, 1, 1)
 thickness = 16
 vertical = true
 

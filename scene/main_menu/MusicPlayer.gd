@@ -34,8 +34,17 @@ signal audio_end();
 		if loop == value: return;
 		loop = value;
 		$Buttons/Loop.modulate.a = 1.0 if loop else 0.5;
+		if !data_loading:
+			DataManager.data_setting["MusicPlayer.Loop"] = value;
+			DataManager.save_data(DataManager.DATA_TYPE.SETTING);
+
+var data_loading = true;
 
 func _ready():
+	
+	# 加载设置
+	loop = DataManager.data_setting.get("MusicPlayer.Loop", loop);
+	data_loading = false;
 	
 	# 绑按钮
 	loop = $Buttons/Loop.button_pressed;

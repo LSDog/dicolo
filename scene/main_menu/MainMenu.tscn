@@ -14,12 +14,12 @@
 [ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://visual/ui_icon/anticlockwise-rotation.svg" id="14_06lng"]
 [ext_resource type="Script" path="res://scene/main_menu/DownPanel.gd" id="15_ml7uc"]
 [ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://visual/partner/avatar_trans-1024x.png" id="16_16t2a"]
+[ext_resource type="Texture2D" uid="uid://cbwyhuuanau7b" path="res://visual/ui_icon/compact-disc.svg" id="17_himgy"]
 [ext_resource type="Texture2D" uid="uid://crtsduk7s68wn" path="res://visual/ui_icon/cog.svg" id="17_yvf60"]
 [ext_resource type="Texture2D" uid="uid://bkw2uvfq75e5p" path="res://visual/ui_icon/cloud-download.svg" id="18_j3jtp"]
 [ext_resource type="AudioStream" uid="uid://crod6cfe1nqid" path="res://audio/intro/Arcane_Beacon.wav" id="19_jw5he"]
 [ext_resource type="Texture2D" uid="uid://d25b25n5ka51" path="res://visual/ui_icon/rolling-dices.svg" id="19_n270n"]
 [ext_resource type="AudioStream" uid="uid://bawqmljx771uq" path="res://audio/intro/dicolo!_tsukuyomichan.wav" id="20_gpahj"]
-[ext_resource type="Texture2D" uid="uid://culfyi41m0gvm" path="res://visual/texture/start.svg" id="20_xn3j1"]
 [ext_resource type="AudioStream" uid="uid://cmucpnk84nn63" path="res://audio/intro/dicolo!_miku.wav" id="21_4we1j"]
 [ext_resource type="AudioStream" uid="uid://c0bw0kmqnvfow" path="res://audio/intro/dicolo!_rin.wav" id="22_ghic7"]
 [ext_resource type="AudioStream" uid="uid://cf1f2lob8pau1" path="res://audio/intro/dicolo!_len.wav" id="23_jg7m8"]
@@ -833,39 +833,6 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonSetting" type="Button" parent="DownPanel/VBox"]
-custom_minimum_size = Vector2(135, 0)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
-theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
-
-[node name="Label" type="Label" parent="DownPanel/VBox/ButtonSetting"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.02
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_vertical = 2
-mouse_filter = 1
-theme_override_fonts/font = ExtResource("5_etfut")
-text = "Setting"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonSetting"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.98
-anchor_bottom = 1.0
-grow_horizontal = 0
-texture = ExtResource("17_yvf60")
-expand_mode = 1
-stretch_mode = 5
-
 [node name="ButtonCloud" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(135, 0)
 layout_mode = 2
@@ -877,13 +844,12 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 [node name="Label" type="Label" parent="DownPanel/VBox/ButtonCloud"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.02
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.547
+anchor_left = 0.3
+anchor_top = 0.65
+anchor_right = 0.3
+anchor_bottom = 0.65
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 theme_override_fonts/font = ExtResource("5_etfut")
 text = "Cloud"
 horizontal_alignment = 1
@@ -896,12 +862,86 @@ anchor_left = 0.5
 anchor_right = 0.98
 anchor_bottom = 1.0
 grow_horizontal = 0
+mouse_filter = 2
 texture = ExtResource("18_j3jtp")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ButtonRandom" type="Button" parent="DownPanel/VBox"]
+[node name="ButtonSetting" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(135, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
+theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
+
+[node name="Label" type="Label" parent="DownPanel/VBox/ButtonSetting"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.65
+anchor_right = 0.5
+anchor_bottom = 0.65
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_etfut")
+text = "Setting"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonSetting"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.98
+anchor_bottom = 1.0
+grow_horizontal = 0
+mouse_filter = 2
+texture = ExtResource("17_yvf60")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ButtonMod" type="Button" parent="DownPanel/VBox"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
+theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
+
+[node name="Label" type="Label" parent="DownPanel/VBox/ButtonMod"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.275
+anchor_top = 0.65
+anchor_right = 0.275
+anchor_bottom = 0.65
+offset_left = -17.5
+offset_top = -13.0
+offset_right = 17.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_etfut")
+text = "Mod"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonMod"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.98
+anchor_bottom = 1.0
+grow_horizontal = 0
+mouse_filter = 2
+texture = ExtResource("17_himgy")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true
+
+[node name="ButtonRandom" type="Button" parent="DownPanel/VBox"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
@@ -911,12 +951,12 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 [node name="Label" type="Label" parent="DownPanel/VBox/ButtonRandom"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.02
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_left = 0.3
+anchor_top = 0.65
+anchor_right = 0.3
+anchor_bottom = 0.65
+grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 theme_override_fonts/font = ExtResource("5_etfut")
 text = "Random"
 horizontal_alignment = 1
@@ -925,10 +965,11 @@ vertical_alignment = 1
 [node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonRandom"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
+anchor_left = 0.45
 anchor_right = 0.98
 anchor_bottom = 1.0
 grow_horizontal = 0
+mouse_filter = 2
 texture = ExtResource("19_n270n")
 expand_mode = 1
 stretch_mode = 5
@@ -936,25 +977,6 @@ stretch_mode = 5
 [node name="||" type="Control" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
-
-[node name="ButtonStart" type="Button" parent="DownPanel/VBox"]
-custom_minimum_size = Vector2(135, 0)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
-theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
-
-[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonStart"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("20_xn3j1")
-expand_mode = 1
-stretch_mode = 5
 
 [node name="<-|" type="Control" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(10, 0)

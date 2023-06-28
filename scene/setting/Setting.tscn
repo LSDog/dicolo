@@ -172,7 +172,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "V-sync"
 
-[node name="Button" type="CheckButton" parent="Panel/Scroll/Margin/List/Video/VSync"]
+[node name="CheckButton" type="CheckButton" parent="Panel/Scroll/Margin/List/Video/VSync"]
 layout_mode = 2
 size_flags_horizontal = 8
 button_pressed = true
@@ -343,6 +343,28 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_fonts/font = ExtResource("4_hbsjn")
 text = "+"
+
+[node name="Misc" type="VBoxContainer" parent="Panel/Scroll/Margin/List"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Scroll/Margin/List/Misc"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "💿 Misc"
+label_settings = SubResource("LabelSettings_bxv0c")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DebugInfo" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Misc"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Misc/DebugInfo"]
+layout_mode = 2
+text = "DebugInfo"
+
+[node name="CheckButton" type="CheckButton" parent="Panel/Scroll/Margin/List/Misc/DebugInfo"]
+layout_mode = 2
+size_flags_horizontal = 10
 
 [node name="__" type="Control" parent="Panel/Scroll/Margin/List"]
 custom_minimum_size = Vector2(0, 32)

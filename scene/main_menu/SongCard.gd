@@ -58,7 +58,8 @@ func _ready():
 	mouse_entered.connect(func():
 		is_mouse_entered = true;
 		modulate_v_target = modulate_v_hover;
-		Global.play_sound(preload("res://audio/ui/click_kak.wav"), -20, 1.25, "Effect");
+		Global.play_sound(preload("res://audio/ui/click_kak.wav"), -25, 1.25, "Effect");
+		Global.play_sound(preload("res://audio/ui/click_hat.wav"), -15, 0.75, "Effect");
 	);
 	
 	mouse_exited.connect(func():
@@ -99,6 +100,8 @@ func _gui_input(event):
 				# 松手后和点击位置距离小于5px时断定为“选中”
 				if abs(y_relate) <= 5.0:
 					select();
+					Global.play_sound(preload("res://audio/ui/click_dvb.wav"), -20, 1, "Effect");
+					Global.play_sound(preload("res://audio/ui/click_kak.wav"), -20, 1, "Effect");
 				else:
 					unhover();
 			else:
@@ -112,9 +115,6 @@ func select():
 	selected = true;
 	modulate_v_target = modulate_v_select;
 	width_target = width_origin * width_select_mul;
-	
-	Global.play_sound(preload("res://audio/ui/click_dvb.wav"), -20, 1, "Effect");
-	Global.play_sound(preload("res://audio/ui/click_kak.wav"), -20, 1, "Effect");
 	
 	if !map_card_generated:
 		generate_map_cards();
@@ -131,7 +131,8 @@ func select():
 	size.y = total_height;
 	image_rect.visible = false;
 	stylebox.skew.x = 0;
-	stylebox.border_color.a = 0.2;
+	stylebox.bg_color.a = 0.1;
+	stylebox.border_color.a = 0.7;
 	#stylebox.shadow_color.a = 0;
 	
 	song_select.emit();
@@ -143,8 +144,9 @@ func unselect():
 	custom_minimum_size.y = 80;
 	image_rect.visible = true;
 	stylebox.skew.x = -0.25;
+	stylebox.bg_color.a = 1;
 	stylebox.border_color.a = 0.8;
-	stylebox.shadow_color.a = 0.3;
+	#stylebox.shadow_color.a = 0.3;
 	
 	selected = false;
 

@@ -31,6 +31,7 @@ func _gui_input(event: InputEvent):
 				if !selected:
 					map_select.emit();
 					select();
+					Global.play_sound(preload("res://audio/ui/click_dthen.wav"), 0, 1, "Effect");
 				else:
 					map_play_request.emit(map_path);
 

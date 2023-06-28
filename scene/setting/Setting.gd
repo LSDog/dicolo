@@ -11,7 +11,7 @@ const COLOR_CHANGED := Color("ffdd00");
 @onready var option_FullScreenMode := $Panel/Scroll/Margin/List/Video/FullScreenMode/Option;
 var option_FullScreenMode_items = [DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN, DisplayServer.WINDOW_MODE_FULLSCREEN];
 @onready var input_FPS := $Panel/Scroll/Margin/List/Video/FPS/Input;
-@onready var button_VSync := $Panel/Scroll/Margin/List/Video/VSync/Button;
+@onready var check_VSync := $Panel/Scroll/Margin/List/Video/VSync/CheckButton;
 @onready var label_Scale := $Panel/Scroll/Margin/List/Video/Scale/Label;
 @onready var slider_Scale := $Panel/Scroll/Margin/List/Video/Scale/HSlider;
 # Audio #
@@ -27,6 +27,8 @@ var audio_offset :int = 0;
 @onready var label_AudioOffset := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/LabelOffset;
 @onready var button_AudioOffsetAdd := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonAdd;
 @onready var button_AudioOffsetSub := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonSub;
+# Misc #
+@onready var check_DebugInfo := $Panel/Scroll/Margin/List/Misc/DebugInfo/CheckButton;
 
 var loading_data := true;
 
@@ -71,7 +73,7 @@ func bind_gui_action():
 				input_FPS.text = text;
 			save_data("FPS", text);
 	);
-	button_VSync.toggled.connect(func(pressed: bool):
+	check_VSync.toggled.connect(func(pressed: bool):
 		DisplayServer.window_set_vsync_mode(
 			DisplayServer.VSYNC_ENABLED
 			if pressed else
@@ -133,13 +135,17 @@ func bind_gui_action():
 		set_audio_offset(audio_offset - 1);
 		save_data("AudioOffset", audio_offset);
 	);
+	check_DebugInfo.toggled.connect(func(flag: bool):
+		Global.scene_DebugInfo.visible = flag;
+		save_data("DebugInfo", flag);
+	);
 
 func set_setting_from_data():
 	
 	option_FullScreenMode.selected = get_data("FullScreenMode", option_FullScreenMode.selected);
 	button_FullScreen.button_pressed = get_data("FullScreen", button_FullScreen.button_pressed);
 	input_FPS.text_submitted.emit(get_data("FPS", 60));
-	button_VSync.button_pressed = get_data("VSync", button_VSync.button_pressed);
+	check_VSync.button_pressed = get_data("VSync", check_VSync.button_pressed);
 	slider_Scale.value = get_data("Scale", slider_Scale.value);
 	
 	slider_volumeMaster.value = get_data("Volume.Master", slider_volumeMaster.value);
@@ -148,6 +154,8 @@ func set_setting_from_data():
 	slider_volumeVoice.value = get_data("Volume.Voice", slider_volumeVoice.value);
 	
 	set_audio_offset(get_data("AudioOffset", 0));
+	
+	check_DebugInfo.button_pressed = get_data("DebugInfo", check_DebugInfo.button_pressed);
 	
 	loading_data = false;
 	Global.data_loaded_setting.emit();

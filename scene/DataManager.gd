@@ -3,19 +3,19 @@ extends Node
 var data_path := "user://"
 
 enum DATA_TYPE {SETTING};
-const DATA_NAME := {
-	DATA_TYPE.SETTING: "data_setting"
+const DATA_INFO := {
+	DATA_TYPE.SETTING: ["data_setting", "setting.json"]
 }
 
 var data_setting := {};
-var data_setting_file := "setting.json";
 
 
 func save_data(data_type: DATA_TYPE):
 	
-	var var_name :String = DATA_NAME.get(data_type);
+	var info = DATA_INFO.get(data_type);
+	var var_name :String = info[0];
+	var data_file :String = info[1];
 	var data :Dictionary = get(var_name);
-	var data_file :String = get(var_name + "_file");
 	
 	var file := FileAccess.open(data_path + data_file, FileAccess.WRITE);
 	file.store_string(JSON.stringify(data, "\t"));
@@ -26,8 +26,9 @@ func save_data(data_type: DATA_TYPE):
 
 func load_data(data_type: DATA_TYPE):
 	
-	var var_name :String = DATA_NAME.get(data_type);
-	var data_file :String = get(var_name + "_file");
+	var info = DATA_INFO.get(data_type);
+	var var_name :String = info[0];
+	var data_file :String = info[1];
 	
 	var file := FileAccess.open(data_path + data_file, FileAccess.READ_WRITE);
 	var data_loaded = JSON.parse_string(file.get_as_text());

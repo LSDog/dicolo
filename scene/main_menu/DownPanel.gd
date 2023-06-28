@@ -17,16 +17,28 @@ func _enter_tree() -> void:
 
 func _ready_later():
 	var setting_init_x = Global.scene_Setting.position.x;
+	$VBox/ButtonSetting.mouse_entered.connect(play_hover_sound);
 	$VBox/ButtonSetting.pressed.connect(func():
+		play_click_sound();
 		var setting := Global.scene_Setting;
 		if !setting.visible:
 			setting.anim_show();
 		else:
 			setting.anim_hide();
 	);
+	$VBox/ButtonCloud.mouse_entered.connect(play_hover_sound);
+	$VBox/ButtonMod.mouse_entered.connect(play_hover_sound);
+	$VBox/ButtonRandom.mouse_entered.connect(play_hover_sound);
 	$VBox/ButtonRandom.pressed.connect(func():
+		play_click_sound();
 		main_menu.song_list.choose_song_random();
 	);
+
+func play_hover_sound():
+	Global.play_sound(preload("res://audio/ui/click_hat.wav"), -10, 1, "Effect");
+
+func play_click_sound():
+	Global.play_sound(preload("res://audio/ui/click_glass.wav"), -10, 1, "Effect");
 
 func _process(_delta: float):
 	var now = Global.now_time();
