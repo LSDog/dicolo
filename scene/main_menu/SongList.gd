@@ -201,7 +201,7 @@ func load_map_of_dir(dir: DirAccess):
 				maps[beatmap.mapname] = [beatmap.diff, beatmap.file_path];
 			else:
 				var map_values = find_map_value(need_keys, map_file);
-				var diff = need_keys[1];
+				var diff = map_values[1];
 				diff = -1.0 if !diff.is_valid_float() else diff.to_float();
 				maps[map_values[0]] = [diff, map_file.get_path()];
 		
