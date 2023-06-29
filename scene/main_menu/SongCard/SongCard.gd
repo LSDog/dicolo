@@ -28,10 +28,9 @@ var map_card_generated := false;
 
 ## 难度，结构为{ "The Normal": [4, "res://map/a_map_folder/map_normal.txt"] }
 var maps :Dictionary = {};
+var selected_mapCard :MapCard;
 
-
-var scene_MapCard :PackedScene = preload("res://scene/main_menu/MapCard.tscn");
-
+var scene_MapCard :PackedScene = preload("res://scene/main_menu/MapCard/MapCard.tscn");
 var mapCard_copy :MapCard = scene_MapCard.instantiate();
 
 ## 用来提供展示的beatmap对象, 并非实际用于游玩的铺面
@@ -136,6 +135,7 @@ func select():
 	#stylebox.shadow_color.a = 0;
 	
 	song_select.emit();
+	select_mapCard_random();
 
 func unselect():
 	modulate_v_target = modulate_v_origin;
@@ -150,10 +150,16 @@ func unselect():
 	
 	selected = false;
 
-func unselect_mapCards(new_selected_card: MapCard = null):
-	for node in map_box.get_children():
-		if node is MapCard && node.selected && node != new_selected_card:
-			node.unselect();
+func select_mapCard(index: int):
+	var map_card := map_box.get_child(index) as MapCard;
+	if map_card != null:
+		map_card.select();
+
+func select_mapCard_random():
+	var count := map_box.get_child_count();
+	if count > 0:
+		select_mapCard(randi_range(0, count-1));
+
 
 func generate_map_cards():
 	for node in map_box.get_children():
@@ -174,5 +180,11 @@ func add_mapCard(diff: float, info: String, rating: String, map_name: String, ma
 	map_card.map_name = map_name;
 	map_card.map_path = map_path;
 	map_card.map_play_request.connect(Global.scene_MainMenu.play_map);
-	map_card.map_select.connect(unselect_mapCards.bind(map_card));
+	map_card.map_select.connect(func():
+		if selected_mapCard != null && selected_mapCard != map_card:
+			selected_mapCard.unselect();
+		selected_mapCard = map_card;
+		Global.scene_MainMenu.left_panel.set_score(randi_range(500_0000, 1000_0000));
+		Global.scene_MainMenu.left_panel.set_count(randf_range(0.8, 1.0), randi_range(500, 1000));
+	);
 

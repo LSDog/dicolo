@@ -15,6 +15,7 @@ var touch_scroll_speed := 0.0; # 最后一次手拖动的速度
 @export var max_card_width := 420; # 歌曲卡片的最大宽度(用于突出选中者)
 @export var min_card_width := 400; # 歌曲卡片的最小宽度
 var selected_card :SongCard; # 选中的卡片
+var selected_index :int;
 
 var is_mouse_entered := false;
 var center_song_index :int = 0; # 当前在屏幕“中间”的歌曲位数
@@ -23,7 +24,7 @@ var dragging_index := [];
 
 var randomed_index_list := []; # 随机抽取到的歌曲index，防止重复
 
-var scene_SongCard :PackedScene= preload("res://scene/main_menu/SongCard.tscn");
+var scene_SongCard :PackedScene= preload("res://scene/main_menu/SongCard/SongCard.tscn");
 
 signal map_first_loaded;
 
@@ -47,7 +48,7 @@ func _ready_later():
 	map_first_loaded.emit();
 	
 	# 载完图后 开场动画结束会随机播放歌曲
-	#choose_song_random();
+	#select_song_random();
 
 ## 处理选中(点击)歌曲卡片
 func handle_song_select(song_card: SongCard):
@@ -58,6 +59,7 @@ func handle_song_select(song_card: SongCard):
 	# 让上一个被选中的songcard缩回去
 	if selected_card != null && selected_card != song_card: selected_card.unselect();
 	selected_card = song_card;
+	selected_index = song_card.get_index();
 	# 更改界面预览当前歌曲
 	var main_menu := get_parent() as MainMenu;
 	if song_card.example_beatmap.bg_image_path != "":
@@ -65,16 +67,14 @@ func handle_song_select(song_card: SongCard):
 	else:
 		# 没有bg的情况下加载这个
 		main_menu.background.texture = main_menu.default_backgrounds.pick_random();
-	main_menu.music_player.play_music(
+	main_menu.musicPlayer.play_music(
 		load(song_card.example_beatmap.audio_path),
 		song_card.example_beatmap.title+" - "+song_card.example_beatmap.singer,
 		song_card.example_beatmap.start_time,
 		song_card.example_beatmap.bpm
 	);
 	# 设置readme文本
-	main_menu.readme_label.text = song_card.readme;
-	main_menu.readme_label.scroll_to_line(0);
-	main_menu.readme_label.get_v_scroll_bar().value = 0.0;
+	main_menu.left_panel.set_readme(song_card.readme);
 	
 	# 设置背景里面啥用也没有的透明大字
 	main_menu.bg_label.text = song_card.example_beatmap.title;
@@ -260,11 +260,11 @@ func scroll_to(index: int):
 	).from_current().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUART);
 
 ## 选择某个曲子
-func choose_song(index: int):
+func select_song(index: int):
 	get_song(index).select();
 
 ## 随机选曲
-func choose_song_random():
+func select_song_random():
 	
 	# 没加载就等
 	if !map_loaded:
@@ -278,10 +278,10 @@ func choose_song_random():
 	);
 	var index = last_indexes.pick_random();
 	randomed_index_list.append(index);
-	choose_song(index);
+	select_song(index);
 	scroll_to(index);
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventKey:
 		if event.physical_keycode == KEY_R && event.pressed:
-			choose_song_random();
+			select_song_random();

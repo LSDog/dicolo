@@ -1,9 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://cdyhqt27mk6t3"]
+[gd_scene load_steps=9 format=3 uid="uid://cdyhqt27mk6t3"]
 
 [ext_resource type="Script" path="res://scene/setting/Setting.gd" id="1_lf8gb"]
-[ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="2_3c6gh"]
 [ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://visual/theme/default_theme.tres" id="3_wwley"]
 [ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="4_hbsjn"]
+
+[sub_resource type="Theme" id="Theme_1f2qo"]
+default_font_size = 28
 
 [sub_resource type="Animation" id="Animation_g3ys8"]
 resource_name = "show"
@@ -26,32 +28,18 @@ _data = {
 "show": SubResource("Animation_g3ys8")
 }
 
-[sub_resource type="Theme" id="Theme_xwlyw"]
-default_font = ExtResource("2_3c6gh")
-default_font_size = 23
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
 bg_color = Color(0, 0, 0, 0.901961)
-shadow_color = Color(0, 0, 0, 0.1)
+shadow_color = Color(0, 0, 0, 0.2)
 shadow_size = 60
 
 [sub_resource type="LabelSettings" id="LabelSettings_xlwvw"]
-line_spacing = 28.0
+line_spacing = 42.0
 font = ExtResource("4_hbsjn")
-font_size = 25
-
-[sub_resource type="LabelSettings" id="LabelSettings_dw6j7"]
-line_spacing = 28.0
-font = ExtResource("4_hbsjn")
-font_size = 25
-
-[sub_resource type="LabelSettings" id="LabelSettings_bxv0c"]
-line_spacing = 28.0
-font = ExtResource("4_hbsjn")
-font_size = 25
+font_size = 34
 
 [node name="Setting" type="Control"]
-custom_minimum_size = Vector2(450, 0)
+custom_minimum_size = Vector2(530, 0)
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -59,6 +47,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 2
+theme = SubResource("Theme_1f2qo")
 script = ExtResource("1_lf8gb")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -73,7 +62,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_xwlyw")
 theme_override_styles/panel = SubResource("StyleBoxFlat_t55bx")
 
 [node name="Scroll" type="ScrollContainer" parent="Panel"]
@@ -120,7 +108,7 @@ size_flags_vertical = 4
 [node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Video/FullScreen"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Full screen (F11)"
+text = "Full Screen"
 
 [node name="Button" type="CheckButton" parent="Panel/Scroll/Margin/List/Video/FullScreen"]
 layout_mode = 2
@@ -206,7 +194,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 text = "🎵 Audio"
-label_settings = SubResource("LabelSettings_dw6j7")
+label_settings = SubResource("LabelSettings_xlwvw")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -224,7 +212,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 size_flags_stretch_ratio = 2.0
 min_value = -50.0
-max_value = 1.0
+max_value = 0.0
 tick_count = 5
 ticks_on_borders = true
 
@@ -289,7 +277,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 text = "🎮 Device"
-label_settings = SubResource("LabelSettings_bxv0c")
+label_settings = SubResource("LabelSettings_xlwvw")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -298,11 +286,13 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Device/Gamepad"]
 layout_mode = 2
+size_flags_horizontal = 2
 text = "Gamepad (null)"
 
 [node name="Option" type="OptionButton" parent="Panel/Scroll/Margin/List/Device/Gamepad"]
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 10
 text_overrun_behavior = 3
 clip_text = true
 
@@ -313,7 +303,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 text = "🥁 GamePlay"
-label_settings = SubResource("LabelSettings_bxv0c")
+label_settings = SubResource("LabelSettings_xlwvw")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -351,7 +341,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 text = "💿 Misc"
-label_settings = SubResource("LabelSettings_bxv0c")
+label_settings = SubResource("LabelSettings_xlwvw")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -365,6 +355,7 @@ text = "DebugInfo"
 [node name="CheckButton" type="CheckButton" parent="Panel/Scroll/Margin/List/Misc/DebugInfo"]
 layout_mode = 2
 size_flags_horizontal = 10
+button_pressed = true
 
 [node name="__" type="Control" parent="Panel/Scroll/Margin/List"]
 custom_minimum_size = Vector2(0, 32)

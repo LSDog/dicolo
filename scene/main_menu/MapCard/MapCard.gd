@@ -16,7 +16,7 @@ var is_mouse_entered := false;
 var pressed_pos;
 var selected := false;
 
-signal map_select();
+signal map_select;
 signal map_play_request(map_path: String);
 
 
@@ -29,7 +29,6 @@ func _gui_input(event: InputEvent):
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if !event.pressed:
 				if !selected:
-					map_select.emit();
 					select();
 					Global.play_sound(preload("res://audio/ui/click_dthen.wav"), 0, 1, "Effect");
 				else:
@@ -37,6 +36,7 @@ func _gui_input(event: InputEvent):
 
 func select():
 	selected = true;
+	map_select.emit();
 	create_tween().tween_property(stylebox, "bg_color:a", 0.4, 0.2
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 

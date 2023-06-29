@@ -47,18 +47,19 @@ func _ready():
 	_ready_later.call_deferred();
 
 func _ready_later():
-	var packed_scene_Setting := preload("res://scene/setting/Setting.tscn") as PackedScene;
-	scene_Setting = packed_scene_Setting.instantiate();
-	scene_Setting.visible = false;
-	scene_Setting.z_index = 11;
-	get_tree().root.add_child(scene_Setting);
-	scene_Setting.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 	
 	var packed_scene_DebugInfo := preload("res://scene/test/DebugInfo.tscn") as PackedScene;
 	scene_DebugInfo = packed_scene_DebugInfo.instantiate();
 	scene_DebugInfo.z_index = 12;
 	get_tree().root.add_child(scene_DebugInfo);
 	scene_DebugInfo.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
+
+	var packed_scene_Setting := preload("res://scene/setting/Setting.tscn") as PackedScene;
+	scene_Setting = packed_scene_Setting.instantiate();
+	scene_Setting.visible = false;
+	scene_Setting.z_index = 11;
+	get_tree().root.add_child(scene_Setting);
+	scene_Setting.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 	
 	Notifier.container.z_index = 13;
 

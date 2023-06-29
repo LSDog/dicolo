@@ -6,6 +6,11 @@ var texture_pause := load("res://visual/ui_icon/pause-button.svg");
 
 @onready var audio_player :AudioStreamPlayer = $AudioPlayer;
 @onready var progress_bar :ProgressBar = $ProgressBar;
+@onready var button_Fav :TextureButton = $Buttons/Fav;
+@onready var button_Prev :TextureButton = $Buttons/Prev;
+@onready var button_Play :TextureButton = $Buttons/Play;
+@onready var button_Next :TextureButton = $Buttons/Next;
+@onready var button_Loop :TextureButton = $Buttons/Loop;
 
 # 让界面随着音乐律动起来！
 ## 音乐第一排的时间
@@ -27,13 +32,13 @@ signal audio_end();
 		play = value;
 		audio_player.stream_paused = !play;
 		if play && !audio_player.playing: audio_player.playing = true;
-		$Buttons/Play.texture_normal = texture_pause if play else texture_play;
+		button_Play.texture_normal = texture_pause if play else texture_play;
 		
 @export var loop := true:
 	set(value):
 		if loop == value: return;
 		loop = value;
-		$Buttons/Loop.modulate.a = 1.0 if loop else 0.5;
+		button_Loop.modulate.a = 1.0 if loop else 0.5;
 		if !data_loading:
 			DataManager.data_setting["MusicPlayer.Loop"] = value;
 			DataManager.save_data(DataManager.DATA_TYPE.SETTING);
@@ -42,15 +47,26 @@ var data_loading = true;
 
 func _ready():
 	
-	# 加载设置
-	loop = DataManager.data_setting.get("MusicPlayer.Loop", loop);
-	data_loading = false;
-	
 	# 绑按钮
-	loop = $Buttons/Loop.button_pressed;
-	$Buttons/Loop.toggled.connect(func(flag: bool): loop = flag);
-	play = $Buttons/Play.button_pressed;
-	$Buttons/Play.toggled.connect(func(flag: bool): play = flag);
+	loop = button_Loop.button_pressed;
+	button_Loop.toggled.connect(func(flag: bool): loop = flag);
+	play = button_Play.button_pressed;
+	button_Play.toggled.connect(func(flag: bool): play = flag);
+	
+	button_Prev.pressed.connect(func():
+		var song_count = Global.scene_MainMenu.songList.get_song_count();
+		var index = Global.scene_MainMenu.songList.selected_index;
+		index = song_count-1 if (index == 0) else index - 1;
+		Global.scene_MainMenu.songList.select_song(index);
+		Global.scene_MainMenu.songList.scroll_to(index);
+	);
+	button_Next.pressed.connect(func():
+		var song_count = Global.scene_MainMenu.songList.get_song_count();
+		var index = Global.scene_MainMenu.songList.selected_index;
+		index = 0 if (index == song_count-1) else index + 1
+		Global.scene_MainMenu.songList.select_song(index);
+		Global.scene_MainMenu.songList.scroll_to(index);
+	);
 	
 	# 音频
 	audio_player.finished.connect(func():
@@ -60,7 +76,11 @@ func _ready():
 			audio_end.emit();
 	);
 	
+	_ready_later.call_deferred();
 
+func _ready_later():
+	button_Loop.button_pressed = DataManager.data_setting.get("MusicPlayer.Loop", loop);
+	data_loading = false;
 
 func _process(_delta: float):
 	if audio_player.playing:

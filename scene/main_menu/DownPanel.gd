@@ -31,7 +31,7 @@ func _ready_later():
 	$VBox/ButtonRandom.mouse_entered.connect(play_hover_sound);
 	$VBox/ButtonRandom.pressed.connect(func():
 		play_click_sound();
-		main_menu.song_list.choose_song_random();
+		main_menu.songList.select_song_random();
 	);
 
 func play_hover_sound():

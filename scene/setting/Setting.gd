@@ -46,7 +46,6 @@ func bind_gui_action():
 	
 	button_FullScreen.toggled.connect(func(pressed):
 		var id = option_FullScreenMode.get_selected_id();
-		print("FullScreen -> ", option_FullScreenMode.get_item_text(id), ": ", pressed);
 		DisplayServer.window_set_mode(
 			DisplayServer.WINDOW_MODE_WINDOWED
 			if !pressed else
@@ -56,8 +55,7 @@ func bind_gui_action():
 	);
 	option_FullScreenMode.item_selected.connect(func(index: int):
 		if button_FullScreen.button_pressed:
-			print("FullScreen -> ", option_FullScreenMode.get_item_text(index), ": ", button_FullScreen.button_pressed);
-			DisplayServer.window_set_mode(option_FullScreenMode_items[index]);	
+			DisplayServer.window_set_mode(option_FullScreenMode_items[index]);
 		save_data("FullScreenMode", index);
 	);
 	input_FPS.text_changed.connect(func(_text: String):
@@ -110,7 +108,7 @@ func bind_gui_action():
 	Input.joy_connection_changed.connect(func(device: int, connected: bool):
 		print("[Setting] gamepad changed: ",device,"\tconnected: ",connected);
 		Notifier.notif_popup(
-			"A gamepad was [b]" + ("inserted" if connected else "pulled out") + "[/b].",
+			"A gamepad [b]" + ("connected" if connected else "disconnected") + "[/b].",
 			Notifier.COLOR_OK if connected else Notifier.COLOR_BAD,
 			preload("res://visual/ui_icon/gamepad.svg")
 		);
@@ -121,10 +119,10 @@ func bind_gui_action():
 		Global.gamepad_id = id;
 		update_label_Gamepad();
 	);
-	var music_player = Global.scene_MainMenu.music_player;
-	music_player.beat.connect(func():
+	var musicPlayer = Global.scene_MainMenu.musicPlayer;
+	musicPlayer.beat.connect(func():
 		label_AudioOffset.create_tween().tween_property(
-			label_AudioOffset, "modulate:a", 1.0, 60.0/music_player.bpm
+			label_AudioOffset, "modulate:a", 1.0, 60.0/musicPlayer.bpm
 		).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
 	);
 	button_AudioOffsetAdd.pressed.connect(func():
@@ -198,6 +196,10 @@ func _input(event: InputEvent):
 				anim_hide();
 	elif event.is_action_pressed("full_screen"):
 		button_FullScreen.button_pressed = !button_FullScreen.button_pressed;
+
+func _gui_input(event: InputEvent):
+	if event.is_action_pressed("esc"):
+		anim_hide();
 
 func anim_show():
 	visible = true;

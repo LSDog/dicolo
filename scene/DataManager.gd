@@ -9,6 +9,7 @@ const DATA_INFO := {
 
 var data_setting := {};
 
+signal data_loaded(data_type);
 
 func save_data(data_type: DATA_TYPE):
 	
@@ -31,9 +32,10 @@ func load_data(data_type: DATA_TYPE):
 	var data_file :String = info[1];
 	
 	var file := FileAccess.open(data_path + data_file, FileAccess.READ_WRITE);
-	var data_loaded = JSON.parse_string(file.get_as_text());
-	if data_loaded != null: set(var_name, data_loaded);
+	var data = JSON.parse_string(file.get_as_text());
+	if data != null: set(var_name, data);
 	file.flush();
 	file.close();
 	
+	data_loaded.emit(data_type);
 	print("[DataManager] loaded ", data_file);

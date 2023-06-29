@@ -2,11 +2,9 @@ class_name MainMenu
 extends Control
 
 @onready var background :TextureRect = $Background;
-@onready var song_list :SongList = $SongList as SongList;
-@onready var music_player :MusicPlayer = $LeftPanel/MusicPlayer as MusicPlayer;
-@onready var readme_label :RichTextLabel = $LeftPanel/Readme/Label;
-#@onready var levels_bar :Control = $LeftPanel/LevelsBar;
-#(此方案弃用)
+@onready var songList :SongList = $SongList as SongList;
+@onready var musicPlayer :MusicPlayer = $LeftPanel/MusicPlayer;
+@onready var left_panel :Control = $LeftPanel;
 @onready var bg_label :Label = $Bg_Label;
 @onready var bg_panel :Panel = $Bg_Panel;
 @onready var animation_control :Control = $Animations;
@@ -35,17 +33,17 @@ func _ready():
 	);
 	
 	# 跟音乐动
-	music_player.beat.connect(func():
+	musicPlayer.beat.connect(func():
 		var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
 		tween.set_parallel(true);
-		tween.tween_property(bg_panel_stylebox, "border_width_left", 0.0, 60/music_player.bpm).from(250.0);
-		tween.tween_property(bg_panel_stylebox, "border_width_right", 0.0, 60/music_player.bpm).from(250.0);
+		tween.tween_property(bg_panel_stylebox, "border_width_left", 0.0, 60/musicPlayer.bpm).from(250.0);
+		tween.tween_property(bg_panel_stylebox, "border_width_right", 0.0, 60/musicPlayer.bpm).from(250.0);
 	);
 	
-	music_player.audio_end.connect(func():
+	musicPlayer.audio_end.connect(func():
 		await get_tree().create_timer(1.0).timeout;
-		if !music_player.play:
-			song_list.choose_song_random();
+		if !musicPlayer.play:
+			songList.select_song_random();
 	);
 
 func select_map(song_name: String, map_name: String):
