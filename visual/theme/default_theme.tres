@@ -1,4 +1,13 @@
-[gd_resource type="Theme" load_steps=20 format=3 uid="uid://d3m8pmhle7d8r"]
+[gd_resource type="Theme" load_steps=28 format=3 uid="uid://d3m8pmhle7d8r"]
+
+[ext_resource type="Texture2D" uid="uid://ci48cp74ulu0l" path="res://visual/theme/default_theme_icon/CheckButton_checked.png" id="1_4qade"]
+[ext_resource type="Texture2D" uid="uid://2tf6gf1wsecb" path="res://visual/theme/default_theme_icon/CheckButton_checked_disabled.png" id="2_7rxdr"]
+[ext_resource type="Texture2D" uid="uid://dk8yy3cgk1n77" path="res://visual/theme/default_theme_icon/CheckButton_checked_disabled_mirrored.png" id="3_mryc5"]
+[ext_resource type="Texture2D" uid="uid://ba1nr7s1snh1x" path="res://visual/theme/default_theme_icon/CheckButton_checked_mirrored.png" id="4_1ik6i"]
+[ext_resource type="Texture2D" uid="uid://c0whnd2lj0bhq" path="res://visual/theme/default_theme_icon/CheckButton_unchecked.png" id="5_rfs0n"]
+[ext_resource type="Texture2D" uid="uid://c4uebd6w8qiyf" path="res://visual/theme/default_theme_icon/CheckButton_unchecked_disabled.png" id="6_qw50i"]
+[ext_resource type="Texture2D" uid="uid://buv6rpsdwjfpk" path="res://visual/theme/default_theme_icon/CheckButton_unchecked_disabled_mirrored.png" id="7_2xfx7"]
+[ext_resource type="Texture2D" uid="uid://bv3ep6ot1mpsb" path="res://visual/theme/default_theme_icon/CheckButton_unchecked_mirrored.png" id="8_pjwdp"]
 
 [sub_resource type="FontVariation" id="FontVariation_qg2ew"]
 
@@ -36,15 +45,15 @@ thickness = 10
 size = Vector2(0, 0)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_okgsi"]
-color = Color(1, 1, 1, 0.75)
-thickness = 16
+color = Color(1, 1, 1, 1)
+thickness = 26
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_3kta4"]
-color = Color(1, 1, 1, 1)
-thickness = 16
+color = Color(0.9, 0.9, 0.9, 1)
+thickness = 26
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_gogtd"]
-thickness = 20
+thickness = 26
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_opqm8"]
 color = Color(1, 1, 1, 1)
@@ -86,19 +95,27 @@ size = Vector2(0, 0)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_fctui"]
 color = Color(1, 1, 1, 0.75)
-thickness = 16
+thickness = 26
 vertical = true
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_4uman"]
 color = Color(1, 1, 1, 1)
-thickness = 16
+thickness = 26
 vertical = true
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_3ta10"]
-thickness = 16
+thickness = 26
 vertical = true
 
 [resource]
+CheckButton/icons/checked = ExtResource("1_4qade")
+CheckButton/icons/checked_disabled = ExtResource("2_7rxdr")
+CheckButton/icons/checked_disabled_mirrored = ExtResource("3_mryc5")
+CheckButton/icons/checked_mirrored = ExtResource("4_1ik6i")
+CheckButton/icons/unchecked = ExtResource("5_rfs0n")
+CheckButton/icons/unchecked_disabled = ExtResource("6_qw50i")
+CheckButton/icons/unchecked_disabled_mirrored = ExtResource("7_2xfx7")
+CheckButton/icons/unchecked_mirrored = ExtResource("8_pjwdp")
 Fonts/fonts/large = SubResource("FontVariation_qg2ew")
 HScrollBar/styles/grabber = SubResource("StyleBoxLine_71cnt")
 HScrollBar/styles/grabber_highlight = SubResource("StyleBoxLine_iajem")
