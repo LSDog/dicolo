@@ -46,7 +46,7 @@ var example_beatmap :BeatMap = null:
 var readme :String;
 
 signal song_select;
-signal song_play_request;
+signal song_menu_request;
 
 func _ready():
 	
@@ -104,7 +104,7 @@ func _gui_input(event):
 				else:
 					unhover();
 			else:
-				song_play_request.emit();
+				song_menu_request.emit();
 
 func unhover():
 	if !selected: modulate_v_target = modulate_v_origin;
@@ -184,7 +184,7 @@ func add_mapCard(diff: float, info: String, rating: String, map_name: String, ma
 		if selected_mapCard != null && selected_mapCard != map_card:
 			selected_mapCard.unselect();
 		selected_mapCard = map_card;
-		Global.scene_MainMenu.left_panel.set_score(randi_range(500_0000, 1000_0000));
-		Global.scene_MainMenu.left_panel.set_count(randf_range(0.8, 1.0), randi_range(500, 1000));
+		Global.scene_MainMenu.leftPanel.set_score(randi_range(500_0000, 1000_0000));
+		Global.scene_MainMenu.leftPanel.set_count(randf_range(0.8, 1.0), randi_range(500, 1000));
 	);
 

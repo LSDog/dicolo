@@ -42,7 +42,7 @@ func _ready_later():
 	Debugger.count_time("Map Load");
 	for node in container.get_children():
 		node.song_select.connect(handle_song_select.bind(node));
-		node.song_play_request.connect(handle_song_play_request.bind(node));
+		node.song_menu_request.connect(func(): get_parent().songMenu.switch_show_hide());
 	
 	map_loaded = true;
 	map_first_loaded.emit();
@@ -74,15 +74,10 @@ func handle_song_select(song_card: SongCard):
 		song_card.example_beatmap.bpm
 	);
 	# 设置readme文本
-	main_menu.left_panel.set_readme(song_card.readme);
+	main_menu.leftPanel.set_readme(song_card.readme);
 	
 	# 设置背景里面啥用也没有的透明大字
-	main_menu.bg_label.text = song_card.example_beatmap.title;
-
-## 【TODO: 改成再次点击出现菜单】处理请求游玩歌曲
-func handle_song_play_request(song_card: SongCard):
-	return; 
-	
+	main_menu.bgLbael.text = song_card.example_beatmap.title;
 
 func _process(delta):
 	

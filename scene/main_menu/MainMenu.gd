@@ -4,15 +4,16 @@ extends Control
 @onready var background :TextureRect = $Background;
 @onready var songList :SongList = $SongList as SongList;
 @onready var musicPlayer :MusicPlayer = $LeftPanel/MusicPlayer;
-@onready var left_panel :Control = $LeftPanel;
-@onready var bg_label :Label = $Bg_Label;
-@onready var bg_panel :Panel = $Bg_Panel;
+@onready var leftPanel :Control = $LeftPanel;
+@onready var bgLbael :Label = $BgPanel/Label;
+@onready var bgPanel :Panel = $BgPanel;
+@onready var songMenu :Control = $SongMenu;
 @onready var animation_control :Control = $Animations;
 @onready var animation_player :AnimationPlayer = $Animations/AnimationPlayer;
 
 var debug_label_last_report = 0;
 
-@onready var bg_panel_stylebox := bg_panel.get_theme_stylebox("panel") as StyleBoxFlat;
+@onready var bgPanel_stylebox := bgPanel.get_theme_stylebox("panel") as StyleBoxFlat;
 
 @onready var default_backgrounds :Array[Texture2D] = [
 	preload("res://visual/background/dicolo_icon_light_bubbles.png"),
@@ -36,8 +37,8 @@ func _ready():
 	musicPlayer.beat.connect(func():
 		var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
 		tween.set_parallel(true);
-		tween.tween_property(bg_panel_stylebox, "border_width_left", 0.0, 60/musicPlayer.bpm).from(250.0);
-		tween.tween_property(bg_panel_stylebox, "border_width_right", 0.0, 60/musicPlayer.bpm).from(250.0);
+		tween.tween_property(bgPanel_stylebox, "border_width_left", 0.0, 60/musicPlayer.bpm).from(250.0);
+		tween.tween_property(bgPanel_stylebox, "border_width_right", 0.0, 60/musicPlayer.bpm).from(250.0);
 	);
 	
 	musicPlayer.audio_end.connect(func():
