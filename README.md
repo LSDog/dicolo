@@ -1,8 +1,9 @@
 # *dicolo! ~轱辘轱辘转动的节奏游戏\~*
+(dicolo! ~A rhythm game of rolling joysticks\~)
 
 ---
 <div align=center>
-<img src="https://user-images.githubusercontent.com/61925478/227782244-970bf3f5-82a5-4712-97d9-ea143d6a5b5c.png" width="256px" alt="icon!"/>
+<img src="https://github.com/LSDogX/dicolo/assets/61925478/aa267b2c-0288-4b3e-9fdb-43ce55df233a" width="128px" alt="aho!"/><img src="visual/icon/icon.svg" width="256px" alt="icon!"/>
 
   `🎉 dicolo! （＾∀＾●）ﾉｼ`
 </div>
@@ -12,34 +13,41 @@
 #### 📣正在开荒中~ 欢迎 **画师** / **曲师** / **铺师** / **臭写代码的** 伙伴一起来合作！
 
 
-# 🎮 简介
+# 🎮 简介 | Introduction
 
 ### 这是 LSDog 用 [Godot](http://github.com/godotengine/godot) 开发的有趣音游！  
 
 > ### ***dicolo!*** 在我们的世界里是 ***你好!*** 的意思！  它读作 **`/dɪˈkolo/`**，或者近似 "**蒂可萝**" 的感觉。  
 
+<br/>
 
-# ✔ 进度
-- [x] 啊啊啊我好累怎么明天又要上学呃啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-- [ ] **故事** —— 这辈子不可能有的东西！
+# 📷 预览截图 | Preview Screenshot
+> 在图片上**悬浮**鼠标来看解释 | **Hover** on images to see explanation
+
+<img src="https://github.com/LSDogX/dicolo/assets/61925478/1cb79355-7cb5-44c6-8158-d08ed67f7a5e" width="384px" title="主菜单 | MainMenu"/> <img src="https://github.com/LSDogX/dicolo/assets/61925478/0302d6ce-3e87-481c-8702-46992d26007e" width="384px" title="设置 | Setting"/> <img src="https://github.com/LSDogX/dicolo/assets/61925478/927d8d4c-2349-4765-90b9-3c9627dbf535" width="384px" title="游戏中 | Playing &#10; 没有铺面，注意下方支持.lrc歌词 | No beatmap, but notice below that we support .lrc lyric file"/>
+
+<br/>
+
+# ✔ 进度 | Progress
 - [ ] **界面** —— 这辈子画不好的东西！
-  - [x] 启动动画 100%
-  - [ ] 主菜单 75% 
-  - [ ] 游戏界面 50%
-  - [ ] 设置 50%
-  - [ ] 铺面商店 0%  
+  - [x] ![](https://progress-bar.dev/100/) 启动动画
+  - [ ] ![](https://progress-bar.dev/75/) 主菜单 
+  - [ ] ![](https://progress-bar.dev/50/) 游戏界面
+  - [ ] ![](https://progress-bar.dev/70/) 设置
+  - [ ] ![](https://progress-bar.dev/0/) 铺面商店
 - [ ] **逻辑** —— 代码去死吧！！
-  - [ ] 载入铺面 75%
-  - [ ] 游玩 85%
-	- [ ] 音符动画 80%
-	- [ ] 判定 90%
-  - [ ] 编辑铺面 15%
-  - [ ] 用户数据存读 25%
-  - [ ] 下载/上传铺面 0%
+  - [ ] ![](https://progress-bar.dev/90/) 载入铺面
+  - [ ] ![](https://progress-bar.dev/85/) 游玩
+	- [ ] 90% 音符动画
+	- [ ] 85% 判定
+  - [ ] ![](https://progress-bar.dev/20/) 编辑铺面
+  - [ ] ![](https://progress-bar.dev/50/) 用户数据存读
+  - [ ] ![](https://progress-bar.dev/0/) 下载/上传铺面
 - [ ] **曲谱** —— 没有曲子，更不会写铺子！
-  - [ ] 10首左右内置曲 25%
+  - [ ] ![](https://progress-bar.dev/100/) 10首左右内置曲
+  - [ ] ![](https://progress-bar.dev/0/) ↑它们的谱子
 - [ ] **插图** —— 啊？
-  - [ ] 10首左右内置曲的曲绘，直接用ai生成罢。。
+  - [ ] ![](https://progress-bar.dev/50/) 内置曲的曲绘 (目前是AI生成)
 - [ ] **宣发** —— 已经过气了！！！
   - [ ] 网站 http://dicolo.LSDog.fun
   - [ ] B站
