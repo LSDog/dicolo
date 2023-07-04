@@ -119,12 +119,13 @@ func bind_gui_action():
 		Global.gamepad_id = id;
 		update_label_Gamepad();
 	);
-	var musicPlayer = Global.scene_MainMenu.musicPlayer;
-	musicPlayer.beat.connect(func():
-		label_AudioOffset.create_tween().tween_property(
-			label_AudioOffset, "modulate:a", 1.0, 60.0/musicPlayer.bpm
-		).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
-	);
+	if Global.scene_MainMenu != null:
+		var musicPlayer = Global.scene_MainMenu.musicPlayer;
+		musicPlayer.beat.connect(func():
+			label_AudioOffset.create_tween().tween_property(
+				label_AudioOffset, "modulate:a", 1.0, 60.0/musicPlayer.bpm
+			).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
+		);
 	button_AudioOffsetAdd.pressed.connect(func():
 		set_audio_offset(audio_offset + 1);
 		save_data("AudioOffset", audio_offset);

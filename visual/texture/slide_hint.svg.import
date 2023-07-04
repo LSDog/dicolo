@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cgkdpt6pais2r"
-path="res://.godot/imported/crash_line.svg-befcb9f9e10caa2c027df3f7be40cb09.ctex"
+uid="uid://dgh845076m2k3"
+path="res://.godot/imported/slide_hint.svg-ab5b78f181da82adcb22f30455e20522.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://visual/texture/crash_line.svg"
-dest_files=["res://.godot/imported/crash_line.svg-befcb9f9e10caa2c027df3f7be40cb09.ctex"]
+source_file="res://visual/texture/slide_hint.svg"
+dest_files=["res://.godot/imported/slide_hint.svg-ab5b78f181da82adcb22f30455e20522.ctex"]
 
 [params]
 

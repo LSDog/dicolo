@@ -1,0 +1,272 @@
+[gd_scene load_steps=23 format=3 uid="uid://dcb7d1ukovwdc"]
+
+[ext_resource type="Script" path="res://scene/play_ground/editor/Editor.gd" id="1_er5p2"]
+[ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://visual/theme/default_theme.tres" id="2_arhua"]
+[ext_resource type="Script" path="res://scene/play_ground/editor/Flow.gd" id="3_1cqtv"]
+[ext_resource type="ButtonGroup" uid="uid://cg56w8paqidtx" path="res://scene/play_ground/editor/button_group_note_choose.tres" id="4_1qgpk"]
+[ext_resource type="Texture2D" uid="uid://b4gdb06jpschw" path="res://visual/ui_icon/pause-button.svg" id="4_225mb"]
+[ext_resource type="PackedScene" uid="uid://ogha2bnilh12" path="res://scene/play_ground/Playground.tscn" id="5_pmqul"]
+[ext_resource type="Texture2D" uid="uid://bxj25va3uy13p" path="res://visual/ui_icon/play-button.svg" id="5_wg7ul"]
+[ext_resource type="Texture2D" uid="uid://wg0701ac8o4g" path="res://visual/ui_icon/hamburger-menu.svg" id="6_ow8f4"]
+[ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="8_8bpox"]
+[ext_resource type="Texture2D" uid="uid://t0wun6q7c52f" path="res://visual/texture/ring.svg" id="10_8f2vj"]
+[ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://visual/texture/slide.svg" id="11_qbg2w"]
+[ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://visual/texture/bounce.svg" id="12_uxpjq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yiivw"]
+bg_color = Color(0.12549, 0.12549, 0.12549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dxybm"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tvr2v"]
+bg_color = Color(0, 0, 0, 1)
+border_width_top = 64
+border_color = Color(0, 0.647059, 0.647059, 1)
+
+[sub_resource type="InputEventKey" id="InputEventKey_fvht2"]
+device = -1
+physical_keycode = 49
+unicode = 49
+
+[sub_resource type="Shortcut" id="Shortcut_wnkq3"]
+events = [SubResource("InputEventKey_fvht2")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_hu3lb"]
+device = -1
+physical_keycode = 50
+unicode = 50
+
+[sub_resource type="Shortcut" id="Shortcut_4o111"]
+events = [SubResource("InputEventKey_hu3lb")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_75ixi"]
+device = -1
+physical_keycode = 51
+unicode = 51
+
+[sub_resource type="Shortcut" id="Shortcut_unanl"]
+events = [SubResource("InputEventKey_75ixi")]
+
+[sub_resource type="LabelSettings" id="LabelSettings_w6vl8"]
+line_spacing = 0.0
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Editor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_er5p2")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yiivw")
+
+[node name="PlaygroundControl" parent="." instance=ExtResource("5_pmqul")]
+custom_minimum_size = Vector2(1152, 648)
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(0.7, 0.7)
+size_flags_horizontal = 4
+
+[node name="FlowBox" type="Control" parent="."]
+layout_mode = 1
+anchor_top = 1.0
+anchor_right = 0.699653
+anchor_bottom = 1.0
+offset_top = -194.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="FlowPanel" type="Panel" parent="FlowBox"]
+layout_mode = 1
+offset_top = 10.0
+offset_right = 806.0
+offset_bottom = 194.0
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_dxybm")
+script = ExtResource("3_1cqtv")
+
+[node name="Scroll" type="HScrollBar" parent="FlowBox"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 10.0
+grow_horizontal = 2
+theme = ExtResource("2_arhua")
+
+[node name="Edit" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_tvr2v")
+metadata/_edit_use_anchors_ = true
+
+[node name="VBox" type="VBoxContainer" parent="Edit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="HBoxPlayback" type="HBoxContainer" parent="Edit/VBox"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ButtonPlay" type="TextureButton" parent="Edit/VBox/HBoxPlayback"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+texture_normal = ExtResource("5_wg7ul")
+texture_pressed = ExtResource("4_225mb")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ButtonMenu" type="Button" parent="Edit/VBox/HBoxPlayback"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+icon = ExtResource("6_ow8f4")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="NoteChoose" type="HFlowContainer" parent="Edit/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="Hit" type="Button" parent="Edit/VBox/NoteChoose"]
+custom_minimum_size = Vector2(106, 106)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 0.501961, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8_8bpox")
+theme_override_font_sizes/font_size = 28
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("4_1qgpk")
+shortcut = SubResource("Shortcut_wnkq3")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "Hit"
+icon = ExtResource("10_8f2vj")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Slide" type="Button" parent="Edit/VBox/NoteChoose"]
+custom_minimum_size = Vector2(106, 106)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0.74902, 0.72549, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8_8bpox")
+theme_override_font_sizes/font_size = 28
+toggle_mode = true
+button_group = ExtResource("4_1qgpk")
+shortcut = SubResource("Shortcut_4o111")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "Slide"
+icon = ExtResource("11_qbg2w")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Bounce" type="Button" parent="Edit/VBox/NoteChoose"]
+custom_minimum_size = Vector2(106, 106)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.968627, 0.823529, 0.0196078, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("8_8bpox")
+theme_override_font_sizes/font_size = 28
+toggle_mode = true
+button_group = ExtResource("4_1qgpk")
+shortcut = SubResource("Shortcut_unanl")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "Bouns"
+icon = ExtResource("12_uxpjq")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ScrollProperty" type="ScrollContainer" parent="Edit/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Edit/VBox/ScrollProperty"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxTime" type="HBoxContainer" parent="Edit/VBox/ScrollProperty/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Edit/VBox/ScrollProperty/VBox/HBoxTime"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Time"
+horizontal_alignment = 1
+
+[node name="LineEditTime" type="LineEdit" parent="Edit/VBox/ScrollProperty/VBox/HBoxTime"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MenuButton" type="MenuButton" parent="Edit/VBox/ScrollProperty/VBox"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Event Type"
+flat = false
+icon_alignment = 1
+expand_icon = true
+item_count = 1
+popup/item_0/text = "Hit"
+popup/item_0/icon = ExtResource("10_8f2vj")
+popup/item_0/id = 0
+
+[node name="DebugLabel2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -46.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "※ 视频进度更改在编辑器中不受支持！
+（如需预览请拖动进度到第0秒再播放）"
+label_settings = SubResource("LabelSettings_w6vl8")
+horizontal_alignment = 2

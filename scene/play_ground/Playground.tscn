@@ -1,8 +1,8 @@
 [gd_scene load_steps=32 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlaygroundControl.gd" id="1_gad4f"]
+[ext_resource type="Shader" path="res://visual/shader/whirl_texture.gdshader" id="2_ht504"]
 [ext_resource type="Script" path="res://scene/play_ground/Spectrum.gd" id="3_pdtlx"]
-[ext_resource type="Shader" path="res://shader/whirl_texture.gdshader" id="3_qnmao"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="4_luceo"]
 [ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://visual/texture/bounce.svg" id="5_86bpa"]
 [ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://visual/texture/slide.svg" id="6_lae8m"]
@@ -22,7 +22,7 @@
 draw_center = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8lu0f"]
-shader = ExtResource("3_qnmao")
+shader = ExtResource("2_ht504")
 shader_parameter/rotation = 0.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_w6vl8"]

@@ -1,10 +1,14 @@
-#@tool
 class_name EditorFlow
 extends Panel
 
-@onready var editor :Editor = get_parent() as Editor;
+## 制谱器的时间轴
+
+@onready var editor :Editor = get_parent().get_parent() as Editor;
+@onready var box :Control = get_parent() as Control;
+@onready var scroll :HScrollBar = $"../Scroll" as HScrollBar;
 @onready var note_hit_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_hit.stylebox");
 @onready var note_slide_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_slide.stylebox");
+@onready var note_bounce_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_bounce.stylebox");
 
 @export var outline_color := Color.LIGHT_YELLOW;
 @export var barline_color := Color.LIGHT_BLUE;
@@ -16,15 +20,17 @@ var start_offset :float = 0.0;
 signal flow_changed;
 
 ## 两小节线间距离
-@export var bar_space := 120.0:
+@export_range(10,300) var bar_space :float = DEFAULT_BAR_SPACE:
 	set(value):
 		bar_space = value;
 		flow_changed.emit();
+const DEFAULT_BAR_SPACE := 120.0;
 ## 一小节有几拍
-@export_range(1,8) var beat_count :int = 4:
+@export_range(1,32) var beat_count :int = DEFAULT_BEAT_COUNT:
 	set(value):
 		beat_count = value;
 		flow_changed.emit();
+const DEFAULT_BEAT_COUNT := 4;
 ## 每拍间距离
 var beat_space :float = bar_space/beat_count;
 ## 偏移值(播放进度)
@@ -32,6 +38,7 @@ var offset := 0.0:
 	set(value):
 		offset = value;
 		position.x = -offset;
+		flow_changed.emit();
 
 ## 鼠标拖动偏移值
 var mouse_offset := 0.0;
@@ -43,8 +50,7 @@ var holding_note_type :BeatMap.EVENT_TYPE = BeatMap.EVENT_TYPE.None;
 var note_map :Dictionary = {};
 
 func _ready():
-	print("Flow: editor ", editor)
-	print("Flow: editor.playground ", editor.playground);
+	
 	flow_changed.connect(func():
 		beat_space = bar_space/beat_count;
 		queue_redraw();
@@ -53,15 +59,16 @@ func _ready():
 ## 画节拍线，老方法是只画可见部分的节拍线，改为一次全画
 func _draw():
 	
-	start_offset = editor.get_length_in_flow(editor.playground.beatmap.start_time);
+	if !editor.has_loaded: return;
 	
 	#var scroll_page := editor.playground.get_rect().size.x;
-	var rect := get_global_rect();
+	var rect := get_rect();
+	draw_rect(Rect2(Vector2.ZERO, rect.size), outline_color, false);
+	draw_line(Vector2(0,rect.size.y/2.0), Vector2(size.x,rect.size.y/2.0), outline_color);
 	
-	# 绘制节拍线
-	var h := rect.size.y;
-	var x := start_offset;
-	print("beat map start time -> x = ", x);
+	# 节拍线
+	var h := size.y;
+	var x := get_length_in_flow(editor.playground.beatmap.start_time);
 	while x > 0: x -= bar_space
 	while x <= size.x:
 		# 小节线
@@ -133,6 +140,12 @@ func _gui_input(event):
 					if !note_overlapped(holding_note, note_pos):
 						move_note(holding_note, note_pos);
 
+func get_length_in_flow(time :float) -> float:
+	return time * editor.playground.bpm / 60.0 * beat_space;
+
+func get_time_by_length(length :float) -> float:
+	return length / beat_space / editor.playground.bpm * 60.0;
+
 func get_note_pos_y(side :BeatMap.Event.SIDE) -> float:
 	match side:
 		BeatMap.Event.SIDE.LEFT:
@@ -172,6 +185,8 @@ func add_note(
 			note.add_theme_stylebox_override("panel", note_hit_stylebox);
 		BeatMap.EVENT_TYPE.Slide:
 			note.add_theme_stylebox_override("panel", note_slide_stylebox);
+		BeatMap.EVENT_TYPE.Bounce:
+			note.add_theme_stylebox_override("panel", note_bounce_stylebox);
 		_:
 			print("not support note type in edtor: ", note_type);
 			return;

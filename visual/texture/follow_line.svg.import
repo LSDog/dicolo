@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://io3fw6wy4all"
-path="res://.godot/imported/round_slim_rect.svg-6fcf8bde04e88bda6a467dd8ad7de2a4.ctex"
+uid="uid://ckb41mx4mpjuw"
+path="res://.godot/imported/follow_line.svg-356309965ca226e26de20663cd5f3f23.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://visual/texture/round_slim_rect.svg"
-dest_files=["res://.godot/imported/round_slim_rect.svg-6fcf8bde04e88bda6a467dd8ad7de2a4.ctex"]
+source_file="res://visual/texture/follow_line.svg"
+dest_files=["res://.godot/imported/follow_line.svg-356309965ca226e26de20663cd5f3f23.ctex"]
 
 [params]
 

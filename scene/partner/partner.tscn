@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dog2ujsoveet6"]
 
 [ext_resource type="Script" path="res://scene/partner/partner.gd" id="1_kyea8"]
-[ext_resource type="Shader" path="res://shader/acrylic_plate.gdshader" id="1_mdplh"]
+[ext_resource type="Shader" path="res://visual/shader/acrylic_plate.gdshader" id="1_mdplh"]
 [ext_resource type="Texture2D" uid="uid://c04oxkkh6fnky" path="res://visual/partner/杏由里.png" id="1_pkh46"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l5mhg"]

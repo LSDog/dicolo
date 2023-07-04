@@ -1,13 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://d3uwa2so8ndgb"]
+[gd_scene load_steps=10 format=3 uid="uid://d3uwa2so8ndgb"]
 
 [ext_resource type="Script" path="res://scene/virtual_joystick/VirtualJoystick.gd" id="1_ef85n"]
+[ext_resource type="Shader" path="res://visual/shader/clip.gdshader" id="2_43tlo"]
 [ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://visual/texture/circle_512.svg" id="2_bmrb0"]
 [ext_resource type="Texture2D" uid="uid://crwko0stxpjul" path="res://visual/texture/slash_round.svg" id="4_pf83e"]
 [ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://visual/texture/track.svg" id="4_vaqr8"]
-[ext_resource type="Shader" path="res://shader/clip.gdshader" id="5_pin1r"]
+[ext_resource type="Texture2D" uid="uid://damv5afuiv3rs" path="res://visual/texture/v_joy.svg" id="5_bw2km"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5augx"]
-shader = ExtResource("5_pin1r")
+shader = ExtResource("2_43tlo")
 
 [sub_resource type="Shader" id="Shader_vrubc"]
 code = "shader_type canvas_item;
@@ -57,8 +58,8 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wbcmf"]
 shader = SubResource("Shader_vrubc")
 shader_parameter/rim_light = true
-shader_parameter/rim_thickness = 15.0
-shader_parameter/rim_intense = 0.09
+shader_parameter/rim_thickness = 5.0
+shader_parameter/rim_intense = 0.1
 shader_parameter/rim_extra_thick = true
 shader_parameter/rim_light_pos = Vector2(1, 1.5)
 shader_parameter/diffuse_reflection = true
@@ -86,11 +87,9 @@ scale = Vector2(2, 2)
 texture = ExtResource("4_pf83e")
 
 [node name="Stick" type="Sprite2D" parent="LOut"]
-modulate = Color(0.972549, 1, 0.682353, 0.607843)
 z_index = 1
 material = SubResource("ShaderMaterial_wbcmf")
-scale = Vector2(0.4, 0.4)
-texture = ExtResource("2_bmrb0")
+texture = ExtResource("5_bw2km")
 
 [node name="Border" type="Sprite2D" parent="LOut"]
 texture = ExtResource("4_vaqr8")
@@ -108,11 +107,9 @@ texture = ExtResource("4_pf83e")
 flip_h = true
 
 [node name="Stick" type="Sprite2D" parent="ROut"]
-modulate = Color(0.972549, 1, 0.682353, 0.607843)
 z_index = 1
 material = SubResource("ShaderMaterial_wbcmf")
-scale = Vector2(0.4, 0.4)
-texture = ExtResource("2_bmrb0")
+texture = ExtResource("5_bw2km")
 
 [node name="Border" type="Sprite2D" parent="ROut"]
 texture = ExtResource("4_vaqr8")

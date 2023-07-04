@@ -123,7 +123,7 @@ var play_time := 0.0;
 var texture_hit_fx = preload("res://visual/texture/hit_fx.svg");
 var texture_slide = preload("res://visual/texture/slide.svg");
 var texture_slide_hint_ring = preload("res://visual/texture/ring.svg");
-var texture_slide_hint_point = preload("res://visual/texture/circle_32.svg");
+var texture_slide_hint_point = preload("res://visual/texture/slide_hint.svg");
 var texture_bounce = preload("res://visual/texture/bounce.svg");
 var texture_follow = preload("res://visual/texture/follow.svg");
 
@@ -619,7 +619,7 @@ func generate_note(note :BeatMap.Event.Note, before_time: float, offset :float =
 				).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
 			# 提示点
 			var point := Sprite2D.new();
-			point.texture = texture_slide_hint_ring;
+			point.texture = texture_slide_hint_point;
 			point.scale = Vector2(0.11, 0.11);
 			path.add_child(point);
 			tween.parallel().tween_property(point, "modulate:a", 0.8, event_before_beat*get_beat_time()
@@ -745,10 +745,6 @@ func judge_note(wait_index :int, note_array = null):
 				remove_note(wait_index, true);
 		
 		BeatMap.EVENT_TYPE.Slide:
-			
-			# Slide只在0ms及往后才会判定(默认NICE)
-			if offset < 0: return;
-			
 			note = note as BeatMap.Event.Note.Slide;
 			touched = (
 				ct.distance >= radius - judge_slide_radius &&
@@ -810,11 +806,15 @@ func get_degree_in_track(vec: Vector2, negative_y :bool = false) -> float:
 ## 判断此度数x是否在min~max里
 func is_in_degree(x: float, min_val: float, max_val: float) -> bool:
 	if min_val > max_val:
-		var temp_min = min_val;
+		var temp_min := min_val;
 		min_val = max_val;
 		max_val = temp_min;
-	x = fposmod(x, 360) + 360 * floor(min_val/360.0);
-	#print("min_val %.1f\tct %.1f\tmax %.1f" % [min_val, x ,max_val]);
+	if min_val < 0 && max_val > 0:
+		# 跨 0° 的判断方法
+		return is_in_degree(x, min_val, 0) || is_in_degree(x, 0, max_val);
+	x = fposmod(x, 360) + 360 * floorf(min_val/360.0);
+	if min_val == -20:
+		print("min_val %.1f\tct %.1f\tmax %.1f" % [min_val, x ,max_val]);
 	return min_val <= x && x <= max_val;
 
 func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"):	

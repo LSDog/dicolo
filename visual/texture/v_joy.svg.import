@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckb41mx4mpjuw"
-path="res://.godot/imported/slide_line.svg-b2c5efb454da4d45989f5d849a0e3e27.ctex"
+uid="uid://damv5afuiv3rs"
+path="res://.godot/imported/v_joy.svg-21aaf10df1be27702f6969c97b21c99f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://visual/texture/slide_line.svg"
-dest_files=["res://.godot/imported/slide_line.svg-b2c5efb454da4d45989f5d849a0e3e27.ctex"]
+source_file="res://visual/texture/v_joy.svg"
+dest_files=["res://.godot/imported/v_joy.svg-21aaf10df1be27702f6969c97b21c99f.ctex"]
 
 [params]
 
