@@ -1,10 +1,8 @@
 extends TextureRect
 
-## 测试 github 的各项有用的 api
+## 测试 github REST api 来获取github上的铺面
 
 var tls_client;
-
-# https://api.github.com/search/repositories?q=dicolo-map-
 
 func _ready():
 	_ready_later.call_deferred();
@@ -18,9 +16,9 @@ func _ready_later():
 	print("GET \"https://api.github.com/search/repositories?q=dicolo-map-\"");
 	var result = get_text("https://api.github.com", "/search/repositories?q=" + search_text.uri_encode())
 	var json :Dictionary = JSON.parse_string(result);
-	var items :Array = json["items"];
+	var result_items :Array = json["items"];
 	print("RESULT count: ", json["total_count"]);
-	for item in items:
+	for item in result_items:
 		print(
 			"""
 			name: %s
@@ -41,27 +39,32 @@ func _ready_later():
 				item['default_branch'],
 			]
 		);
-	if items.size() == 0: return;
-	var item = items[0];
-	print()
+	if result_items.size() == 0: return;
+	var result_item = result_items[0];
 	
 	print("2. Get file")
 	
-	var file := FileAccess.open("user://temp_%d" % hash(self), FileAccess.WRITE);
-	file.close();
+	print(JSON.parse_string(get_text("https://api.github.com",
+		"/repos/%s/%s/contents?ref=master" %
+			[result_item['owner']['login'], result_item['name']]
+	)));
 	
-	var url = "https://api.github.com:443/repos/LSDogX/dicolo-map-HareHareYukai/git/blobs/1b3e30f82f139709bf4cdee9b65296bbadd0d4db";
+	var file_temp := FileAccess.open("user://temp_%d.jpeg" % hash(self), FileAccess.WRITE);
+	file_temp.close();
+	
+	var url = "https://raw.githubusercontent.com/LSDogX/dicolo-map-HareHareYukai/master/bg.jpeg";
 	var http := HTTPRequest.new();
 	add_child(http);
-	http.download_file = file.get_path_absolute();
+	http.download_file = file_temp.get_path_absolute();
 	#http.use_threads = true;
 	http.set_tls_options(tls_client);
-	var header := ["Accept: application/vnd.github.raw"];
+	var header := ["Accept: */*"];
 	
 	var timer = Timer.new();
 	add_child(timer);
 	timer.timeout.connect(func():
 		print("downloading... status:", http.get_http_client_status());
+		print("download: ", http.get_downloaded_bytes(), " / ", http.get_body_size());
 	);
 	timer.start(0.1);
 	
@@ -70,13 +73,29 @@ func _ready_later():
 	assert(err == OK);
 	
 	
-	http.request_completed.connect(func(result, response_code, headers, body):
-		print("Success!");
+	http.request_completed.connect(func(
+		result, response_code, headers: PackedStringArray, body):
+		
+		timer.stop();
+		print("Success!  ", http.get_downloaded_bytes(), " / ", http.get_body_size());
+		print("""
+		result: %s
+		response_code: %s
+		headers: %s
+		body: %s
+		""" % [result, response_code, str(headers), str(body)])
+		
+		var headers_dic = {};
+		for text in headers:
+			var split = text.split(": ", true, 2);
+			headers_dic[split[0]] = split[1];
+		
+		print("Loading image");
 		var image = Image.new();
-		image.load_jpg_from_buffer(body);
+		image.load(file_temp.get_path_absolute());
 		var image_texture = ImageTexture.create_from_image(image);
 		texture = image_texture;
-		DirAccess.remove_absolute(file.get_path_absolute());
+		DirAccess.remove_absolute(file_temp.get_path_absolute());
 	);
 	
 
@@ -86,6 +105,7 @@ func get_text(host: String, url: String) -> String:
 	
 	var err := 0;
 	var http := HTTPClient.new();
+	#var tls_client = TLSOptions.client();
 	
 	err = http.connect_to_host(host, 443, tls_client);
 	assert(err == OK);
@@ -94,6 +114,7 @@ func get_text(host: String, url: String) -> String:
 		http.poll();
 		#print("Connecting...");
 		OS.delay_msec(500);
+	print("status = ", http.get_status())
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED);
 	
 	var headers = [
