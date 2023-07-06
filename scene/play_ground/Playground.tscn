@@ -1,10 +1,11 @@
-[gd_scene load_steps=32 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=34 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/play_ground/PlaygroundControl.gd" id="1_gad4f"]
 [ext_resource type="Shader" path="res://visual/shader/whirl_texture.gdshader" id="2_ht504"]
 [ext_resource type="Script" path="res://scene/play_ground/Spectrum.gd" id="3_pdtlx"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="4_luceo"]
 [ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://visual/texture/bounce.svg" id="5_86bpa"]
+[ext_resource type="FontFile" uid="uid://dy4m6l0n1c0kk" path="res://visual/font/LettersLaughingAtTheirExecution-WJLG.ttf" id="5_b4ur2"]
 [ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://visual/texture/slide.svg" id="6_lae8m"]
 [ext_resource type="Texture2D" uid="uid://t0wun6q7c52f" path="res://visual/texture/ring.svg" id="7_8d748"]
 [ext_resource type="Script" path="res://scene/play_ground/Ct.gd" id="8_hms3c"]
@@ -36,6 +37,12 @@ font = ExtResource("4_luceo")
 font_size = 34
 outline_size = 8
 outline_color = Color(0.188235, 0.188235, 0.188235, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_h1s5i"]
+line_spacing = 0.0
+font = ExtResource("5_b4ur2")
+font_size = 91
+font_color = Color(1, 1, 1, 0.0980392)
 
 [sub_resource type="Curve2D" id="Curve2D_43mu5"]
 _data = {
@@ -173,6 +180,21 @@ offset_right = 0.5
 grow_horizontal = 2
 grow_vertical = 0
 label_settings = SubResource("LabelSettings_5mju1")
+
+[node name="LabelCombo" type="Label" parent="BGPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.1667
+offset_right = 20.0
+offset_bottom = 11.1667
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_h1s5i")
 
 [node name="PlayGround" type="Control" parent="."]
 layout_mode = 1
