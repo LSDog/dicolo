@@ -1,11 +1,91 @@
-header, footer {
+
+* {
+    margin: 0;
+}
+
+a:link {
+    font-weight: 800;
+    color: rgb(79, 167, 245);
+}
+a:visited {
+    font-weight: 800;
+    color: rgb(79, 167, 245);
+}
+
+header,
+footer {
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 5px;
     background-color: #45a1ff;
     color: #fff;
 }
 
+header {
+    justify-content: center;
+    align-items: center;
+}
+header nav {
+    z-index: 1;
+}
+header nav li {
+    display: inline-block;
+}
+header a {
+    background-color: white;
+    padding: 0.6em;
+    border-radius: 0.5em;
+    text-decoration: none;
+    line-height: 3em;
+}
+
 footer {
+    justify-content: center;
+    align-items: center;
     color: gainsboro
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+
+#corner_logo {
+    z-index: 1;
+    display: block;
+    width: 40vw;
+    top: -15vw;
+    left: -15vw;
+    position: absolute;
+    border-radius: 100%;
+    animation-delay: 0.5s;
+    -webkit-animation: rotate-center 12s linear infinite both;
+    animation: rotate-center 12s linear infinite both;
+}
+
+#showcase {
+    width: 100vw;
+    height: 56.25vw;
+    position: relative;
+    background-color: black;
+    overflow: hidden;
+    background-image: url("../visual/background/dicolo_icon_light_bubbles.png");
+    background-size: cover;
+    box-shadow: 0px 12px 20px 0px rgb(241 169 26 / 28%);
+    margin-bottom: 3em;
+}
+#showcase #title {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    color: white;
+}
+#showcase #title h1 {
+    margin: 0;
 }
