@@ -223,6 +223,13 @@ class Event:
 		func _init(p_time: float):
 			super._init(p_time, SIDE.OTHER);
 			event_type = EVENT_TYPE.Start;
+
+	## 结束
+	class End:
+		extends Event;
+		func _init(p_time: float):
+			super._init(p_time, SIDE.OTHER);
+			event_type = EVENT_TYPE.End;
 	
 	## bpm更改
 	class Bpm:
