@@ -1,37 +1,50 @@
-
 * {
     margin: 0;
+}
+
+
+body {
+    margin: 0;
+    color: white;
+    background-color: black;
+}
+
+#content {
+    background-color: rgb(10, 4, 17);
 }
 
 a:link {
     font-weight: 800;
     color: rgb(79, 167, 245);
 }
+
 a:visited {
     font-weight: 800;
     color: rgb(79, 167, 245);
 }
 
-header,
-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
-    background-color: #45a1ff;
-    color: #fff;
-}
 
 header {
+    position: relative;
+    text-align: end;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
+    padding: 5px;
+    color: #fff;
+    background-color: #45a1ff;
 }
+
 header nav {
     z-index: 1;
 }
+
 header nav li {
     display: inline-block;
+    white-space: nowrap;
 }
+
 header a {
     background-color: white;
     padding: 0.6em;
@@ -41,9 +54,19 @@ header a {
 }
 
 footer {
-    justify-content: center;
-    align-items: center;
-    color: gainsboro
+    text-align: center;
+    display: block;
+    padding: 5px;
+    color: gainsboro;
+    background-color: black;
+}
+
+footer a:link {
+    color: white;
+}
+
+footer a:visited {
+    color: white;
 }
 
 .flex-center {
@@ -54,17 +77,42 @@ footer {
 #corner_logo {
     z-index: 1;
     display: block;
-    width: 40vw;
-    top: -15vw;
-    left: -15vw;
     position: absolute;
+    width: 50vw;
+    top: -25vw;
+    left: -25vw;
     border-radius: 100%;
-    animation-delay: 0.5s;
-    -webkit-animation: rotate-center 12s linear infinite both;
-    animation: rotate-center 12s linear infinite both;
+    filter: drop-shadow(0 0 5px black);
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+    animation: fade-in 0.75s cubic-bezier(1, 2.51, 0.88, 0.68) 1, rotate-center 60s linear infinite;
+    animation-delay: 1s, 2s;
+    animation-fill-mode: backwards, forwards;
+}
+
+@keyframes fade-in {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rotate-center {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 #showcase {
+    max-width: 100%;
     width: 100vw;
     height: 56.25vw;
     position: relative;
@@ -72,20 +120,24 @@ footer {
     overflow: hidden;
     background-image: url("../visual/background/dicolo_icon_light_bubbles.png");
     background-size: cover;
-    box-shadow: 0px 12px 20px 0px rgb(241 169 26 / 28%);
+    box-shadow: inset 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
     margin-bottom: 3em;
 }
+
 #showcase #title {
+    height: 100%;
     position: absolute;
     display: flex;
     align-items: center;
     flex-direction: column;
+    justify-content: flex-end;
     left: 0;
     right: 0;
     bottom: 0;
     text-align: center;
     color: white;
 }
+
 #showcase #title h1 {
     margin: 0;
 }
