@@ -2,7 +2,7 @@
 extends Path2D
 
 var slash_right_texture := preload("res://visual/texture/slash_right.svg");
-var width_curve := preload("res://scene/play_ground/bar_width_curve.tres");
+var width_curve := preload("res://scene/playground/bar_width_curve.tres");
 
 func _ready() -> void:
 	var line := Line2D.new();

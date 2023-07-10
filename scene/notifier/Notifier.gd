@@ -17,6 +17,7 @@ const COLOR_NORAML = Color(0.4,0.4,0.4);
 const COLOR_OK = Color.LIME_GREEN;
 const COLOR_WARN = Color.ORANGE;
 const COLOR_BAD = Color.RED;
+const COLOR_BLUE = Color.SKY_BLUE;
 
 
 func _ready() -> void:
@@ -41,7 +42,7 @@ func _ready_later():
 	vbox.set_anchors_preset(Control.PRESET_TOP_RIGHT);
 	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE;
 	vbox.grow_horizontal = Control.GROW_DIRECTION_BEGIN;
-	vbox.add_theme_constant_override("separation", 0);
+	vbox.add_theme_constant_override("separation", 1);
 	
 	get_tree().root.add_child(container);
 	container.add_child(base_point);

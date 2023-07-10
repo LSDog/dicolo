@@ -42,7 +42,6 @@ func _ready_later():
 	Debugger.count_time("Map Load");
 	for node in container.get_children():
 		node.song_select.connect(handle_song_select.bind(node));
-		node.song_menu_request.connect(func(): get_parent().songMenu.switch_show_hide());
 	
 	map_loaded = true;
 	map_first_loaded.emit();
@@ -142,7 +141,6 @@ func _gui_input(event):
 						scroll_speed = touch_scroll_speed;
 		"InputEventScreenDrag":
 			accept_event();
-			#if !has_point(event.position): return;
 			scroll_vertical -= floori(event.relative.y);
 			touch_scroll_speed = -event.velocity.y;
 		"InputEventScreenTouch":
@@ -150,9 +148,6 @@ func _gui_input(event):
 				touch_scroll_speed = 0;
 			else:
 				scroll_speed = touch_scroll_speed;
-
-func has_point(point: Vector2) -> bool:
-	return get_rect().has_point(point);
 
 ## 加载铺面
 func load_maps():
@@ -257,6 +252,12 @@ func scroll_to(index: int):
 ## 选择某个曲子
 func select_song(index: int):
 	get_song(index).select();
+
+## 获取选中的map
+func get_selected_map_path() -> String:
+	if selected_card != null && selected_card.selected_mapCard != null:
+		return selected_card.selected_mapCard.map_path;
+	else: return "";
 
 ## 随机选曲
 func select_song_random():

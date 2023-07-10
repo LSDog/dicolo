@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cvonjf6lsdmlw"]
+[gd_scene load_steps=22 format=3 uid="uid://cvonjf6lsdmlw"]
 
 [ext_resource type="Script" path="res://scene/test/GithubAPITest.gd" id="1_n5jhp"]
 [ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://visual/texture/circle_512.svg" id="2_e4efk"]
@@ -95,8 +95,6 @@ states/appear/position = Vector2(491, 100)
 states/judge/node = SubResource("AnimationNodeAnimation_aef17")
 states/judge/position = Vector2(681, 100)
 transitions = ["appear", "judge", SubResource("AnimationNodeStateMachineTransition_fein6"), "judge", "End", SubResource("AnimationNodeStateMachineTransition_frsny"), "Start", "RESET", SubResource("AnimationNodeStateMachineTransition_e6dkp"), "RESET", "appear", SubResource("AnimationNodeStateMachineTransition_dv3vs")]
-
-[sub_resource type="AnimationNodeStateMachinePlayback" id="AnimationNodeStateMachinePlayback_6p488"]
 
 [sub_resource type="Animation" id="Animation_8bj1y"]
 length = 0.001
@@ -421,7 +419,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.1
-value = 0.2
+value = 0.3
 
 [node name="Strong" type="HBoxContainer" parent="Gamepad/Content/Viberate/Sliders"]
 layout_mode = 2
@@ -556,7 +554,6 @@ offset_bottom = 318.0
 tree_root = SubResource("AnimationNodeStateMachine_amys1")
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource("AnimationNodeStateMachinePlayback_6p488")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="NoteExample"]
 libraries = {
@@ -603,3 +600,28 @@ color_ramp = SubResource("Gradient_dcsir")
 color = Color(1, 1, 1, 0.54902)
 polygon = PackedVector2Array(44, 482, 142, 473, 87, 334)
 vertex_colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[node name="Container" type="Container" parent="."]
+layout_mode = 1
+offset_left = 565.0
+offset_top = 432.0
+offset_right = 696.0
+offset_bottom = 580.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Container"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Container/MarginContainer"]
+layout_mode = 2
+
+[node name="VScrollBar" type="VScrollBar" parent="Container/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+max_value = 1.0
+page = 0.12
+value = 0.88
+
+[node name="HScrollBar" type="HScrollBar" parent="Container/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 10

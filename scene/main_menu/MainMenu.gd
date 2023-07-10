@@ -7,7 +7,6 @@ extends Control
 @onready var leftPanel :Control = $LeftPanel;
 @onready var bgLbael :Label = $BgPanel/Label;
 @onready var bgPanel :Panel = $BgPanel;
-@onready var songMenu :Control = $SongMenu;
 @onready var animation_control :Control = $Animations;
 @onready var animation_player :AnimationPlayer = $Animations/AnimationPlayer;
 
@@ -21,7 +20,7 @@ var debug_label_last_report = 0;
 
 func _ready():
 	
-	Global.scene_MainMenu = self;
+	Global.mainMenu = self;
 	
 	animation_control.visible = true;
 	Global.data_loaded_setting.connect(func():
@@ -52,9 +51,18 @@ func select_map(song_name: String, map_name: String):
 
 func play_map(map_path: String):
 	print("play song: ", map_path);
-	var play_ground_scene := preload("res://scene/play_ground/Playground.tscn") as PackedScene;
-	var play_ground := play_ground_scene.instantiate() as PlaygroundControl;
-	get_tree().root.add_child(play_ground);
-	get_tree().current_scene = play_ground;
+	var playground_scene := preload("res://scene/playground/Playground.tscn") as PackedScene;
+	var playground := playground_scene.instantiate() as PlaygroundControl;
+	get_tree().root.add_child(playground);
+	get_tree().current_scene = playground;
 	Global.freeze(self);
-	play_ground.load_map(map_path, true);
+	playground.load_map(map_path, true);
+
+func edit_map(map_path: String):
+	print("edit map: ", map_path);
+	var editor_scene := preload("res://scene/editor/Editor.tscn") as PackedScene;
+	var editor := editor_scene.instantiate() as Editor;
+	get_tree().root.add_child(editor);
+	get_tree().current_scene = editor;
+	Global.freeze(self);
+	editor.load_map(map_path);

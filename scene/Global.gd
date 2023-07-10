@@ -8,11 +8,11 @@ var window_wide_ratio = 1.0;
 var full_screen = false;
 
 ## 主界面
-var scene_MainMenu :MainMenu;
+var mainMenu :MainMenu;
 ## 设置界面
-var scene_Setting :Control;
+var setting :Control;
 ## Debug界面
-var scene_DebugInfo :Control;
+var debugInfo :Control;
 
 ## 上次旋转屏幕方向的游戏时间
 var last_auto_rotate := 0.0;
@@ -29,6 +29,14 @@ signal data_loaded_setting;
 var data_has_loaded_setting: bool;
 
 func _ready():
+	
+	var data = PlayerData.new();
+	print("data: ", str(data));
+	var error = ResourceSaver.save(data, "user://player_data.tres",
+		ResourceSaver.FLAG_OMIT_EDITOR_PROPERTIES);
+	print(error_string(error));
+	var load_data = load("user://player_data.tres");
+	print(str(load_data));
 	
 	get_tree().root.size_changed.connect(func():
 		var now = get_tree().root.size;
@@ -48,18 +56,18 @@ func _ready():
 
 func _ready_later():
 	
-	var packed_scene_DebugInfo := preload("res://scene/test/DebugInfo.tscn") as PackedScene;
-	scene_DebugInfo = packed_scene_DebugInfo.instantiate();
-	scene_DebugInfo.z_index = 12;
-	get_tree().root.add_child(scene_DebugInfo);
-	scene_DebugInfo.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
+	var packed_debugInfo := preload("res://scene/test/DebugInfo.tscn") as PackedScene;
+	debugInfo = packed_debugInfo.instantiate();
+	debugInfo.z_index = 12;
+	get_tree().root.add_child(debugInfo);
+	debugInfo.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 
-	var packed_scene_Setting := preload("res://scene/setting/Setting.tscn") as PackedScene;
-	scene_Setting = packed_scene_Setting.instantiate();
-	scene_Setting.visible = false;
-	scene_Setting.z_index = 11;
-	get_tree().root.add_child(scene_Setting);
-	scene_Setting.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
+	var packed_setting := preload("res://scene/setting/Setting.tscn") as PackedScene;
+	setting = packed_setting.instantiate();
+	setting.visible = false;
+	setting.z_index = 11;
+	get_tree().root.add_child(setting);
+	setting.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE;
 	
 	Notifier.container.z_index = 13;
 

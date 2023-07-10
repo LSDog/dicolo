@@ -13,32 +13,20 @@ var dir_path :String;
 ## 铺面文件路径
 var file_path :String;
 
-## 歌曲标题
-var title :String;
-## 演唱者
-var singer :String;
-## 铺面名称
-var mapname :String;
-## 作图者
-var mapper :String;
-## 难度
-var diff: float;
-## 音频文件路径
-var audio_path :String;
-## 视频文件路径
-var video_path :String;
-## 默认Bpm
-var bpm: float;
-## 背景图片路径
-var bg_image_path :String;
-## 背景图片
-#var bg_image :Texture2D;
-## 歌词路径
-var lrc_path :String;
-## 音符/事件等
-var events :Array[Event] = [];
-## 开始时间（来自第一个event的时间）
-var start_time: float;
+var title :String; ## 歌曲标题
+var title_latin :String; ## 歌曲标题(拉丁字母)
+var singer :String; ## 演唱者
+var singer_latin :String; ## 演唱者(拉丁字母)
+var mapname :String; ## 铺面名称
+var mapper :String; ## 作图者
+var diff: float; ## 难度
+var audio_path :String; ## 音频文件路径
+var video_path :String; ## 视频文件路径
+var bpm: float; ## 默认Bpm
+var bg_image_path :String; ## 背景图片路径
+var lrc_path :String; ## 歌词路径
+var events :Array[Event] = []; ## 音符/事件等
+var start_time: float; ## 开始时间（来自第一个event的时间）
 
 ## 构造器。需要当前铺面目录和已经打开的 [FileAccess] ([method FileAccess.open])
 func _init(dir_access :DirAccess, file :FileAccess):
@@ -73,7 +61,9 @@ func _init(dir_access :DirAccess, file :FileAccess):
 			value = array[1];
 			match key:
 				"title": title = value;
+				"title_latin": title_latin = value;
 				"singer": singer = value;
+				"singer_latin": singer_latin = value;
 				"mapper": mapper = value;
 				"diff": diff = -1.0 if !value.is_valid_float() else value.to_float();
 				"mapname": mapname = value;

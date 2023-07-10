@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=28 format=3 uid="uid://d3m8pmhle7d8r"]
+[gd_resource type="Theme" load_steps=34 format=3 uid="uid://d3m8pmhle7d8r"]
 
 [ext_resource type="Texture2D" uid="uid://ci48cp74ulu0l" path="res://visual/theme/default_theme_icon/CheckButton_checked.png" id="1_4qade"]
 [ext_resource type="Texture2D" uid="uid://2tf6gf1wsecb" path="res://visual/theme/default_theme_icon/CheckButton_checked_disabled.png" id="2_7rxdr"]
@@ -8,6 +8,70 @@
 [ext_resource type="Texture2D" uid="uid://c4uebd6w8qiyf" path="res://visual/theme/default_theme_icon/CheckButton_unchecked_disabled.png" id="6_qw50i"]
 [ext_resource type="Texture2D" uid="uid://buv6rpsdwjfpk" path="res://visual/theme/default_theme_icon/CheckButton_unchecked_disabled_mirrored.png" id="7_2xfx7"]
 [ext_resource type="Texture2D" uid="uid://bv3ep6ot1mpsb" path="res://visual/theme/default_theme_icon/CheckButton_unchecked_mirrored.png" id="8_pjwdp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7lt11"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 1
+border_width_right = 1
+border_color = Color(0.25098, 0.25098, 0.25098, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hoord"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0.6)
+draw_center = false
+border_width_left = 1
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 0.1)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0rdfg"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0.8)
+border_width_left = 1
+border_width_right = 1
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d5kbi"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0.8)
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wghoh"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0.8)
+border_width_left = 3
+border_width_right = 3
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 0.1)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_onwf1"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0.8)
 
 [sub_resource type="FontVariation" id="FontVariation_qg2ew"]
 
@@ -108,6 +172,11 @@ thickness = 26
 vertical = true
 
 [resource]
+Button/styles/disabled = SubResource("StyleBoxFlat_7lt11")
+Button/styles/focus = SubResource("StyleBoxFlat_hoord")
+Button/styles/hover = SubResource("StyleBoxFlat_0rdfg")
+Button/styles/normal = SubResource("StyleBoxFlat_d5kbi")
+Button/styles/pressed = SubResource("StyleBoxFlat_wghoh")
 CheckButton/icons/checked = ExtResource("1_4qade")
 CheckButton/icons/checked_disabled = ExtResource("2_7rxdr")
 CheckButton/icons/checked_disabled_mirrored = ExtResource("3_mryc5")
@@ -116,6 +185,12 @@ CheckButton/icons/unchecked = ExtResource("5_rfs0n")
 CheckButton/icons/unchecked_disabled = ExtResource("6_qw50i")
 CheckButton/icons/unchecked_disabled_mirrored = ExtResource("7_2xfx7")
 CheckButton/icons/unchecked_mirrored = ExtResource("8_pjwdp")
+CheckButton/styles/disabled = SubResource("StyleBoxFlat_onwf1")
+CheckButton/styles/focus = SubResource("StyleBoxFlat_onwf1")
+CheckButton/styles/hover = SubResource("StyleBoxFlat_onwf1")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxFlat_onwf1")
+CheckButton/styles/normal = SubResource("StyleBoxFlat_onwf1")
+CheckButton/styles/pressed = SubResource("StyleBoxFlat_onwf1")
 Fonts/fonts/large = SubResource("FontVariation_qg2ew")
 HScrollBar/styles/grabber = SubResource("StyleBoxLine_71cnt")
 HScrollBar/styles/grabber_highlight = SubResource("StyleBoxLine_iajem")

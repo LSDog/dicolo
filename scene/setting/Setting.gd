@@ -34,6 +34,12 @@ var loading_data := true;
 
 func _ready():
 	
+	# 将vScroll放到左侧
+	var scrollContainer := $Panel/Scroll as ScrollContainer;
+	var vScroll := scrollContainer.get_v_scroll_bar();
+	vScroll.layout_direction = Control.LAYOUT_DIRECTION_RTL;
+	
+	
 	DataManager.load_data(DataManager.DATA_TYPE.SETTING);
 	
 	bind_gui_action();
@@ -119,8 +125,8 @@ func bind_gui_action():
 		Global.gamepad_id = id;
 		update_label_Gamepad();
 	);
-	if Global.scene_MainMenu != null:
-		var musicPlayer = Global.scene_MainMenu.musicPlayer;
+	if Global.mainMenu != null:
+		var musicPlayer = Global.mainMenu.musicPlayer;
 		musicPlayer.beat.connect(func():
 			label_AudioOffset.create_tween().tween_property(
 				label_AudioOffset, "modulate:a", 1.0, 60.0/musicPlayer.bpm
@@ -135,7 +141,7 @@ func bind_gui_action():
 		save_data("AudioOffset", audio_offset);
 	);
 	check_DebugInfo.toggled.connect(func(flag: bool):
-		Global.scene_DebugInfo.visible = flag;
+		Global.debugInfo.visible = flag;
 		save_data("DebugInfo", flag);
 	);
 
@@ -205,12 +211,12 @@ func _gui_input(event: InputEvent):
 func anim_show():
 	visible = true;
 	var tween = create_tween();
-	tween.tween_property(self, "offset_right", 0, 0.15
-		).from(size.x).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
+	tween.tween_property(self, "offset_left", 0, 0.15
+		).from(-size.x).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 
 func anim_hide():
 	var tween = create_tween();
-	tween.tween_property(self, "offset_right", size.x, 0.15
+	tween.tween_property(self, "offset_left", -size.x, 0.15
 		).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 	tween.finished.connect(func(): visible = false);
 	

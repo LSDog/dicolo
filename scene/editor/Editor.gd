@@ -9,12 +9,15 @@ extends Control
 @onready var flowScroll :HScrollBar = $FlowBox/Scroll as HScrollBar;
 @onready var playLine :Control = $FlowBox/PlayLine;
 
-@onready var labelTime :Label = $Edit/VBox/LabelTime;
-@onready var sliderScale := $Edit/VBox/VBoxFlowAdjust/HBoxScale/HSliderScale;
-@onready var editBeats := $Edit/VBox/VBoxFlowAdjust/HBoxBeats/LineEditBeats;
-@onready var note_choose := $Edit/VBox/NoteChoose;
 @onready var buttonPlay := $Edit/VBox/HBoxPlayback/ButtonPlay;
 @onready var buttonMenu := $Edit/VBox/HBoxPlayback/ButtonMenu;
+@onready var labelTime :Label = $Edit/VBox/LabelTime;
+@onready var boxMap := $Edit/VBox/Scroll/VBox/VBoxMap;
+@onready var buttonMpaSave := $Edit/VBox/Scroll/VBox/VBoxMap/HBoxAction/ButtonSave;
+@onready var buttonMapExit := $Edit/VBox/Scroll/VBox/VBoxMap/HBoxAction/ButtonExit;
+@onready var sliderScale := $Edit/VBox/Scroll/VBox/VBoxEditor/HBoxScale/HSliderScale;
+@onready var editBeats := $Edit/VBox/Scroll/VBox/VBoxEditor/HBoxBeats/LineEditBeats;
+@onready var note_choose := $Edit/VBox/Scroll/VBox/VBoxEvent/NoteChoose;
 
 var edit_event_type :BeatMap.EVENT_TYPE; ## 正在编辑的
 
@@ -26,15 +29,15 @@ var has_loaded := false;
 func _ready():
 	# 禁用 virtualJoystic
 	playground.enable_virtualJoystick = false;
-	playground.manuButton.visible = false;
+	playground.menuButton.visible = false;
 	# 设定模式
 	playground.play_mode = playground.PLAY_MODE.EDIT;
 	# 修正大小
-	if Global.data_has_loaded_setting: currect_scaling();
+	if Global.data_has_loaded_setting: currect_scaling.call_deferred();
 	else: Global.data_loaded_setting.connect(currect_scaling);
 	
 	# 测试用 加载map
-	load_map("res://map/HareHareYukai/map_normal.txt");
+	#load_map("res://map/HareHareYukai/map_normal.txt");
 	
 	# 绑定Gui操作
 	playground.play_end.connect(func():
@@ -51,6 +54,17 @@ func _ready():
 		else:
 			playground.resume();
 	);
+	buttonMenu.toggled.connect(func(pressed:bool):
+		boxMap.visible = pressed;
+	)
+	buttonMapExit.pressed.connect(func():
+		var editor = get_tree().current_scene;
+		Global.unfreeze(Global.mainMenu);
+		Global.mainMenu.visible = true;
+		get_tree().current_scene = Global.mainMenu;
+		get_tree().root.remove_child(editor);
+		editor.queue_free();
+	);
 	
 	playground.bgpanel_mask.color.a = 0.6;
 	
@@ -63,8 +77,8 @@ func _ready():
 
 ## 修正大小
 func currect_scaling():
-	playground.video_player.scale = Vector2(0.91, 0.91);
 	playground.scale /= Global.stretch_scale;
+	playground.video_player.scale /= Global.stretch_scale;
 
 
 ## 加载铺面
@@ -113,8 +127,8 @@ func update_flow_scale():
 	var value = flowScroll.value;
 	var length := flow.get_length_in_flow(playground.get_audio_length());
 	var scale_multiple := length / flow.size.x;
-	flow.position.x -= (playLine.position.x-flow.position.x)*(scale_multiple-1)/2.0;
 	flow.size.x = length;
+	flow.position.x -= (playLine.position.x-flow.position.x)*(scale_multiple-1);
 	flowScroll.page = flowBox.size.x;
 	flowScroll.max_value = flow.size.x + flowScroll.page;
 	flow.rescale_contents(scale_multiple);
@@ -137,21 +151,3 @@ func get_time_string(time: float) -> String:
 func choose_note_type(type :BeatMap.EVENT_TYPE):
 	(note_choose.find_child(BeatMap.EVENT_TYPE.find_key(type)) as Button).button_pressed = true;
 	edit_event_type = type;
-
-func _input(event: InputEvent):
-	if event.is_action_pressed("play"):
-		accept_event();
-		buttonPlay.button_pressed = !buttonPlay.button_pressed;
-
-func _unhandled_input(event):
-	if !visible: return;
-	match event.get_class():
-		"InputEventMouseButton":
-			event = event as InputEventMouseButton;
-			match event.button_index:
-				MOUSE_BUTTON_WHEEL_UP:
-					flowScroll.value -= 10;
-					accept_event();
-				MOUSE_BUTTON_WHEEL_DOWN:
-					flowScroll.value += 10;
-					accept_event();

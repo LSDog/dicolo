@@ -6,9 +6,10 @@ extends Panel
 @onready var editor :Editor = $"../.." as Editor;
 @onready var box :Control = $".." as Control;
 @onready var playLine :Control = $"../PlayLine";
-@onready var note_hit_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_hit.stylebox");
-@onready var note_slide_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_slide.stylebox");
-@onready var note_bounce_stylebox :StyleBox = preload("res://scene/play_ground/editor/note_bounce.stylebox");
+@onready var scroll :Control = $"../Scroll" as HScrollBar;
+@onready var note_hit_stylebox :StyleBox = preload("res://scene/editor/note_hit.stylebox");
+@onready var note_slide_stylebox :StyleBox = preload("res://scene/editor/note_slide.stylebox");
+@onready var note_bounce_stylebox :StyleBox = preload("res://scene/editor/note_bounce.stylebox");
 
 @export var outline_color := Color.LIGHT_YELLOW;
 @export var barline_color := Color.LIGHT_BLUE;
@@ -55,6 +56,10 @@ func _ready():
 		queue_redraw();
 	);
 	
+	_ready_later.call_deferred();
+
+func _ready_later():
+	offset = 0.0;
 
 ## 画节拍线，老方法是只画可见部分的节拍线，改为一次全画
 func _draw():
@@ -69,7 +74,7 @@ func _draw():
 	# 节拍线
 	var h := size.y;
 	var x := get_length_in_flow(editor.playground.beatmap.start_time);
-	while x > 0: x -= bar_length
+	while x >= 0: x -= bar_length
 	flow_start_offset = x;
 	beat_offset = fmod(flow_start_offset, beat_space);
 	while x <= size.x:
@@ -106,23 +111,21 @@ func _gui_input(event):
 	
 	match event.get_class():
 		
-		"InputEventMouseButton":
-			if event.button_index != MOUSE_BUTTON_LEFT: return;
-			if event.pressed:
-				
-				var note_pos = get_note_pos(event.position);
-				if pos_overlap_note(note_pos): return; # 当前位置存在note则忽略
-				
-				holding_note_type = editor.edit_event_type;
-				
-				var note_panel = add_note(holding_note_type, note_pos);
-				
-				holding_note = note_panel;
-				
-			else:
-				
-				holding_note = null;
-				mouse_offset = 0;
+		"InputEventMouseButton": match event.button_index:
+			MOUSE_BUTTON_WHEEL_UP:
+				scroll.value -= 10;
+			MOUSE_BUTTON_WHEEL_DOWN:
+				scroll.value += 10;
+			MOUSE_BUTTON_LEFT:
+				if event.pressed:
+					var note_pos = get_note_pos(event.position);
+					if pos_overlap_note(note_pos): return; # 当前位置存在note则忽略
+					holding_note_type = editor.edit_event_type;
+					var note_panel = add_note(holding_note_type, note_pos);
+					holding_note = note_panel;
+				else:
+					holding_note = null;
+					mouse_offset = 0;
 		
 		"InputEventMouseMotion":
 			# 移动持有的note

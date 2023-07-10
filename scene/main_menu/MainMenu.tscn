@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=62 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_1m2wa"]
 [ext_resource type="Texture2D" uid="uid://besj0l23codt1" path="res://visual/background/dicolo_icon_light_bubbles.png" id="2_tlhgm"]
@@ -13,11 +13,12 @@
 [ext_resource type="Texture2D" uid="uid://b4gdb06jpschw" path="res://visual/ui_icon/pause-button.svg" id="12_l5xq2"]
 [ext_resource type="Texture2D" uid="uid://sv03cqt1sa2u" path="res://visual/ui_icon/fast-forward-button.svg" id="13_hu1oq"]
 [ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://visual/ui_icon/anticlockwise-rotation.svg" id="14_06lng"]
+[ext_resource type="Texture2D" uid="uid://bkg1gle7rjuxr" path="res://visual/ui_icon/shopping-cart.svg" id="15_4f8ke"]
 [ext_resource type="Script" path="res://scene/main_menu/DownPanel.gd" id="15_ml7uc"]
 [ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://visual/partner/avatar_trans-1024x.png" id="16_16t2a"]
 [ext_resource type="Texture2D" uid="uid://cbwyhuuanau7b" path="res://visual/ui_icon/compact-disc.svg" id="17_himgy"]
 [ext_resource type="Texture2D" uid="uid://crtsduk7s68wn" path="res://visual/ui_icon/cog.svg" id="17_yvf60"]
-[ext_resource type="Texture2D" uid="uid://bkw2uvfq75e5p" path="res://visual/ui_icon/cloud-download.svg" id="18_j3jtp"]
+[ext_resource type="Texture2D" uid="uid://blgnytuwcpehb" path="res://visual/ui_icon/toggles.svg" id="18_du0a7"]
 [ext_resource type="AudioStream" uid="uid://crod6cfe1nqid" path="res://audio/intro/Arcane_Beacon.wav" id="19_jw5he"]
 [ext_resource type="Texture2D" uid="uid://d25b25n5ka51" path="res://visual/ui_icon/rolling-dices.svg" id="19_n270n"]
 [ext_resource type="AudioStream" uid="uid://bawqmljx771uq" path="res://audio/intro/dicolo!_tsukuyomichan.wav" id="20_gpahj"]
@@ -25,15 +26,6 @@
 [ext_resource type="AudioStream" uid="uid://c0bw0kmqnvfow" path="res://audio/intro/dicolo!_rin.wav" id="22_ghic7"]
 [ext_resource type="AudioStream" uid="uid://cf1f2lob8pau1" path="res://audio/intro/dicolo!_len.wav" id="23_jg7m8"]
 [ext_resource type="Texture2D" uid="uid://485q4nyju4h0" path="res://visual/icon/icon.png" id="25_2hpux"]
-[ext_resource type="Texture2D" uid="uid://dvyr8m51ew7pf" path="res://visual/partner/aho/hair_tail_back.png" id="26_f45au"]
-[ext_resource type="Texture2D" uid="uid://cd8di46r2rvqv" path="res://visual/partner/aho/face.png" id="27_2xyf1"]
-[ext_resource type="Texture2D" uid="uid://cmgwv65eexkho" path="res://visual/partner/aho/hair_top.png" id="28_nj5va"]
-[ext_resource type="Texture2D" uid="uid://g5w547vujl50" path="res://visual/partner/aho/hair_tail_front.png" id="29_5sn2m"]
-[ext_resource type="Texture2D" uid="uid://3ql3p624hpel" path="res://visual/partner/aho/aho_sit.png" id="30_gobif"]
-[ext_resource type="Texture2D" uid="uid://bimwojbbxm0pj" path="res://visual/partner/aho/headset.png" id="30_o0o7e"]
-[ext_resource type="Shader" path="res://visual/shader/Blur.gdshader" id="32_tmbn0"]
-[ext_resource type="Script" path="res://scene/main_menu/SongMenu.gd" id="33_p5fof"]
-[ext_resource type="FontFile" uid="uid://bplyekufap58x" path="res://visual/font/Alibaba-PuHuiTi-Light.ttf" id="33_uugmb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwa4q"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -222,6 +214,11 @@ border_width_right = 2
 border_color = Color(1, 1, 0.603922, 1)
 shadow_color = Color(0, 0, 0, 0.5)
 shadow_size = 16
+
+[sub_resource type="Theme" id="Theme_jp7kg"]
+default_font_size = 35
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cm3ht"]
 
 [sub_resource type="Animation" id="Animation_ct87p"]
 length = 0.01
@@ -518,109 +515,6 @@ line_spacing = 0.0
 font = ExtResource("5_etfut")
 font_size = 120
 
-[sub_resource type="Animation" id="Animation_u5n6v"]
-length = 0.001
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Skeleton2D/hip/body/neck/face/hair_tail_back:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1.44862, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-
-[sub_resource type="Animation" id="Animation_vtyyj"]
-resource_name = "idle"
-length = 6.0
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Skeleton2D/hip/body/neck/face/hair_tail_front:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(1.44421, -0.25, 0, 1.2, -0.000608444, 1.59543, -1.8, 0.000563502, 1.75, 0.000563502, 1.44384, -1.1, -0.000231743, 0.25, 0),
-"times": PackedFloat32Array(0, 3, 6)
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Skeleton2D/hip/body/neck/face/hair_tail_back:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0, 0),
-"points": PackedFloat32Array(1.50132, -0.25, 0, 0, 0.00139284, 1.44305, -0.6, 0.00394726, 1.2, 0.0011611, 1.59464, -1.8, 0, 1.8, 0.00139284, 1.44343, -1.2, 0.000784397, 0.25, 0),
-"times": PackedFloat32Array(0, 1, 4, 7)
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_c8d0r"]
-_data = {
-"RESET": SubResource("Animation_u5n6v"),
-"idle": SubResource("Animation_vtyyj")
-}
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fctxt"]
-shader = ExtResource("32_tmbn0")
-shader_parameter/amount = 2.0
-
-[sub_resource type="LabelSettings" id="LabelSettings_hlll4"]
-line_spacing = 0.0
-font = ExtResource("33_uugmb")
-font_size = 62
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_peypf"]
-bg_color = Color(0, 0, 0, 0.8)
-corner_detail = 1
-expand_margin_left = 22.0
-expand_margin_right = 22.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0so0y"]
-bg_color = Color(0.0941176, 0.0941176, 0.0941176, 0.8)
-corner_detail = 1
-expand_margin_left = 22.0
-expand_margin_right = 22.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_88h8l"]
-bg_color = Color(0, 0, 0, 1)
-corner_detail = 1
-expand_margin_left = 22.0
-expand_margin_right = 22.0
-
-[sub_resource type="Theme" id="Theme_clr2o"]
-default_font_size = 50
-Button/styles/disabled = SubResource("StyleBoxFlat_peypf")
-Button/styles/focus = SubResource("StyleBoxFlat_0so0y")
-Button/styles/hover = SubResource("StyleBoxFlat_0so0y")
-Button/styles/normal = SubResource("StyleBoxFlat_peypf")
-Button/styles/pressed = SubResource("StyleBoxFlat_88h8l")
-PanelContainer/styles/panel = SubResource("StyleBoxFlat_peypf")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_226ou"]
-draw_center = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_27c3l"]
-draw_center = false
-border_width_bottom = 9
-border_color = Color(0.403922, 0.721569, 0.45098, 1)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wtmq4"]
-draw_center = false
-border_width_bottom = 9
-border_color = Color(1, 1, 0, 1)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_22yyl"]
-draw_center = false
-border_width_bottom = 9
-border_color = Color(0, 1, 1, 1)
-border_blend = true
-
 [node name="MainMenu" type="Control"]
 process_priority = 10
 layout_mode = 3
@@ -884,6 +778,29 @@ text = "] Playing: ...nothing..."
 label_settings = SubResource("LabelSettings_n6jtj")
 autowrap_mode = 3
 
+[node name="VBoxButton" type="VBoxContainer" parent="LeftPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.4
+anchor_bottom = 0.4
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="ButtonSetting" type="Button" parent="LeftPanel/VBoxButton"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+icon = ExtResource("17_yvf60")
+expand_icon = true
+
+[node name="ButtonShop" type="Button" parent="LeftPanel/VBoxButton"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+icon = ExtResource("15_4f8ke")
+expand_icon = true
+
 [node name="DownPanel" type="Panel" parent="."]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 1
@@ -959,7 +876,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonCloud" type="Button" parent="DownPanel/VBox"]
+[node name="ButtonEdit" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
@@ -967,63 +884,74 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 
-[node name="Label" type="Label" parent="DownPanel/VBox/ButtonCloud"]
+[node name="PanelMenu" type="PanelContainer" parent="DownPanel/VBox/ButtonEdit"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = SubResource("Theme_jp7kg")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_cm3ht")
+
+[node name="VBox" type="VBoxContainer" parent="DownPanel/VBox/ButtonEdit/PanelMenu"]
+layout_mode = 2
+
+[node name="ButtonNew" type="Button" parent="DownPanel/VBox/ButtonEdit/PanelMenu/VBox"]
+modulate = Color(1, 1, 0.6, 1)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "New Map"
+
+[node name="ButtonEdit" type="Button" parent="DownPanel/VBox/ButtonEdit/PanelMenu/VBox"]
+modulate = Color(1, 1, 0.6, 1)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Edit Map"
+
+[node name="ButtonCopy" type="Button" parent="DownPanel/VBox/ButtonEdit/PanelMenu/VBox"]
+modulate = Color(1, 1, 0.6, 1)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Copy Map"
+
+[node name="ButtonDeleteMap" type="Button" parent="DownPanel/VBox/ButtonEdit/PanelMenu/VBox"]
+modulate = Color(1, 0.364706, 0.341176, 1)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Delete This Map"
+
+[node name="ButtonDeleteSong" type="Button" parent="DownPanel/VBox/ButtonEdit/PanelMenu/VBox"]
+modulate = Color(1, 0.168627, 0.188235, 1)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Delete This Song"
+
+[node name="Label" type="Label" parent="DownPanel/VBox/ButtonEdit"]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 3.0
+offset_left = 7.0
+offset_top = -26.0
+offset_right = 37.0
 grow_vertical = 0
 size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("5_etfut")
-text = "Cloud"
+text = "Edit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonCloud"]
+[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonEdit"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-offset_left = 51.0
-offset_right = 115.0
+offset_left = 47.0
+offset_right = 111.0
 offset_bottom = 80.0
 grow_horizontal = 0
 size_flags_horizontal = 10
 mouse_filter = 2
-texture = ExtResource("18_j3jtp")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="ButtonSetting" type="Button" parent="DownPanel/VBox"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
-theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
-theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
-
-[node name="Label" type="Label" parent="DownPanel/VBox/ButtonSetting"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-grow_vertical = 0
-size_flags_vertical = 8
-theme_override_fonts/font = ExtResource("5_etfut")
-text = "Setting"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonSetting"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-offset_left = 51.0
-offset_right = 115.0
-offset_bottom = 80.0
-grow_horizontal = 0
-size_flags_horizontal = 10
-mouse_filter = 2
-texture = ExtResource("17_yvf60")
+texture = ExtResource("18_du0a7")
 expand_mode = 1
 stretch_mode = 5
 
@@ -1040,7 +968,9 @@ layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 3.0
+offset_left = 7.0
+offset_top = -26.0
+offset_right = 42.0
 grow_vertical = 0
 size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("5_etfut")
@@ -1051,6 +981,8 @@ vertical_alignment = 1
 [node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonMod"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+anchor_left = -0.0333333
+anchor_right = -0.0333333
 offset_left = 51.0
 offset_right = 115.0
 offset_bottom = 80.0
@@ -1062,7 +994,7 @@ expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
 
-[node name="ButtonRandom" type="Button" parent="DownPanel/VBox"]
+[node name="ButtonDraw" type="Button" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_p6fnm")
@@ -1070,12 +1002,14 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_q2owl")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kcgan")
 theme_override_styles/focus = SubResource("StyleBoxFlat_j6nmm")
 
-[node name="Label" type="Label" parent="DownPanel/VBox/ButtonRandom"]
+[node name="Label" type="Label" parent="DownPanel/VBox/ButtonDraw"]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 3.0
+offset_left = 7.0
+offset_top = -26.0
+offset_right = 48.0
 grow_vertical = 0
 size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("5_etfut")
@@ -1083,11 +1017,11 @@ text = "Draw"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonRandom"]
+[node name="Image" type="TextureRect" parent="DownPanel/VBox/ButtonDraw"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-offset_left = 51.0
-offset_right = 115.0
+offset_left = 47.0
+offset_right = 111.0
 offset_bottom = 80.0
 grow_horizontal = 0
 size_flags_horizontal = 10
@@ -1095,10 +1029,6 @@ mouse_filter = 2
 texture = ExtResource("19_n270n")
 expand_mode = 1
 stretch_mode = 5
-
-[node name="||" type="Control" parent="DownPanel/VBox"]
-custom_minimum_size = Vector2(10, 0)
-layout_mode = 2
 
 [node name="<-|" type="Control" parent="DownPanel/VBox"]
 custom_minimum_size = Vector2(10, 0)
@@ -1171,250 +1101,3 @@ grow_vertical = 2
 text = "dicolo!"
 label_settings = SubResource("LabelSettings_wwovf")
 clip_text = true
-
-[node name="Aho-sit" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(513, 513)
-texture = ExtResource("30_gobif")
-
-[node name="PartnerAho" type="Node2D" parent="."]
-visible = false
-position = Vector2(744, 548)
-
-[node name="animation_player" type="AnimationPlayer" parent="PartnerAho"]
-libraries = {
-"": SubResource("AnimationLibrary_c8d0r")
-}
-
-[node name="Polygons" type="Node2D" parent="PartnerAho"]
-
-[node name="hair_tail_back" type="Polygon2D" parent="PartnerAho/Polygons"]
-position = Vector2(-18, -151)
-texture = ExtResource("26_f45au")
-skeleton = NodePath("../../Skeleton2D")
-polygon = PackedVector2Array(0, 0, 49, 0, 49, 118, 0, 118)
-uv = PackedVector2Array(0, 0, 49, 0, 49, 118, 0, 118)
-bones = ["hip", PackedFloat32Array(0, 0, 0, 0), "hip/body", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/face", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/face/hair_tail_front", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/face/hair_tail_back", PackedFloat32Array(0.5, 0.5, 0.5, 0.5), "hip/body/neck/arm_front", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_front/hand", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_back", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_back/hand", PackedFloat32Array(0, 0, 0, 0), "hip/leg_front_top", PackedFloat32Array(0, 0, 0, 0), "hip/leg_front_top/leg_front_down", PackedFloat32Array(0, 0, 0, 0), "hip/leg_back_top", PackedFloat32Array(0, 0, 0, 0), "hip/leg_back_top/leg_back_down", PackedFloat32Array(0, 0, 0, 0)]
-
-[node name="face" type="Polygon2D" parent="PartnerAho/Polygons"]
-position = Vector2(-46, -167)
-texture = ExtResource("27_2xyf1")
-skeleton = NodePath("../../Skeleton2D")
-polygon = PackedVector2Array(0, 0, 55, 0, 55, 56, 0, 56)
-uv = PackedVector2Array(0, 0, 55, 0, 55, 56, 0, 56)
-bones = ["hip", PackedFloat32Array(0, 0, 0, 0), "hip/body", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/face", PackedFloat32Array(0.5, 0.5, 0.5, 0.5), "hip/body/neck/face/hair_tail_back", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/face/hair_tail_front", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_front", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_front/hand", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_back", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_back/hand", PackedFloat32Array(0, 0, 0, 0), "hip/leg_front_top", PackedFloat32Array(0, 0, 0, 0), "hip/leg_front_top/leg_front_down", PackedFloat32Array(0, 0, 0, 0), "hip/leg_back_top", PackedFloat32Array(0, 0, 0, 0), "hip/leg_back_top/leg_back_down", PackedFloat32Array(0, 0, 0, 0)]
-
-[node name="hair_top" type="Polygon2D" parent="PartnerAho/Polygons/face"]
-position = Vector2(-12, -18)
-texture = ExtResource("28_nj5va")
-polygon = PackedVector2Array(0, 0, 78, 0, 78, 61, 0, 61)
-uv = PackedVector2Array(0, 0, 78, 0, 78, 61, 0, 61)
-
-[node name="headset" type="Polygon2D" parent="PartnerAho/Polygons/face/hair_top"]
-position = Vector2(13, 3)
-texture = ExtResource("30_o0o7e")
-polygon = PackedVector2Array(0, 0, 16, 0, 16, 38, 0, 38)
-
-[node name="hair_tail_front" type="Polygon2D" parent="PartnerAho/Polygons"]
-position = Vector2(-30, -157)
-texture = ExtResource("29_5sn2m")
-skeleton = NodePath("../../Skeleton2D")
-polygon = PackedVector2Array(0, 0, 51, 0, 51, 127, 0, 127)
-uv = PackedVector2Array(0, 0, 51, 0, 51, 127, 0, 127)
-bones = ["hip", PackedFloat32Array(0, 0, 0, 0), "hip/body", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/face", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/face/hair_tail_back", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/face/hair_tail_front", PackedFloat32Array(0.5, 0.5, 0.5, 0.5), "hip/body/neck/arm_front", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_front/hand", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_back", PackedFloat32Array(0, 0, 0, 0), "hip/body/neck/arm_back/hand", PackedFloat32Array(0, 0, 0, 0), "hip/leg_front_top", PackedFloat32Array(0, 0, 0, 0), "hip/leg_front_top/leg_front_down", PackedFloat32Array(0, 0, 0, 0), "hip/leg_back_top", PackedFloat32Array(0, 0, 0, 0), "hip/leg_back_top/leg_back_down", PackedFloat32Array(0, 0, 0, 0)]
-
-[node name="Skeleton2D" type="Skeleton2D" parent="PartnerAho"]
-
-[node name="hip" type="Bone2D" parent="PartnerAho/Skeleton2D"]
-rest = Transform2D(1, 0, 0, 1, 0, 0)
-
-[node name="body" type="Bone2D" parent="PartnerAho/Skeleton2D/hip"]
-position = Vector2(-7, -29)
-rest = Transform2D(1, 0, 0, 1, -7, -29)
-
-[node name="neck" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/body"]
-position = Vector2(-3, -63)
-rest = Transform2D(1, 0, 0, 1, -3, -63)
-
-[node name="face" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/body/neck"]
-position = Vector2(-6, -26)
-rest = Transform2D(1, 0, 0, 1, -6, -26)
-
-[node name="hair_tail_back" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/body/neck/face"]
-position = Vector2(31, -25)
-rotation = 1.44862
-scale = Vector2(5.69999, 5.69999)
-rest = Transform2D(-2.49155e-07, 5.7, -5.7, -2.49155e-07, 31, -25)
-
-[node name="hair_tail_front" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/body/neck/face"]
-position = Vector2(18, -23)
-rotation = 1.44421
-scale = Vector2(5.869, 5.869)
-rest = Transform2D(-2.56542e-07, 5.869, -5.869, -2.56542e-07, 18, -23)
-
-[node name="arm_front" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/body/neck"]
-position = Vector2(2, -1)
-rest = Transform2D(1, 0, 0, 1, 2, -1)
-
-[node name="hand" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/body/neck/arm_front"]
-position = Vector2(-13, 125)
-rotation = 2.28987
-rest = Transform2D(-0.658688, 0.752416, -0.752416, -0.658688, -13, 125)
-
-[node name="arm_back" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/body/neck"]
-position = Vector2(7, 4)
-rest = Transform2D(1, 0, 0, 1, 7, 4)
-
-[node name="hand" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/body/neck/arm_back"]
-position = Vector2(3, 107)
-rotation = -2.2602
-rest = Transform2D(-0.636077, -0.771625, 0.771625, -0.636077, 3, 107)
-
-[node name="leg_front_top" type="Bone2D" parent="PartnerAho/Skeleton2D/hip"]
-position = Vector2(2, 18)
-rest = Transform2D(1, 0, 0, 1, 2, 18)
-
-[node name="leg_front_down" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/leg_front_top"]
-position = Vector2(-61, -5)
-rotation = 0.310669
-scale = Vector2(7.895, 7.895)
-rest = Transform2D(7.51706, 2.41346, -2.41346, 7.51706, -61, -5)
-
-[node name="leg_back_top" type="Bone2D" parent="PartnerAho/Skeleton2D/hip"]
-position = Vector2(7, 14)
-rest = Transform2D(1, 0, 0, 1, 7, 14)
-
-[node name="leg_back_down" type="Bone2D" parent="PartnerAho/Skeleton2D/hip/leg_back_top"]
-position = Vector2(-59, -14)
-rotation = -0.712094
-scale = Vector2(8.034, 8.034)
-rest = Transform2D(6.0817, -5.24958, 5.24958, 6.0817, -59, -14)
-
-[node name="SongMenu" type="ColorRect" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_fctxt")
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-script = ExtResource("33_p5fof")
-
-[node name="Background" type="ColorRect" parent="SongMenu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.2)
-
-[node name="Label" type="Label" parent="SongMenu"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.2
-anchor_right = 0.5
-anchor_bottom = 0.2
-grow_horizontal = 2
-grow_vertical = 0
-text = "Song Menu"
-label_settings = SubResource("LabelSettings_hlll4")
-
-[node name="Line" type="ColorRect" parent="SongMenu/Label"]
-custom_minimum_size = Vector2(0, 2)
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="ScrollContainer" type="ScrollContainer" parent="SongMenu"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.25
-anchor_right = 1.0
-anchor_bottom = 0.95
-mouse_filter = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="VBox" type="VBoxContainer" parent="SongMenu/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme = SubResource("Theme_clr2o")
-theme_override_constants/separation = 20
-
-[node name="PanelEdit" type="PanelContainer" parent="SongMenu/ScrollContainer/VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="HBox" type="VBoxContainer" parent="SongMenu/ScrollContainer/VBox/PanelEdit"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="HBox" type="HBoxContainer" parent="SongMenu/ScrollContainer/VBox/PanelEdit/HBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="ButtonNew" type="Button" parent="SongMenu/ScrollContainer/VBox/PanelEdit/HBox/HBox"]
-layout_mode = 2
-theme_override_colors/font_pressed_color = Color(0.34902, 0.85098, 0.34902, 1)
-theme_override_colors/font_hover_color = Color(0.34902, 0.85098, 0.34902, 1)
-theme_override_colors/font_focus_color = Color(0.34902, 0.85098, 0.34902, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_226ou")
-theme_override_styles/hover = SubResource("StyleBoxFlat_27c3l")
-theme_override_styles/focus = SubResource("StyleBoxFlat_27c3l")
-text = "New"
-
-[node name="ButtonCopy" type="Button" parent="SongMenu/ScrollContainer/VBox/PanelEdit/HBox/HBox"]
-layout_mode = 2
-theme_override_colors/font_pressed_color = Color(1, 0.843137, 0.568627, 1)
-theme_override_colors/font_hover_color = Color(1, 0.843137, 0.568627, 1)
-theme_override_colors/font_focus_color = Color(1, 0.843137, 0.568627, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_226ou")
-theme_override_styles/hover = SubResource("StyleBoxFlat_wtmq4")
-theme_override_styles/focus = SubResource("StyleBoxFlat_wtmq4")
-text = "Copy"
-
-[node name="ButtonEdit" type="Button" parent="SongMenu/ScrollContainer/VBox/PanelEdit/HBox/HBox"]
-layout_mode = 2
-theme_override_colors/font_pressed_color = Color(0.478431, 0.870588, 0.839216, 1)
-theme_override_colors/font_hover_color = Color(0.478431, 0.870588, 0.839216, 1)
-theme_override_colors/font_focus_color = Color(0.478431, 0.870588, 0.839216, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_226ou")
-theme_override_styles/hover = SubResource("StyleBoxFlat_22yyl")
-theme_override_styles/focus = SubResource("StyleBoxFlat_22yyl")
-text = "Edit"
-
-[node name="Label" type="Label" parent="SongMenu/ScrollContainer/VBox/PanelEdit/HBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "a beatmap"
-
-[node name="PanelDeleteMap" type="Button" parent="SongMenu/ScrollContainer/VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_colors/font_color = Color(1, 0.486275, 0.294118, 1)
-theme_override_colors/font_pressed_color = Color(1, 0.32549, 0, 1)
-theme_override_colors/font_hover_color = Color(1, 0.486275, 0.294118, 1)
-theme_override_colors/font_focus_color = Color(1, 0.486275, 0.294118, 1)
-text = "Delete this map"
-
-[node name="PanelDeleteSong" type="Button" parent="SongMenu/ScrollContainer/VBox"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_colors/font_color = Color(1, 0.196078, 0.294118, 1)
-theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(1, 0.196078, 0.294118, 1)
-theme_override_colors/font_focus_color = Color(1, 0.196078, 0.294118, 1)
-text = "Delete this song"

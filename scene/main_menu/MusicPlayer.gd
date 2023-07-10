@@ -54,18 +54,18 @@ func _ready():
 	button_Play.toggled.connect(func(flag: bool): play = flag);
 	
 	button_Prev.pressed.connect(func():
-		var song_count = Global.scene_MainMenu.songList.get_song_count();
-		var index = Global.scene_MainMenu.songList.selected_index;
+		var song_count = Global.mainMenu.songList.get_song_count();
+		var index = Global.mainMenu.songList.selected_index;
 		index = song_count-1 if (index == 0) else index - 1;
-		Global.scene_MainMenu.songList.select_song(index);
-		Global.scene_MainMenu.songList.scroll_to(index);
+		Global.mainMenu.songList.select_song(index);
+		Global.mainMenu.songList.scroll_to(index);
 	);
 	button_Next.pressed.connect(func():
-		var song_count = Global.scene_MainMenu.songList.get_song_count();
-		var index = Global.scene_MainMenu.songList.selected_index;
+		var song_count = Global.mainMenu.songList.get_song_count();
+		var index = Global.mainMenu.songList.selected_index;
 		index = 0 if (index == song_count-1) else index + 1
-		Global.scene_MainMenu.songList.select_song(index);
-		Global.scene_MainMenu.songList.scroll_to(index);
+		Global.mainMenu.songList.select_song(index);
+		Global.mainMenu.songList.scroll_to(index);
 	);
 	
 	# 音频

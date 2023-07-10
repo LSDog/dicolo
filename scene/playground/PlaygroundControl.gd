@@ -117,7 +117,7 @@ var play_time := 0.0;
 @onready var playground := $PlayGround;
 @onready var lyricsLabel :=  $BGPanel/LyricLabel;
 @onready var virtualJoystick := $VirtualJoystick;
-@onready var manuButton := $MenuButton;
+@onready var menuButton := $MenuButton;
 
 
 var texture_hit_fx = preload("res://visual/texture/hit_fx.svg");
@@ -161,9 +161,9 @@ func _ready():
 	# 暂停菜单
 	$Pause/Content/Quit.pressed.connect(func():
 		var playGroundScene = get_tree().current_scene;
-		Global.unfreeze(Global.scene_MainMenu);
-		Global.scene_MainMenu.visible = true;
-		get_tree().current_scene = Global.scene_MainMenu;
+		Global.unfreeze(Global.mainMenu);
+		Global.mainMenu.visible = true;
+		get_tree().current_scene = Global.mainMenu;
 		get_tree().root.remove_child(playGroundScene);
 		playGroundScene.queue_free();
 	)
@@ -195,7 +195,7 @@ func load_map(map_file_path: String, auto_start: bool = false):
 	print("[PlayGround] map_loaded: ", beatmap);
 	map_file = null;
 	
-	background.texture = load(beatmap.bg_image_path) if beatmap.bg_image_path != "" else Global.scene_MainMenu.default_backgrounds.pick_random();
+	background.texture = load(beatmap.bg_image_path) if beatmap.bg_image_path != "" else Global.mainMenu.default_backgrounds.pick_random();
 	#has_audio = beatmap.audio_path != "";
 	audio_player.stream = load(beatmap.audio_path);
 	has_video = beatmap.video_path != "";
@@ -343,7 +343,7 @@ func jump(time :float, do_pause :bool = true):
 	
 	# 强制运行很短的时间来预览
 	resume();
-	_process(1/1000.0);
+	_process(1/100.0);
 	pause();
 	
 	#print(anim_tweens)
@@ -696,6 +696,10 @@ func judge_note(wait_index :int, note_array = null):
 	
 	# 非 miss 的判定与动画
 	
+	var edit_mode := play_mode == PLAY_MODE.EDIT;
+	# 编辑模式下精准击中
+	if edit_mode && offset < 0: return;
+	
 	if offset > -judge_just && offset < judge_just:
 		# just
 		judge = JUDGEMENT.JUST;
@@ -724,7 +728,7 @@ func judge_note(wait_index :int, note_array = null):
 				ct.degree - judge_hit_deg_offset,
 				ct.degree + judge_hit_deg_offset
 			);
-			if ct.velocity.length() >= judge_hit_speed && touched && hit:
+			if edit_mode || ct.velocity.length() >= judge_hit_speed && touched && hit:
 				judged_notes[wait_index] = note_array;
 				var line :Line2D = note_item_array[0];
 				#var polygon :Polygon2D = note_item_array[1];
@@ -738,7 +742,7 @@ func judge_note(wait_index :int, note_array = null):
 				var tween = create_anim_tween(line_fx);
 				tween.parallel().tween_property(line_fx, "width", 140.0, note_after_time
 					).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
-				tween.parallel().tween_property(line_fx, "modulate:a", 0.0, note_after_time*2
+				tween.parallel().tween_property(line_fx, "modulate:a", 0.0, note_after_time
 					).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD);
 				note_item_array.append(line_fx);
 				
@@ -750,7 +754,7 @@ func judge_note(wait_index :int, note_array = null):
 				ct.distance >= radius - judge_slide_radius &&
 				is_in_degree(ct.degree, note.deg - judge_slide_deg/2.0, note.deg + judge_slide_deg/2.0)
 			);
-			if touched:
+			if edit_mode || touched:
 				judged_notes[wait_index] = note_array;
 				var path_follow := note_item_array[0] as PathFollow2D;
 				#var slide :Sprite2D = path_follow.get_child(0);
@@ -769,7 +773,7 @@ func judge_note(wait_index :int, note_array = null):
 		BeatMap.EVENT_TYPE.Bounce:
 			note = note as BeatMap.Event.Note.Bounce;
 			touched = ct.distance <= judge_bounce_radius;
-			if ct.velocity.length_squared() >= judge_bounce_speed**2 && touched:
+			if edit_mode || ct.velocity.length_squared() >= judge_bounce_speed**2 && touched:
 				judged_notes[wait_index] = note_array;
 				var bounce := note_item_array[0] as Sprite2D;
 				bounce.modulate = COLOR_JUST if judge == JUDGEMENT.JUST else COLOR_GOOD;

@@ -10,26 +10,26 @@ content_margin_top = 2.0
 content_margin_right = 6.0
 content_margin_bottom = 2.0
 bg_color = Color(0, 0, 0, 0.901961)
-border_width_left = 30
+border_width_left = 36
 border_color = Color(0.4, 0.4, 0.4, 1)
-corner_radius_top_left = 8
-corner_radius_bottom_left = 8
+corner_radius_top_left = 12
+corner_radius_bottom_left = 12
+corner_detail = 16
 shadow_color = Color(0, 0, 0, 0.18)
-shadow_size = 10
 shadow_offset = Vector2(-10, 0)
 anti_aliasing = false
 
 [node name="NotifBox" type="PanelContainer"]
 offset_right = 51.0
-offset_bottom = 34.0
+offset_bottom = 48.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_p4tae")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 7
 
 [node name="Icon" type="TextureRect" parent="HBoxContainer"]
-custom_minimum_size = Vector2(26, 26)
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -43,11 +43,11 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/normal_font = ExtResource("2_uu3u5")
 theme_override_fonts/bold_font = ExtResource("3_lhb13")
-theme_override_font_sizes/normal_font_size = 18
-theme_override_font_sizes/bold_font_size = 18
-theme_override_font_sizes/italics_font_size = 18
-theme_override_font_sizes/bold_italics_font_size = 18
-theme_override_font_sizes/mono_font_size = 18
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 28
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/bold_italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 28
 bbcode_enabled = true
 fit_content = true
 scroll_active = false

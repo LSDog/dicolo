@@ -29,7 +29,7 @@ _data = {
 }
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t55bx"]
-bg_color = Color(0, 0, 0, 0.901961)
+bg_color = Color(0, 0, 0, 0.7)
 shadow_color = Color(0, 0, 0, 0.2)
 shadow_size = 60
 
@@ -41,11 +41,8 @@ font_size = 34
 [node name="Setting" type="Control"]
 custom_minimum_size = Vector2(530, 0)
 layout_mode = 3
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
+anchors_preset = 9
 anchor_bottom = 1.0
-grow_horizontal = 0
 grow_vertical = 2
 theme = SubResource("Theme_1f2qo")
 script = ExtResource("1_lf8gb")
@@ -79,8 +76,8 @@ vertical_scroll_mode = 2
 [node name="Margin" type="MarginContainer" parent="Panel/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_right = 18
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 6
 
 [node name="List" type="VBoxContainer" parent="Panel/Scroll/Margin"]
 layout_mode = 2
@@ -315,9 +312,10 @@ layout_mode = 2
 text = "Audio Offset"
 
 [node name="ButtonSub" type="Button" parent="Panel/Scroll/Margin/List/Gameplay/AudioOffset"]
-custom_minimum_size = Vector2(32, 0)
+custom_minimum_size = Vector2(52, 0)
 layout_mode = 2
 size_flags_horizontal = 6
+size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("4_hbsjn")
 text = "-"
 
@@ -328,9 +326,10 @@ text = "0"
 horizontal_alignment = 1
 
 [node name="ButtonAdd" type="Button" parent="Panel/Scroll/Margin/List/Gameplay/AudioOffset"]
-custom_minimum_size = Vector2(32, 0)
+custom_minimum_size = Vector2(52, 0)
 layout_mode = 2
 size_flags_horizontal = 6
+size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("4_hbsjn")
 text = "+"
 

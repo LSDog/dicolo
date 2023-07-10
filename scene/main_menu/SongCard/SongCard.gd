@@ -179,12 +179,12 @@ func add_mapCard(diff: float, info: String, rating: String, map_name: String, ma
 	map_card.set_rating(rating);
 	map_card.map_name = map_name;
 	map_card.map_path = map_path;
-	map_card.map_play_request.connect(Global.scene_MainMenu.play_map);
+	map_card.map_play_request.connect(Global.mainMenu.play_map);
 	map_card.map_select.connect(func():
 		if selected_mapCard != null && selected_mapCard != map_card:
 			selected_mapCard.unselect();
 		selected_mapCard = map_card;
-		Global.scene_MainMenu.leftPanel.set_score(randi_range(500_0000, 1000_0000));
-		Global.scene_MainMenu.leftPanel.set_count(randf_range(0.8, 1.0), randi_range(500, 1000));
+		Global.mainMenu.leftPanel.set_score(randi_range(500_0000, 1000_0000));
+		Global.mainMenu.leftPanel.set_count(randf_range(0.8, 1.0), randi_range(500, 1000));
 	);
 
