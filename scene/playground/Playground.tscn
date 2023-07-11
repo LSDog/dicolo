@@ -1,8 +1,7 @@
-[gd_scene load_steps=30 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=29 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/playground/PlaygroundControl.gd" id="1_p2o0i"]
 [ext_resource type="Shader" path="res://visual/shader/whirl_texture.gdshader" id="2_hx1af"]
-[ext_resource type="VideoStream" path="res://map/HareHareYukai/ハレ晴レユカイed.ogv" id="3_11wx6"]
 [ext_resource type="Script" path="res://scene/playground/Spectrum.gd" id="3_fqg67"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="4_ea2p3"]
 [ext_resource type="FontFile" uid="uid://dy4m6l0n1c0kk" path="res://visual/font/LettersLaughingAtTheirExecution-WJLG.ttf" id="5_slvds"]
@@ -130,7 +129,6 @@ ratio = 1.7778
 [node name="VideoPlayer" type="VideoStreamPlayer" parent="BGPanel/VideoContainer"]
 process_priority = 10
 layout_mode = 2
-stream = ExtResource("3_11wx6")
 expand = true
 
 [node name="Spectrum" type="Control" parent="BGPanel"]

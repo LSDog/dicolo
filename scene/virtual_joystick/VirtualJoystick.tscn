@@ -78,7 +78,7 @@ script = ExtResource("1_ef85n")
 [node name="LOut" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_5augx")
 position = Vector2(128, 522)
-scale = Vector2(0.35, 0.35)
+scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_bmrb0")
 
 [node name="Pattern" type="Sprite2D" parent="LOut"]
@@ -97,7 +97,7 @@ texture = ExtResource("4_vaqr8")
 [node name="ROut" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_5augx")
 position = Vector2(1023, 522)
-scale = Vector2(0.35, 0.35)
+scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_bmrb0")
 
 [node name="Pattern" type="Sprite2D" parent="ROut"]

@@ -18,7 +18,7 @@ func set_avatar(path: String):
 	if path == avatar_path: return;
 	remove_storage_file(avatar_path);
 	avatar_path = storage_file(path);
-	avatar = get_avatar();
+	avatar = null;
 
 func remove_storage_file(path: String):
 	var path_storage := "user://.storage/";
