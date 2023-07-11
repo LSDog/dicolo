@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cdyhqt27mk6t3"]
+[gd_scene load_steps=10 format=3 uid="uid://cdyhqt27mk6t3"]
 
 [ext_resource type="Script" path="res://scene/setting/Setting.gd" id="1_lf8gb"]
 [ext_resource type="Theme" uid="uid://d3m8pmhle7d8r" path="res://visual/theme/default_theme.tres" id="3_wwley"]
 [ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="4_hbsjn"]
+[ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://visual/partner/avatar_trans-1024x.png" id="4_qoaw6"]
 
 [sub_resource type="Theme" id="Theme_1f2qo"]
 default_font_size = 28
@@ -86,6 +87,33 @@ size_flags_horizontal = 3
 [node name="--" type="Control" parent="Panel/Scroll/Margin/List"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
+
+[node name="Player" type="VBoxContainer" parent="Panel/Scroll/Margin/List"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Scroll/Margin/List/Player"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "😏 Player"
+label_settings = SubResource("LabelSettings_xlwvw")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Profile" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Player"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="TextureAvatar" type="TextureRect" parent="Panel/Scroll/Margin/List/Player/Profile"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+mouse_filter = 0
+texture = ExtResource("4_qoaw6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LineEditName" type="LineEdit" parent="Panel/Scroll/Margin/List/Player/Profile"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Video" type="VBoxContainer" parent="Panel/Scroll/Margin/List"]
 layout_mode = 2

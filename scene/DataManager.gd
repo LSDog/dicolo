@@ -1,41 +1,58 @@
 extends Node
 
-var data_path := "user://"
+## 存储/加载 json 格式数据的地方
 
-enum DATA_TYPE {SETTING};
-const DATA_INFO := {
-	DATA_TYPE.SETTING: ["data_setting", "setting.json"]
-}
+## 数据路径
+var data_path := "user://";
 
-var data_setting := {};
+var data_setting :Dictionary = {};
+var data_setting_path := "setting.json";
+var data_setting_loaded :bool = false;
+func save_data_setting(): save_json_data(data_setting, data_setting_path);
 
-signal data_loaded(data_type);
+var data_player :PlayerData;
+var data_player_path := "player.tres";
+var data_player_loaded :bool = false;
+func save_data_player(): save_res_data(data_player, data_player_path);
 
-func save_data(data_type: DATA_TYPE):
-	
-	var info = DATA_INFO.get(data_type);
-	var var_name :String = info[0];
-	var data_file :String = info[1];
-	var data :Dictionary = get(var_name);
-	
-	var file := FileAccess.open(data_path + data_file, FileAccess.WRITE);
+func _ready():
+	if data_exist(data_setting_path):
+		data_setting = load_json_data(data_setting_path);
+		data_setting_loaded = true;
+	if data_exist(data_player_path):
+		data_player = load_res_data(data_player_path);
+	else:
+		data_player = PlayerData.new();
+
+## 检查数据文件是否存在于data_path之下
+func data_exist(path: String) -> bool:
+	return FileAccess.file_exists(data_path + path);
+
+## 保存json数据
+func save_json_data(data: Dictionary, path: String) -> void:
+	var file := FileAccess.open(data_path + path, FileAccess.WRITE);
 	file.store_string(JSON.stringify(data, "\t"));
 	file.flush();
 	file.close();
-	
-	print("[DataManager] saved ", data_file);
+	print("[DataManager] saved ", path);
 
-func load_data(data_type: DATA_TYPE):
-	
-	var info = DATA_INFO.get(data_type);
-	var var_name :String = info[0];
-	var data_file :String = info[1];
-	
-	var file := FileAccess.open(data_path + data_file, FileAccess.READ_WRITE);
+## 加载json数据
+func load_json_data(path: String) -> Dictionary:
+	var file := FileAccess.open(data_path + path, FileAccess.READ_WRITE);
 	var data = JSON.parse_string(file.get_as_text());
-	if data != null: set(var_name, data);
 	file.flush();
 	file.close();
-	
-	data_loaded.emit(data_type);
-	print("[DataManager] loaded ", data_file);
+	print("[DataManager] loaded ", path);
+	return data;
+
+## 保存res/tres/scn/tscn等Resource数据
+func save_res_data(data: Resource, path: String) -> void:
+	var error = ResourceSaver.save(data, data_path + path,
+		ResourceSaver.FLAG_OMIT_EDITOR_PROPERTIES);
+	print("[DataManager] save ", path, ": ", error_string(error));
+
+## 加载res/tres/scn/tscn等Resource数据
+func load_res_data(path: String) -> Resource:
+	var data :Resource = load(data_path + path); 
+	print("[DataManager] loaded ", path);
+	return data;

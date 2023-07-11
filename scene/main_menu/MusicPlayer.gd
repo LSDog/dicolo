@@ -41,7 +41,7 @@ signal audio_end();
 		button_Loop.modulate.a = 1.0 if loop else 0.5;
 		if !data_loading:
 			DataManager.data_setting["MusicPlayer.Loop"] = value;
-			DataManager.save_data(DataManager.DATA_TYPE.SETTING);
+			DataManager.save_data_setting();
 
 var data_loading = true;
 
@@ -101,7 +101,7 @@ func _process(_delta: float):
 func play_music(stream: AudioStream, song_string: String, song_start_beat: float = 0.0, song_bpm: float = 0.0):
 	start_beat = song_start_beat;
 	bpm = song_bpm;
-	$InfoLabel.text = "] Playing: " + song_string;
+	$InfoLabel.text = "] " + song_string;
 	if audio_player.stream != stream:
 		audio_player.stream = stream;
 		if !audio_player.playing: audio_player.play();

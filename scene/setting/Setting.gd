@@ -6,29 +6,32 @@ const COLOR_NORMAL := Color.WHITE;
 const COLOR_WAITING := Color("e098ff");
 const COLOR_CHANGED := Color("ffdd00");
 
+# Player #
+@onready var textureAvatar := $Panel/Scroll/Margin/List/Player/Profile/TextureAvatar;
+@onready var lineEditName := $Panel/Scroll/Margin/List/Player/Profile/LineEditName;
 # Video #
-@onready var button_FullScreen := $Panel/Scroll/Margin/List/Video/FullScreen/Button;
-@onready var option_FullScreenMode := $Panel/Scroll/Margin/List/Video/FullScreenMode/Option;
-var option_FullScreenMode_items = [DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN, DisplayServer.WINDOW_MODE_FULLSCREEN];
-@onready var input_FPS := $Panel/Scroll/Margin/List/Video/FPS/Input;
-@onready var check_VSync := $Panel/Scroll/Margin/List/Video/VSync/CheckButton;
-@onready var label_Scale := $Panel/Scroll/Margin/List/Video/Scale/Label;
-@onready var slider_Scale := $Panel/Scroll/Margin/List/Video/Scale/HSlider;
+@onready var buttonFullScreen := $Panel/Scroll/Margin/List/Video/FullScreen/Button;
+@onready var optionFullScreenMode := $Panel/Scroll/Margin/List/Video/FullScreenMode/Option;
+var optionFullScreenMode_items = [DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN, DisplayServer.WINDOW_MODE_FULLSCREEN];
+@onready var inputFPS := $Panel/Scroll/Margin/List/Video/FPS/Input;
+@onready var checkVSync := $Panel/Scroll/Margin/List/Video/VSync/CheckButton;
+@onready var labelScale := $Panel/Scroll/Margin/List/Video/Scale/Label;
+@onready var sliderScale := $Panel/Scroll/Margin/List/Video/Scale/HSlider;
 # Audio #
-@onready var slider_volumeMaster := $Panel/Scroll/Margin/List/Audio/VolumeMaster/HSlider;
-@onready var slider_volumeMusic := $Panel/Scroll/Margin/List/Audio/VolumeMusic/HSlider;
-@onready var slider_volumeEffect := $Panel/Scroll/Margin/List/Audio/VolumeEffect/HSlider;
-@onready var slider_volumeVoice := $Panel/Scroll/Margin/List/Audio/VolumeVoice/HSlider;
+@onready var sliderVolumeMaster := $Panel/Scroll/Margin/List/Audio/VolumeMaster/HSlider;
+@onready var sliderVolumeMusic := $Panel/Scroll/Margin/List/Audio/VolumeMusic/HSlider;
+@onready var sliderVolumeEffect := $Panel/Scroll/Margin/List/Audio/VolumeEffect/HSlider;
+@onready var sliderVolumeVoice := $Panel/Scroll/Margin/List/Audio/VolumeVoice/HSlider;
 # Device #
-@onready var label_Gamepad := $Panel/Scroll/Margin/List/Device/Gamepad/Label;
-@onready var option_Gamepad := $Panel/Scroll/Margin/List/Device/Gamepad/Option;
+@onready var labelGamepad := $Panel/Scroll/Margin/List/Device/Gamepad/Label;
+@onready var optionGamepad := $Panel/Scroll/Margin/List/Device/Gamepad/Option;
 # GamePlay #
 var audio_offset :int = 0;
-@onready var label_AudioOffset := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/LabelOffset;
-@onready var button_AudioOffsetAdd := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonAdd;
-@onready var button_AudioOffsetSub := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonSub;
+@onready var labelAudioOffset := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/LabelOffset;
+@onready var buttonAudioOffsetAdd := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonAdd;
+@onready var buttonAudioOffsetSub := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonSub;
 # Misc #
-@onready var check_DebugInfo := $Panel/Scroll/Margin/List/Misc/DebugInfo/CheckButton;
+@onready var checkDebugInfo := $Panel/Scroll/Margin/List/Misc/DebugInfo/CheckButton;
 
 var loading_data := true;
 
@@ -39,9 +42,6 @@ func _ready():
 	var vScroll := scrollContainer.get_v_scroll_bar();
 	vScroll.layout_direction = Control.LAYOUT_DIRECTION_RTL;
 	
-	
-	DataManager.load_data(DataManager.DATA_TYPE.SETTING);
-	
 	bind_gui_action();
 	
 	set_setting_from_data();
@@ -49,35 +49,61 @@ func _ready():
 
 ## 绑定gui与设置变化
 func bind_gui_action():
-	
-	button_FullScreen.toggled.connect(func(pressed):
-		var id = option_FullScreenMode.get_selected_id();
+	textureAvatar.gui_input.connect(func(input_event):
+		if input_event is InputEventMouseButton:
+			if input_event.pressed || input_event.button_index > MOUSE_BUTTON_MIDDLE: return;
+			var fileDialog = FileDialog.new();
+			fileDialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE;
+			fileDialog.access = FileDialog.ACCESS_FILESYSTEM;
+			fileDialog.set_filters(PackedStringArray(["*.png, *.jpg, *.jpeg, *.svg"]));
+			add_child(fileDialog);
+			fileDialog.size = Vector2i(1024, 512);
+			fileDialog.popup_centered()
+			fileDialog.canceled.connect(func():
+				remove_child(fileDialog);
+				fileDialog.queue_free();
+			);
+			fileDialog.file_selected.connect(func(path):
+				DataManager.data_player.avatar_path = path;
+				var texture := DataManager.data_player.get_avatar();
+				textureAvatar.texture = texture;
+				Global.mainMenu.downPanel.textureAvatar.texture = texture;
+				DataManager.save_data_player();
+			);
+	);
+	lineEditName.text_changed.connect(func(text):
+		DataManager.data_player.name = text;
+		if loading_data: return;
+		DataManager.save_data_player();
+	);
+	buttonFullScreen.toggled.connect(func(pressed):
+		var id = optionFullScreenMode.get_selected_id();
 		DisplayServer.window_set_mode(
 			DisplayServer.WINDOW_MODE_WINDOWED
 			if !pressed else
-			option_FullScreenMode_items[id]
+			optionFullScreenMode_items[id]
 		);
 		save_data("FullScreen", pressed);
 	);
-	option_FullScreenMode.item_selected.connect(func(index: int):
-		if button_FullScreen.button_pressed:
-			DisplayServer.window_set_mode(option_FullScreenMode_items[index]);
+	optionFullScreenMode.item_selected.connect(func(index: int):
+		if buttonFullScreen.button_pressed:
+			DisplayServer.window_set_mode(optionFullScreenMode_items[index]);
 		save_data("FullScreenMode", index);
 	);
-	input_FPS.text_changed.connect(func(_text: String):
-		input_FPS.modulate = COLOR_WAITING;
+	inputFPS.text_changed.connect(func(_text: String):
+		inputFPS.modulate = COLOR_WAITING;
 	);
-	input_FPS.text_submitted.connect(func(text: String):
+	inputFPS.text_submitted.connect(func(text: String):
 		if text.is_valid_int():
 			var fps = text.to_int();
 			Engine.max_fps = 0 if fps < 0 else fps;
-			input_FPS.modulate = COLOR_NORMAL;
+			inputFPS.modulate = COLOR_NORMAL;
 			# 给初始化加载数据用的
-			if input_FPS.text != text:
-				input_FPS.text = text;
+			if inputFPS.text != text:
+				inputFPS.text = text;
 			save_data("FPS", text);
 	);
-	check_VSync.toggled.connect(func(pressed: bool):
+	checkVSync.toggled.connect(func(pressed: bool):
 		DisplayServer.window_set_vsync_mode(
 			DisplayServer.VSYNC_ENABLED
 			if pressed else
@@ -85,7 +111,7 @@ func bind_gui_action():
 		);
 		save_data("VSync", pressed);
 	);
-	slider_Scale.value_changed.connect(func(value: float):
+	sliderScale.value_changed.connect(func(value: float):
 		get_tree().root.content_scale_factor = value;
 		Global.stretch_scale = value;
 		var event := InputEventMouseButton.new();
@@ -94,20 +120,20 @@ func bind_gui_action():
 		Input.parse_input_event(event);
 		save_data("Scale", value);
 	);
-	slider_volumeMaster.value_changed.connect(func(value: float):
-		set_audio_bus_volume("Master", value);
+	sliderVolumeMaster.value_changed.connect(func(value: float):
+		set_audio_bus_Volume("Master", value);
 		save_data("Volume.Master", value);
 	);
-	slider_volumeMusic.value_changed.connect(func(value: float):
-		set_audio_bus_volume("Music", value);
+	sliderVolumeMusic.value_changed.connect(func(value: float):
+		set_audio_bus_Volume("Music", value);
 		save_data("Volume.Music", value);
 	);
-	slider_volumeEffect.value_changed.connect(func(value: float):
-		set_audio_bus_volume("Effect", value);
+	sliderVolumeEffect.value_changed.connect(func(value: float):
+		set_audio_bus_Volume("Effect", value);
 		save_data("Volume.Effect", value);
 	);
-	slider_volumeVoice.value_changed.connect(func(value: float):
-		set_audio_bus_volume("Voice", value);
+	sliderVolumeVoice.value_changed.connect(func(value: float):
+		set_audio_bus_Volume("Voice", value);
 		save_data("Volume.Voice", value);
 	);
 	update_gamepad_select();
@@ -121,68 +147,72 @@ func bind_gui_action():
 		update_gamepad_select();
 		if connected: Global.gamepad_id = device;
 	);
-	option_Gamepad.item_selected.connect(func(id):
+	optionGamepad.item_selected.connect(func(id):
 		Global.gamepad_id = id;
-		update_label_Gamepad();
+		update_labelGamepad();
 	);
 	if Global.mainMenu != null:
 		var musicPlayer = Global.mainMenu.musicPlayer;
 		musicPlayer.beat.connect(func():
-			label_AudioOffset.create_tween().tween_property(
-				label_AudioOffset, "modulate:a", 1.0, 60.0/musicPlayer.bpm
+			labelAudioOffset.create_tween().tween_property(
+				labelAudioOffset, "modulate:a", 1.0, 60.0/musicPlayer.bpm
 			).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
 		);
-	button_AudioOffsetAdd.pressed.connect(func():
+	buttonAudioOffsetAdd.pressed.connect(func():
 		set_audio_offset(audio_offset + 1);
 		save_data("AudioOffset", audio_offset);
 	);
-	button_AudioOffsetSub.pressed.connect(func():
+	buttonAudioOffsetSub.pressed.connect(func():
 		set_audio_offset(audio_offset - 1);
 		save_data("AudioOffset", audio_offset);
 	);
-	check_DebugInfo.toggled.connect(func(flag: bool):
+	checkDebugInfo.toggled.connect(func(flag: bool):
 		Global.debugInfo.visible = flag;
 		save_data("DebugInfo", flag);
 	);
 
 func set_setting_from_data():
 	
-	option_FullScreenMode.selected = get_data("FullScreenMode", option_FullScreenMode.selected);
-	button_FullScreen.button_pressed = get_data("FullScreen", button_FullScreen.button_pressed);
-	input_FPS.text_submitted.emit(get_data("FPS", 60));
-	check_VSync.button_pressed = get_data("VSync", check_VSync.button_pressed);
-	slider_Scale.value = get_data("Scale", slider_Scale.value);
+	var data_player := DataManager.data_player as PlayerData;
+	textureAvatar.texture = data_player.get_avatar();
+	lineEditName.text = data_player.name;
 	
-	slider_volumeMaster.value = get_data("Volume.Master", slider_volumeMaster.value);
-	slider_volumeMusic.value = get_data("Volume.Music", slider_volumeMusic.value);
-	slider_volumeEffect.value = get_data("Volume.Effect", slider_volumeEffect.value);
-	slider_volumeVoice.value = get_data("Volume.Voice", slider_volumeVoice.value);
+	optionFullScreenMode.selected = get_data("FullScreenMode", optionFullScreenMode.selected);
+	buttonFullScreen.button_pressed = get_data("FullScreen", buttonFullScreen.button_pressed);
+	inputFPS.text_submitted.emit(get_data("FPS", 60));
+	checkVSync.button_pressed = get_data("VSync", checkVSync.button_pressed);
+	sliderScale.value = get_data("Scale", sliderScale.value);
+	
+	sliderVolumeMaster.value = get_data("Volume.Master", sliderVolumeMaster.value);
+	sliderVolumeMusic.value = get_data("Volume.Music", sliderVolumeMusic.value);
+	sliderVolumeEffect.value = get_data("Volume.Effect", sliderVolumeEffect.value);
+	sliderVolumeVoice.value = get_data("Volume.Voice", sliderVolumeVoice.value);
 	
 	set_audio_offset(get_data("AudioOffset", 0));
 	
-	check_DebugInfo.button_pressed = get_data("DebugInfo", check_DebugInfo.button_pressed);
+	checkDebugInfo.button_pressed = get_data("DebugInfo", checkDebugInfo.button_pressed);
 	
 	loading_data = false;
 	Global.data_loaded_setting.emit();
 	
 
 func update_gamepad_select():
-	option_Gamepad.clear();
+	optionGamepad.clear();
 	for i in Input.get_connected_joypads():
-		option_Gamepad.add_item(Input.get_joy_name(i)+" ("+Input.get_joy_guid(i)+")", i);
-	if option_Gamepad.item_count == 0:
+		optionGamepad.add_item(Input.get_joy_name(i)+" ("+Input.get_joy_guid(i)+")", i);
+	if optionGamepad.item_count == 0:
 		Global.gamepad_id = -1;
 	elif Global.gamepad_id == -1:
 		var id = Input.get_connected_joypads()[0]
 		Global.gamepad_id = id;
 	Global.gamepad_count = Input.get_connected_joypads().size();
-	update_label_Gamepad();
+	update_labelGamepad();
 
-func update_label_Gamepad():
-	label_Gamepad.text = "Gamepad: " + str(Global.gamepad_id+1) + "/" + str(Global.gamepad_count);
+func update_labelGamepad():
+	labelGamepad.text = "Gamepad: " + str(Global.gamepad_id+1) + "/" + str(Global.gamepad_count);
 
-func set_audio_bus_volume(bus: String, volume_db: float):
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(bus), volume_db);
+func set_audio_bus_Volume(bus: String, Volume_db: float):
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(bus), Volume_db);
 
 func get_audio_offset() -> int:
 	return audio_offset;
@@ -190,7 +220,7 @@ func get_audio_offset() -> int:
 func set_audio_offset(offset: int):
 	if offset < 0: offset = 0;
 	audio_offset = offset;
-	label_AudioOffset.text = ("+" if offset >= 0 else "") + str(offset) + " ms";
+	labelAudioOffset.text = ("+" if offset >= 0 else "") + str(offset) + " ms";
 	var delay := AudioServer.get_bus_effect(0, 0) as AudioEffectDelay;
 	delay.tap1_delay_ms = offset;
 
@@ -202,7 +232,7 @@ func _input(event: InputEvent):
 			if event.button_index == MOUSE_BUTTON_LEFT && event.pressed:
 				anim_hide();
 	elif event.is_action_pressed("full_screen"):
-		button_FullScreen.button_pressed = !button_FullScreen.button_pressed;
+		buttonFullScreen.button_pressed = !buttonFullScreen.button_pressed;
 
 func _gui_input(event: InputEvent):
 	if event.is_action_pressed("esc"):
@@ -224,8 +254,9 @@ func anim_hide():
 func save_data(key: String, value):
 	if loading_data: return;
 	DataManager.data_setting[key] = value;
-	DataManager.save_data(DataManager.DATA_TYPE.SETTING);
+	DataManager.save_data_setting();
 
-func get_data(key: String, default_value = null):
+## 获取配置
+func get_data(key: String, default = null):
 	var value = DataManager.data_setting.get(key);
-	return default_value if value == null else value;
+	return default if value == null else value;

@@ -5,6 +5,7 @@ extends Control
 @onready var songList :SongList = $SongList as SongList;
 @onready var musicPlayer :MusicPlayer = $LeftPanel/MusicPlayer;
 @onready var leftPanel :Control = $LeftPanel;
+@onready var downPanel :Control = $DownPanel;
 @onready var bgLbael :Label = $BgPanel/Label;
 @onready var bgPanel :Panel = $BgPanel;
 @onready var animation_control :Control = $Animations;

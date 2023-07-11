@@ -42,7 +42,7 @@ func _ready_later():
 	vbox.set_anchors_preset(Control.PRESET_TOP_RIGHT);
 	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE;
 	vbox.grow_horizontal = Control.GROW_DIRECTION_BEGIN;
-	vbox.add_theme_constant_override("separation", 1);
+	vbox.add_theme_constant_override("separation", 2);
 	
 	get_tree().root.add_child(container);
 	container.add_child(base_point);

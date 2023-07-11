@@ -30,13 +30,7 @@ var data_has_loaded_setting: bool;
 
 func _ready():
 	
-	var data = PlayerData.new();
-	print("data: ", str(data));
-	var error = ResourceSaver.save(data, "user://player_data.tres",
-		ResourceSaver.FLAG_OMIT_EDITOR_PROPERTIES);
-	print(error_string(error));
-	var load_data = load("user://player_data.tres");
-	print(str(load_data));
+	print("player data: ", DataManager.data_player)
 	
 	get_tree().root.size_changed.connect(func():
 		var now = get_tree().root.size;
@@ -137,6 +131,10 @@ func get_sub_dir(parent_dir: DirAccess, sub_dir_name: String) -> DirAccess:
 ## 获取一个文件夹内的文件
 func get_sub_file(parent_dir: DirAccess, sub_file_name: String, flags: FileAccess.ModeFlags) -> FileAccess:
 	return FileAccess.open(parent_dir.get_current_dir()+'/'+sub_file_name, flags);
+
+## 获取文件名
+func get_file_name(path: String) -> String:
+	return path.substr(path.rfind("/")+1);
 
 ## 播放声音
 func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"):	

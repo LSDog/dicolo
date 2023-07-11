@@ -3,6 +3,7 @@ extends Panel
 var last_info_update := 0.0;
 
 @onready var mainMenu := get_parent() as MainMenu;
+@onready var textureAvatar := $Avatar;
 @onready var label_player_info := $VBox/PlayerInfoVBox/Label;
 @onready var label_player_text_template :String = label_player_info.text;
 @onready var label_device_info := $VBox/DeviceInfoVBox/Label;
@@ -63,14 +64,16 @@ func play_click_sound():
 
 func _input(event: InputEvent):
 	if event is InputEventMouseButton:
-		if editMenu.visible && !editMenu.get_global_rect().has_point(event.global_position) && event.button_index <= MOUSE_BUTTON_MIDDLE:
+		if editMenu.visible && !editMenu.get_viewport_rect().has_point(event.global_position
+			) && event.button_index <= MOUSE_BUTTON_MIDDLE:
 			accept_event();
 			editMenu.visible = false;
 
 func _process(_delta: float):
 	var now = Global.now_time();
 	if now - last_info_update < 0.1: return;
-	var username = OS.get_environment("USERNAME") if OS.has_environment("USERNAME") else "Player";
-	label_player_info.text = label_player_text_template % [username, -255, "ALIVE"];
+	var username = DataManager.data_player.name;
+	var level = DataManager.data_player.level;
+	label_player_info.text = label_player_text_template % [username, level, "alive lol"];
 	label_device_info.text = label_device_text_template % [Time.get_time_string_from_system(), Time.get_date_string_from_system()];
 	last_info_update = now;
