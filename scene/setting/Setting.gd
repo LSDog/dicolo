@@ -64,7 +64,7 @@ func bind_gui_action():
 				fileDialog.queue_free();
 			);
 			fileDialog.file_selected.connect(func(path):
-				DataManager.data_player.avatar_path = path;
+				DataManager.data_player.set_avatar(path);
 				var texture := DataManager.data_player.get_avatar();
 				textureAvatar.texture = texture;
 				Global.mainMenu.downPanel.textureAvatar.texture = texture;

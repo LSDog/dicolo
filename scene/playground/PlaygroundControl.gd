@@ -111,8 +111,8 @@ var play_time := 0.0;
 
 @onready var bgpanel := $BGPanel;
 @onready var bgpanel_mask := $BGPanel/Mask;
-@onready var audio_player := $BGPanel/AudioPlayer;
-@onready var video_player := $BGPanel/VideoPlayer;
+@onready var audioPlayer := $BGPanel/AudioPlayer;
+@onready var videoPlayer := $BGPanel/VideoContainer/VideoPlayer;
 @onready var background := $BGPanel/Background;
 @onready var playground := $PlayGround;
 @onready var lyricsLabel :=  $BGPanel/LyricLabel;
@@ -171,7 +171,7 @@ func _ready():
 	$Pause/Content/Restart.pressed.connect(restart);
 	
 	# 音乐结束之后进入end
-	audio_player.finished.connect(end);
+	audioPlayer.finished.connect(end);
 
 
 ## 修正大小
@@ -180,8 +180,7 @@ func correct_size():
 	var keep_scale = Vector2(1.0/Global.stretch_scale, 1.0/Global.stretch_scale);
 	var center_pos = get_tree().root.size/2;
 	playground.scale = keep_scale;
-	video_player.scale = keep_scale;
-	video_player.pivot_offset = center_pos;
+	videoPlayer.get_stream_name()
 
 
 ## 载入铺面并开始游戏
@@ -197,10 +196,10 @@ func load_map(map_file_path: String, auto_start: bool = false):
 	
 	background.texture = load(beatmap.bg_image_path) if beatmap.bg_image_path != "" else Global.mainMenu.default_backgrounds.pick_random();
 	#has_audio = beatmap.audio_path != "";
-	audio_player.stream = load(beatmap.audio_path);
+	audioPlayer.stream = load(beatmap.audio_path);
 	has_video = beatmap.video_path != "";
-	if has_video: video_player.stream = load(beatmap.video_path);
-	has_video = false if video_player.stream == null else true;
+	if has_video: videoPlayer.stream = load(beatmap.video_path);
+	has_video = false if videoPlayer.stream == null else true;
 	$BGPanel/DebugLabel.text = "debug text..."
 	
 	bpm = beatmap.bpm;
@@ -255,11 +254,11 @@ func start():
 		# 背景变更黑
 		create_anim_tween().tween_property(background, "modulate:v", 0.3, 2).from_current().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
 		# 开始视频
-		video_player.play();
+		videoPlayer.play();
 		# 淡入视频
-		create_anim_tween().tween_property(video_player, "modulate:a", 1.0, 1).from(0.0).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
+		create_anim_tween().tween_property(videoPlayer, "modulate:a", 1.0, 1).from(0.0).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD);
 	# 开始音频
-	audio_player.play();
+	audioPlayer.play();
 	started = true;
 	start_time = Time.get_unix_time_from_system();
 	
@@ -270,8 +269,8 @@ func pause():
 	if !started: return;
 	
 	paused = true;
-	video_player.paused = true;
-	audio_player.stream_paused = true;
+	videoPlayer.paused = true;
+	audioPlayer.stream_paused = true;
 	if play_mode == PLAY_MODE.PLAY: $Pause.visible = true;
 	pause_anim_tweens();
 	
@@ -281,8 +280,8 @@ func pause():
 func resume():
 	
 	$Pause.visible = false;
-	video_player.paused = false;
-	audio_player.stream_paused = false;
+	videoPlayer.paused = false;
+	audioPlayer.stream_paused = false;
 	paused = false;
 	resume_anim_tweens();
 	
@@ -310,19 +309,19 @@ func jump(time :float, do_pause :bool = true):
 	
 	# 跳转音乐
 	if paused:
-		audio_player.play(time);
-		audio_player.stream_paused = true;
+		audioPlayer.play(time);
+		audioPlayer.stream_paused = true;
 	else:
-		audio_player.seek(time);
+		audioPlayer.seek(time);
 	play_time = time;
 	print("[Play] Jump to: ", time, " index = ", last_index);
 	
 	# 跳转视频(只能暂停或回到第一帧开始)
-	video_player.stop();
+	videoPlayer.stop();
 	if time == 0.0:
-		video_player.stop();
-		video_player.play();
-		video_player.paused = true;
+		videoPlayer.stop();
+		videoPlayer.play();
+		videoPlayer.paused = true;
 		jumped = false;
 	else:
 		# 无法跳转视频播放，故暂停
@@ -356,11 +355,11 @@ func restart():
 	$Pause.visible = false;
 	started = false;
 	paused = false;
-	audio_player.stop();
-	audio_player.seek(0);
-	video_player.stop();
-	audio_player.stream_paused = false;
-	video_player.paused = false;
+	audioPlayer.stop();
+	audioPlayer.seek(0);
+	videoPlayer.stop();
+	audioPlayer.stream_paused = false;
+	videoPlayer.paused = false;
 	stream_time = 0;
 	start_time = 0.0;
 	play_time = 0.0;
@@ -381,8 +380,8 @@ func end():
 	
 	print("[Play] end!");
 	ended = true;
-	audio_player.stop();
-	video_player.stop();
+	audioPlayer.stop();
+	videoPlayer.stop();
 	
 	play_end.emit();
 
@@ -420,15 +419,15 @@ func _process(delta):
 	
 	var can_control = false;
 	
-	var audio_pos = audio_player.get_playback_position();
+	var audio_pos = audioPlayer.get_playback_position();
 	
 	# 通过播放进度判断是否end
-	if !ended && audio_pos >= audio_player.stream.get_length():
+	if !ended && audio_pos >= audioPlayer.stream.get_length():
 		end();
 	
 	if !ended: # 未结束
 		
-		var video_pos = video_player.stream_position;
+		var video_pos = videoPlayer.stream_position;
 		
 		stream_time = video_pos if has_video else audio_pos;
 		
@@ -447,7 +446,7 @@ func _process(delta):
 					if abs(audio_delay) > max_delay: # 音视频延迟超过校准时间就回调音频
 						# 更新 audio_pos
 						audio_pos = audio_pos-audio_delay;
-						audio_player.seek(audio_pos);
+						audioPlayer.seek(audio_pos);
 						print("[audio] delay ", audio_delay, " > ",max_delay," --> reset-audio=",video_pos);
 				
 				# 演奏总时间 <- 音频流校准
@@ -878,7 +877,7 @@ func get_beat_time() -> float:
 	return 60/bpm;
 
 func get_audio_length() -> float:
-	return audio_player.stream.get_length();
+	return audioPlayer.stream.get_length();
 
 func round_multiple(value :float, round_float :float) -> float:
 	return roundf(value/round_float) * round_float;

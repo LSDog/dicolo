@@ -1,9 +1,14 @@
-[gd_scene load_steps=22 format=3 uid="uid://cvonjf6lsdmlw"]
+[gd_scene load_steps=28 format=3 uid="uid://cvonjf6lsdmlw"]
 
 [ext_resource type="Script" path="res://scene/test/GithubAPITest.gd" id="1_n5jhp"]
 [ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://visual/texture/circle_512.svg" id="2_e4efk"]
 [ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://visual/texture/crash.svg" id="3_shmos"]
 [ext_resource type="Texture2D" uid="uid://bq5vwdwd33o73" path="res://visual/texture/rect_box.svg" id="4_yslnx"]
+[ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://visual/texture/bounce.svg" id="5_exs1f"]
+[ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://visual/texture/slide.svg" id="6_3n811"]
+[ext_resource type="Texture2D" uid="uid://t0wun6q7c52f" path="res://visual/texture/ring.svg" id="7_u4uox"]
+[ext_resource type="Texture2D" uid="uid://5xyvc3ec13xo" path="res://visual/texture/hit_fx.svg" id="8_earic"]
+[ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://visual/texture/track.svg" id="9_8a7x2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r2rr1"]
 bg_color = Color(0.717647, 0.654902, 0.6, 1)
@@ -322,6 +327,12 @@ _data = {
 offsets = PackedFloat32Array(0.566667, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
+[sub_resource type="Curve2D" id="Curve2D_0syq4"]
+_data = {
+"points": PackedVector2Array(-128, 0, 141.257, 0, 0, -256, 0, -141.257, 0, 141.257, 256, 0, 141.257, 0, -141.257, 0, 0, 256, 0, 141.257, 0, -141.257, -256, 0, -141.257, 0, 0, 0, 0, -256)
+}
+point_count = 5
+
 [node name="Test" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -625,3 +636,86 @@ value = 0.88
 [node name="HScrollBar" type="HScrollBar" parent="Container/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 10
+
+[node name="TrackL" type="Sprite2D" parent="."]
+position = Vector2(839, 327)
+
+[node name="Path" type="Path2D" parent="TrackL"]
+self_modulate = Color(1, 1, 1, 0.0980392)
+curve = SubResource("Curve2D_0syq4")
+
+[node name="ExamplePath" type="Path2D" parent="TrackL"]
+self_modulate = Color(1, 1, 1, 0.0980392)
+curve = SubResource("Curve2D_0syq4")
+
+[node name="Bounce" type="Sprite2D" parent="TrackL/ExamplePath"]
+texture = ExtResource("5_exs1f")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="TrackL/ExamplePath"]
+position = Vector2(0, -256)
+
+[node name="Follow" type="Sprite2D" parent="TrackL/ExamplePath/PathFollow2D"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("6_3n811")
+
+[node name="Ring" type="Sprite2D" parent="TrackL/ExamplePath/PathFollow2D"]
+modulate = Color(1, 1, 1, 0.2)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_u4uox")
+
+[node name="PathFollow2D2" type="PathFollow2D" parent="TrackL/ExamplePath"]
+position = Vector2(29.9335, -254.264)
+rotation = 0.116227
+progress = 30.0
+
+[node name="Follow" type="Sprite2D" parent="TrackL/ExamplePath/PathFollow2D2"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("6_3n811")
+
+[node name="PathFollow2D3" type="PathFollow2D" parent="TrackL/ExamplePath"]
+position = Vector2(59.4584, -249.043)
+rotation = 0.233984
+progress = 60.0
+
+[node name="Follow" type="Sprite2D" parent="TrackL/ExamplePath/PathFollow2D3"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("6_3n811")
+
+[node name="PathFollow2D4" type="PathFollow2D" parent="TrackL/ExamplePath"]
+position = Vector2(97.4785, -236.748)
+rotation = 0.391483
+progress = 100.0
+
+[node name="Follow" type="Sprite2D" parent="TrackL/ExamplePath/PathFollow2D4"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_shmos")
+
+[node name="Line2D" type="Line2D" parent="TrackL/ExamplePath"]
+texture_repeat = 2
+points = PackedVector2Array(-78.5714, -243.878, -91.8367, -238.776, -106.122, -232.653, -116.327, -227.551, -126.531, -222.449, -136.735, -216.327, -146.939, -209.184, -157.143, -202.041, -167.347, -193.878, -177.551, -184.694, -186.735, -175.51, -195.918, -166.327)
+texture = ExtResource("8_earic")
+texture_mode = 1
+
+[node name="PathFollow2D6" type="PathFollow2D" parent="TrackL/ExamplePath"]
+position = Vector2(-78.7098, -243.645)
+rotation = -0.312765
+progress = 1528.49
+
+[node name="Follow" type="Sprite2D" parent="TrackL/ExamplePath/PathFollow2D6"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_shmos")
+
+[node name="PathFollow2D7" type="PathFollow2D" parent="TrackL/ExamplePath"]
+position = Vector2(-195.651, -165.002)
+rotation = -0.869521
+progress = 1385.73
+
+[node name="Follow" type="Sprite2D" parent="TrackL/ExamplePath/PathFollow2D7"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_shmos")
+
+[node name="Circle" type="Sprite2D" parent="TrackL"]
+modulate = Color(1, 1, 1, 0.117647)
+rotation = -0.218166
+scale = Vector2(1.02, 1.02)
+texture = ExtResource("9_8a7x2")

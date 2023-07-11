@@ -33,8 +33,7 @@ func _ready():
 	# 设定模式
 	playground.play_mode = playground.PLAY_MODE.EDIT;
 	# 修正大小
-	if Global.data_has_loaded_setting: currect_scaling.call_deferred();
-	else: Global.data_loaded_setting.connect(currect_scaling);
+	currect_scaling.call_deferred();
 	
 	# 测试用 加载map
 	#load_map("res://map/HareHareYukai/map_normal.txt");
@@ -78,7 +77,7 @@ func _ready():
 ## 修正大小
 func currect_scaling():
 	playground.scale /= Global.stretch_scale;
-	playground.video_player.scale /= Global.stretch_scale;
+	#playground.video_player.scale /= Global.stretch_scale;
 
 
 ## 加载铺面

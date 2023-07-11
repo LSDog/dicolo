@@ -87,11 +87,13 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_yiivw")
 [node name="PlaygroundControl" parent="." instance=ExtResource("2_ej5en")]
 custom_minimum_size = Vector2(1152, 648)
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.7
-anchor_bottom = 0.7
-offset_right = 345.6
-offset_bottom = 194.4
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 1
+grow_vertical = 1
 scale = Vector2(0.7, 0.7)
 enable_control = false
 
@@ -217,6 +219,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxMap" type="VBoxContainer" parent="Edit/VBox/Scroll/VBox"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxMap"]
@@ -442,7 +445,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="Hit" type="Button" parent="Edit/VBox/Scroll/VBox/VBoxEvent/NoteChoose"]
-custom_minimum_size = Vector2(98, 98)
+custom_minimum_size = Vector2(86, 86)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
@@ -462,7 +465,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Slide" type="Button" parent="Edit/VBox/Scroll/VBox/VBoxEvent/NoteChoose"]
-custom_minimum_size = Vector2(98, 98)
+custom_minimum_size = Vector2(86, 86)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -482,7 +485,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Bounce" type="Button" parent="Edit/VBox/Scroll/VBox/VBoxEvent/NoteChoose"]
-custom_minimum_size = Vector2(98, 98)
+custom_minimum_size = Vector2(86, 86)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -561,5 +564,3 @@ text = "※ 视频进度更改在编辑器中不受支持！
 （如需预览请拖动进度到第0秒再播放）"
 label_settings = SubResource("LabelSettings_w6vl8")
 horizontal_alignment = 2
-
-[editable path="PlaygroundControl"]

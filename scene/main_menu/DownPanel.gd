@@ -23,10 +23,8 @@ func _ready():
 	last_info_update = Global.now_time() + 1 - fmod(Global.now_time(), 1.0);
 	_ready_later.call_deferred();
 
-func _enter_tree() -> void:
-	pass
-
 func _ready_later():
+	textureAvatar.texture = DataManager.data_player.get_avatar();
 	apply_button_hover_sound(self);
 	buttonEdit.pressed.connect(func():
 		play_click_sound();

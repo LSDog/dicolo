@@ -3,12 +3,7 @@ extends Resource
 
 @export_category("Information")
 @export var name :String = "Player";
-@export var avatar_path :String = "res://visual/partner/avatar_trans-1024x.png":
-	set(value):
-		if value != avatar_path:
-			remove_storage_file(avatar_path);
-			avatar_path = storage_file(value);
-			avatar = null;
+@export var avatar_path :String = "res://visual/partner/avatar_trans-1024x.png";
 var avatar :Texture2D = null;
 @export var exp :int = 0;
 @export var level :int = 0;
@@ -18,6 +13,12 @@ var first_play :bool = true;
 
 @export_category("Statistics")
 @export var total_note :int = 0;
+
+func set_avatar(path: String):
+	if path == avatar_path: return;
+	remove_storage_file(avatar_path);
+	avatar_path = storage_file(path);
+	avatar = get_avatar();
 
 func remove_storage_file(path: String):
 	var path_storage := "user://.storage/";

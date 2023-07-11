@@ -1,15 +1,11 @@
-[gd_scene load_steps=34 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=30 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/playground/PlaygroundControl.gd" id="1_p2o0i"]
 [ext_resource type="Shader" path="res://visual/shader/whirl_texture.gdshader" id="2_hx1af"]
+[ext_resource type="VideoStream" path="res://map/HareHareYukai/ハレ晴レユカイed.ogv" id="3_11wx6"]
 [ext_resource type="Script" path="res://scene/playground/Spectrum.gd" id="3_fqg67"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="4_ea2p3"]
 [ext_resource type="FontFile" uid="uid://dy4m6l0n1c0kk" path="res://visual/font/LettersLaughingAtTheirExecution-WJLG.ttf" id="5_slvds"]
-[ext_resource type="Texture2D" uid="uid://2k2u7yyjoqwg" path="res://visual/texture/bounce.svg" id="6_sfxof"]
-[ext_resource type="Texture2D" uid="uid://myv65aaj8g4v" path="res://visual/texture/slide.svg" id="7_6qrux"]
-[ext_resource type="Texture2D" uid="uid://t0wun6q7c52f" path="res://visual/texture/ring.svg" id="8_ydbfk"]
-[ext_resource type="Texture2D" uid="uid://dfq4nr2oyt3mr" path="res://visual/texture/crash.svg" id="9_nkf5x"]
-[ext_resource type="Texture2D" uid="uid://5xyvc3ec13xo" path="res://visual/texture/hit_fx.svg" id="10_e32uv"]
 [ext_resource type="Texture2D" uid="uid://cd8vw76awn13p" path="res://visual/texture/track.svg" id="11_bq6vb"]
 [ext_resource type="Texture2D" uid="uid://dyruh3syyydp6" path="res://visual/texture/ct.svg" id="12_3dnx1"]
 [ext_resource type="Script" path="res://scene/playground/Ct.gd" id="13_2efnq"]
@@ -122,18 +118,20 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="VideoPlayer" type="VideoStreamPlayer" parent="BGPanel"]
-process_priority = 10
+[node name="VideoContainer" type="AspectRatioContainer" parent="BGPanel"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+ratio = 1.7778
+
+[node name="VideoPlayer" type="VideoStreamPlayer" parent="BGPanel/VideoContainer"]
+process_priority = 10
+layout_mode = 2
+stream = ExtResource("3_11wx6")
+expand = true
 
 [node name="Spectrum" type="Control" parent="BGPanel"]
 process_mode = 4
@@ -220,77 +218,6 @@ position = Vector2(384, 324)
 [node name="Path" type="Path2D" parent="PlayGround/TrackL"]
 self_modulate = Color(1, 1, 1, 0.0980392)
 curve = SubResource("Curve2D_43mu5")
-
-[node name="ExamplePath" type="Path2D" parent="PlayGround/TrackL"]
-visible = false
-self_modulate = Color(1, 1, 1, 0.0980392)
-curve = SubResource("Curve2D_43mu5")
-
-[node name="Bounce" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath"]
-texture = ExtResource("6_sfxof")
-
-[node name="PathFollow2D" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
-position = Vector2(0, -256)
-
-[node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D"]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("7_6qrux")
-
-[node name="Ring" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D"]
-modulate = Color(1, 1, 1, 0.2)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("8_ydbfk")
-
-[node name="PathFollow2D2" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
-position = Vector2(29.9335, -254.264)
-rotation = 0.116227
-progress = 30.0
-
-[node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D2"]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("7_6qrux")
-
-[node name="PathFollow2D3" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
-position = Vector2(59.4584, -249.043)
-rotation = 0.233984
-progress = 60.0
-
-[node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D3"]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("7_6qrux")
-
-[node name="PathFollow2D4" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
-position = Vector2(97.4785, -236.748)
-rotation = 0.391483
-progress = 100.0
-
-[node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D4"]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("9_nkf5x")
-
-[node name="Line2D" type="Line2D" parent="PlayGround/TrackL/ExamplePath"]
-texture_repeat = 2
-points = PackedVector2Array(-78.5714, -243.878, -91.8367, -238.776, -106.122, -232.653, -116.327, -227.551, -126.531, -222.449, -136.735, -216.327, -146.939, -209.184, -157.143, -202.041, -167.347, -193.878, -177.551, -184.694, -186.735, -175.51, -195.918, -166.327)
-texture = ExtResource("10_e32uv")
-texture_mode = 1
-
-[node name="PathFollow2D6" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
-position = Vector2(-78.7098, -243.645)
-rotation = -0.312765
-progress = 1528.49
-
-[node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D6"]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("9_nkf5x")
-
-[node name="PathFollow2D7" type="PathFollow2D" parent="PlayGround/TrackL/ExamplePath"]
-position = Vector2(-195.651, -165.002)
-rotation = -0.869521
-progress = 1385.73
-
-[node name="Follow" type="Sprite2D" parent="PlayGround/TrackL/ExamplePath/PathFollow2D7"]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("9_nkf5x")
 
 [node name="Circle" type="Sprite2D" parent="PlayGround/TrackL"]
 modulate = Color(1, 1, 1, 0.117647)
