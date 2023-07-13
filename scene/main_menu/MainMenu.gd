@@ -11,13 +11,20 @@ extends Control
 @onready var animation_control :Control = $Animations;
 @onready var animation_player :AnimationPlayer = $Animations/AnimationPlayer;
 
-var debug_label_last_report = 0;
+var debug_label_last_report := 0.0;
 
 @onready var bgPanel_stylebox := bgPanel.get_theme_stylebox("panel") as StyleBoxFlat;
 
 @onready var default_backgrounds :Array[Texture2D] = [
 	preload("res://visual/background/dicolo_icon_light_bubbles.png"),
 ];
+
+@export var parallax_bg_scale := 1.015:
+	set(value):
+		parallax_bg_scale = value;
+		background.scale.x = parallax_bg_scale;
+		background.scale.y = parallax_bg_scale;
+		background.pivot_offset = background.size/2.0;
 
 func _ready():
 	
@@ -46,6 +53,17 @@ func _ready():
 		if !musicPlayer.play:
 			songList.select_song_random();
 	);
+	
+	background.scale.x = parallax_bg_scale;
+	background.scale.y = parallax_bg_scale;
+	background.pivot_offset = background.size/2.0;
+
+func _process(delta: float):
+	# 视差背景
+	var mouse_position = get_local_mouse_position();
+	mouse_position.clamp(Vector2.ZERO, size);
+	background.position = (
+		mouse_position.clamp(Vector2.ZERO, size) - size/2.0) * (1-parallax_bg_scale)/2.0;
 
 func select_map(song_name: String, map_name: String):
 	print("select map: ", song_name, " -- ", map_name);
