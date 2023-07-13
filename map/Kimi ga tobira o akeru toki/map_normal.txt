@@ -1,9 +1,9 @@
 !dicolo_map_v1
 title:君が扉をあけるとき
-singer:LA MARINA BRISA
+author:LA MARINA BRISA
 mapper:LSDog
 diff:6
-mapname:normal
+map_name:normal
 audio:君が扉をあけるとき.mp3
 bpm:100
 bg:bg.jpg

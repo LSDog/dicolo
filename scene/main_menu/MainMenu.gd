@@ -11,6 +11,8 @@ extends Control
 @onready var animation_control :Control = $Animations;
 @onready var animation_player :AnimationPlayer = $Animations/AnimationPlayer;
 
+var last_background_path :String;
+var last_audio_path :String;
 var debug_label_last_report := 0.0;
 
 @onready var bgPanel_stylebox := bgPanel.get_theme_stylebox("panel") as StyleBoxFlat;

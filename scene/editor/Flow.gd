@@ -55,7 +55,9 @@ func _ready():
 		beat_space = bar_length/beat_count;
 		queue_redraw();
 	);
-	
+	get_viewport().size_changed.connect(func():
+		offset = offset + 0;
+	);
 	_ready_later.call_deferred();
 
 func _ready_later():

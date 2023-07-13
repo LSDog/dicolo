@@ -32,6 +32,7 @@ var audio_offset :int = 0;
 @onready var buttonAudioOffsetSub := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonSub;
 # Misc #
 @onready var checkDebugInfo := $Panel/Scroll/Margin/List/Misc/DebugInfo/CheckButton;
+@onready var buttonReloadMap := $Panel/Scroll/Margin/List/Misc/ButtonReloadMap;
 
 var loading_data := true;
 
@@ -55,7 +56,7 @@ func bind_gui_action():
 			var fileDialog = FileDialog.new();
 			fileDialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE;
 			fileDialog.access = FileDialog.ACCESS_FILESYSTEM;
-			fileDialog.set_filters(PackedStringArray(["*.png, *.jpg, *.jpeg, *.svg"]));
+			fileDialog.filters = ["*.png, *.jpg, *.jpeg, *.svg, *.webp, *.bmp", "Image"];
 			add_child(fileDialog);
 			fileDialog.size = Vector2i(1024, 512);
 			fileDialog.popup_centered()
@@ -169,6 +170,13 @@ func bind_gui_action():
 	checkDebugInfo.toggled.connect(func(flag: bool):
 		Global.debugInfo.visible = flag;
 		save_data("DebugInfo", flag);
+	);
+	buttonReloadMap.pressed.connect(func():
+		Notifier.notif_popup("Reloding all the map and song...");
+		Global.mainMenu.songList.clear_maps();
+		Global.mainMenu.songList.load_maps();
+		Global.mainMenu.songList.select_song_random();
+		Notifier.notif_popup("Reloded!", Notifier.COLOR_OK);
 	);
 
 func set_setting_from_data():

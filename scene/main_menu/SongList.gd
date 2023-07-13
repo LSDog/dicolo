@@ -3,7 +3,6 @@ extends ScrollContainer
 
 @onready var container := $VBoxContainer;
 
-var map_loaded := false;
 
 var scroll_speed := 0.0; # 滚动速度，向下为正方向
 var touch_scroll_speed := 0.0; # 最后一次手拖动的速度
@@ -24,8 +23,9 @@ var dragging_index := [];
 
 var randomed_index_list := []; # 随机抽取到的歌曲index，防止重复
 
-var scene_SongCard :PackedScene= preload("res://scene/main_menu/SongCard/SongCard.tscn");
+var scene_SongCard :PackedScene = preload("res://scene/main_menu/SongCard/SongCard.tscn");
 
+var map_loaded := false;
 signal map_first_loaded;
 
 func _ready():
@@ -40,8 +40,6 @@ func _ready_later():
 	Debugger.count_time("Map Load");
 	load_maps();
 	Debugger.count_time("Map Load");
-	for node in container.get_children():
-		node.song_select.connect(handle_song_select.bind(node));
 	
 	map_loaded = true;
 	map_first_loaded.emit();
@@ -59,24 +57,9 @@ func handle_song_select(song_card: SongCard):
 	if selected_card != null && selected_card != song_card: selected_card.unselect();
 	selected_card = song_card;
 	selected_index = song_card.get_index();
-	# 更改界面预览当前歌曲
-	var main_menu := get_parent() as MainMenu;
-	if song_card.example_beatmap.bg_image_path != "":
-		main_menu.background.texture = load(song_card.example_beatmap.bg_image_path);
-	else:
-		# 没有bg的情况下加载这个
-		main_menu.background.texture = main_menu.default_backgrounds.pick_random();
-	main_menu.musicPlayer.play_music(
-		load(song_card.example_beatmap.audio_path),
-		song_card.example_beatmap.title+" - "+song_card.example_beatmap.singer,
-		song_card.example_beatmap.start_time,
-		song_card.example_beatmap.bpm
-	);
-	# 设置readme文本
-	main_menu.leftPanel.set_readme(song_card.readme);
 	
 	# 设置背景里面啥用也没有的透明大字
-	main_menu.bgLbael.text = song_card.example_beatmap.title;
+	Global.mainMenu.bgLbael.text = song_card.example_beatmap.title;
 
 func _process(delta):
 	
@@ -149,6 +132,12 @@ func _gui_input(event):
 			else:
 				scroll_speed = touch_scroll_speed;
 
+## 清理铺面
+func clear_maps():
+	for node in container.get_children():
+		container.remove_child(node);
+		node.free();
+
 ## 加载铺面
 func load_maps():
 	
@@ -174,7 +163,7 @@ func load_map_of_dir(dir: DirAccess):
 	var beatmap :BeatMap;
 	var readme :String;
 	var maps :Dictionary = {};
-	var need_keys := ["mapname", "diff"];
+	var need_keys := ["map_name", "diff"];
 	
 	for file_name in dir.get_files():
 		if !file_name.ends_with(".txt"): continue;
@@ -185,22 +174,40 @@ func load_map_of_dir(dir: DirAccess):
 			readme = map_file.get_as_text();
 		else:
 			if beatmap == null:
-				var temp_beatmap := BeatMap.new(dir, map_file);
+				var temp_beatmap := BeatMap.new(dir.get_current_dir(), map_file);
 				if temp_beatmap != null && temp_beatmap.loaded:
 					beatmap = temp_beatmap;
-				maps[beatmap.mapname] = [beatmap.diff, beatmap.file_path];
+				maps[get_renamed_map_name(maps, beatmap.map_name)] = [
+					beatmap.diff, beatmap.file_path];
 			else:
 				var map_values = find_map_value(need_keys, map_file);
 				var diff = map_values[1];
 				diff = -1.0 if !diff.is_valid_float() else diff.to_float();
-				maps[map_values[0]] = [diff, map_file.get_path()];
+				maps[get_renamed_map_name(maps, map_values[0])] = [
+					diff, map_file.get_path()];
 		
 		map_file.close();
 	
 	if beatmap != null:
 		print("    - ", beatmap.file_path);
 		add_song(beatmap, maps, readme if readme != null else "");
-		print("   ↑ Loaded: ", beatmap.title);
+		print("       ↑ Loaded: ", beatmap.title);
+
+## 重命名重复的map_name -> map_name [1]
+func get_renamed_map_name(maps: Dictionary, map_name: String) -> String:
+	var exist_map = maps.get(map_name);
+	if exist_map != null:
+		var dup_value := 1;
+		if map_name.match(" \\[[0-9]*\\]$"):
+			var dup_value_string = map_name.substr(
+				map_name.rfind('(')+1, map_name.rfind(')')-1);
+			if dup_value_string.is_valid_int():
+				dup_value = dup_value_string.to_int();
+			map_name = map_name.substr(0, map_name.rfind(')')+1);
+		else: map_name += " (";
+		dup_value += 1;
+		map_name += str(dup_value) + ")";
+	return map_name;
 
 ## 获取map中的特定信息
 func find_map_value(need_keys :Array, map_file :FileAccess) -> Array:
@@ -228,9 +235,11 @@ func add_song(example_beatmap: BeatMap, maps: Dictionary, readme: String = ""):
 	song_card.example_beatmap = example_beatmap;
 	song_card.maps = maps;
 	song_card.readme = readme;
+	song_card.song_select.connect(handle_song_select.bind(song_card));
 	# 清除之前的随机
 	if !randomed_index_list.is_empty():
 		randomed_index_list.clear()
+	
 
 ## 获取总歌曲数
 func get_song_count() -> int:

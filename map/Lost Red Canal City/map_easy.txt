@@ -1,9 +1,9 @@
 !dicolo_map_v1
 title:Lost Red Canal City
-singer:GRÜNEMUSIK/初音ミク
+author:GRÜNEMUSIK/初音ミク
 mapper:LSDog
 diff:3.5
-mapname:hard
+map_name:hard
 audio:Lost_Red_Canal_City.mp3
 bpm:150
 bg:bg.jpg

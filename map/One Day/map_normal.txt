@@ -1,9 +1,9 @@
 !dicolo_map_v1
 title:One Day
-singer:I. D. F. X./Anton Delorosa
+author:I. D. F. X./Anton Delorosa
 mapper:LSDog
 diff:6
-mapname:normal
+map_name:normal
 audio:One_Day.mp3
 bpm:129
 bg:bg.jpg

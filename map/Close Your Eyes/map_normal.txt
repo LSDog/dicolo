@@ -1,9 +1,9 @@
 !dicolo_map_v1
 title:Close Your Eyes
-singer:GRÜNEMUSIK/初音ミク
+author:GRÜNEMUSIK/初音ミク
 mapper:LSDog
 diff:4
-mapname:normal
+map_name:normal
 audio:Close_Your_Eyes.mp3
 bpm:164
 bg:bg.jpg

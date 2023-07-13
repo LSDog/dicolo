@@ -1,8 +1,8 @@
 class_name MusicPlayer
 extends Panel
 
-var texture_play := load("res://visual/ui_icon/play-button.svg");
-var texture_pause := load("res://visual/ui_icon/pause-button.svg");
+var texture_play := preload("res://visual/ui_icon/play-button.svg");
+var texture_pause := preload("res://visual/ui_icon/pause-button.svg");
 
 @onready var audio_player :AudioStreamPlayer = $AudioPlayer;
 @onready var progress_bar :ProgressBar = $ProgressBar;

@@ -11,6 +11,11 @@ extends Panel
 
 var map_name :String;
 var map_path :String;
+var example_map_loaded := false;
+var example_map :BeatMap: ## 只包含信息而没有event的map
+	get:
+		while !example_map_loaded: continue;
+		return example_map;
 
 var is_mouse_entered := false;
 var pressed_pos;
@@ -18,7 +23,6 @@ var selected := false;
 
 signal map_select;
 signal map_play_request(map_path: String);
-
 
 func _ready():
 	stylebox = stylebox.duplicate();

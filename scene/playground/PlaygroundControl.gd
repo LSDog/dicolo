@@ -178,7 +178,6 @@ func _ready():
 func correct_size():
 	# 保证 stretch scale 更改后 track 大小不变
 	var keep_scale = Vector2(1.0/Global.stretch_scale, 1.0/Global.stretch_scale);
-	var center_pos = get_tree().root.size/2;
 	playground.scale = keep_scale;
 	videoPlayer.get_stream_name()
 
@@ -189,17 +188,13 @@ func load_map(map_file_path: String, auto_start: bool = false):
 	print("[PlayGround] opening map files..")
 	var map_file = FileAccess.open(map_file_path, FileAccess.READ);
 	print("[PlayGround] result: ", map_file, ": ", error_string(FileAccess.get_open_error()));
-	var dir := DirAccess.open(map_file_path.substr(0, map_file_path.rfind("/")));
-	beatmap = BeatMap.new(dir, map_file);
+	beatmap = BeatMap.new(map_file_path.get_base_dir(), map_file);
 	print("[PlayGround] map_loaded: ", beatmap);
 	map_file = null;
 	
-	background.texture = load(beatmap.bg_image_path) if beatmap.bg_image_path != "" else Global.mainMenu.default_backgrounds.pick_random();
-	#has_audio = beatmap.audio_path != "";
-	audioPlayer.stream = load(beatmap.audio_path);
-	has_video = beatmap.video_path != "";
-	if has_video: videoPlayer.stream = load(beatmap.video_path);
-	has_video = false if videoPlayer.stream == null else true;
+	load_bg_image();
+	load_audio();
+	load_video();
 	$BGPanel/DebugLabel.text = "debug text..."
 	
 	bpm = beatmap.bpm;
@@ -218,7 +213,18 @@ func load_map(map_file_path: String, auto_start: bool = false):
 	if auto_start:
 		pre_start.call_deferred();
 		# ▼▼▼ 这里初始化结束进入 pre_start
-	
+
+func load_bg_image():
+	background.texture = ExternLoader.load_image(beatmap.get_bg_image_path()
+		) if beatmap.bg_image_path != "" else Global.mainMenu.default_backgrounds.pick_random();
+
+func load_audio():
+	audioPlayer.stream = ExternLoader.load_audio(beatmap.get_audio_path());
+
+func load_video():
+	has_video = beatmap.video_path != "";
+	if has_video: videoPlayer.stream = load(beatmap.get_video_path());
+	has_video = false if videoPlayer.stream == null else true;
 
 ## 准备开始游戏
 func pre_start():

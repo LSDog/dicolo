@@ -1,8 +1,8 @@
 !dicolo_map_v1
 title:青白い炎に想いを乗せて
-singer:セントラルパ吉田
+author:セントラルパ吉田
 mapper:LSDog
 diff:2
-mapname:easy
+map_name:easy
 audio:aojiroi-honoo-ni-omoi-wo-nosete.mp3
 bpm:99

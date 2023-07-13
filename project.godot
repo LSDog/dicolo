@@ -29,6 +29,10 @@ Debugger="*res://scene/Debugger.gd"
 Notifier="*res://scene/notifier/Notifier.gd"
 DataManager="*res://scene/DataManager.gd"
 
+[debug]
+
+gdscript/warnings/unused_parameter=0
+
 [display]
 
 window/stretch/mode="canvas_items"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://dcb7d1ukovwdc"]
+[gd_scene load_steps=30 format=3 uid="uid://dcb7d1ukovwdc"]
 
 [ext_resource type="Script" path="res://scene/editor/Editor.gd" id="1_nmcv3"]
 [ext_resource type="PackedScene" uid="uid://ogha2bnilh12" path="res://scene/playground/Playground.tscn" id="2_ej5en"]
@@ -21,7 +21,7 @@ bg_color = Color(0.12549, 0.12549, 0.12549, 1)
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tvr2v"]
-bg_color = Color(0.431373, 0.364706, 0.329412, 1)
+bg_color = Color(0.188235, 0.341176, 0.4, 1)
 border_width_top = 64
 border_color = Color(0, 0.647059, 0.647059, 1)
 
@@ -31,6 +31,32 @@ font_size = 21
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qnvwy"]
 content_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t7673"]
+bg_color = Color(0, 0.75, 0.75, 1)
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 12
+corner_radius_bottom_right = 12
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e86mn"]
+bg_color = Color(0, 0.75, 0.75, 1)
+border_width_top = 12
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 12
+corner_radius_bottom_right = 12
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfic7"]
+bg_color = Color(0, 0.75, 0.75, 1)
+border_width_top = 12
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 12
+corner_radius_bottom_right = 12
+corner_detail = 1
 
 [sub_resource type="InputEventKey" id="InputEventKey_fvht2"]
 device = -1
@@ -87,13 +113,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_yiivw")
 [node name="PlaygroundControl" parent="." instance=ExtResource("2_ej5en")]
 custom_minimum_size = Vector2(1152, 648)
 layout_mode = 1
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_right = 1152.0
-offset_bottom = 648.0
-grow_horizontal = 1
-grow_vertical = 1
 scale = Vector2(0.7, 0.7)
 enable_control = false
 
@@ -114,12 +133,6 @@ offset_bottom = 194.0
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_dxybm")
 script = ExtResource("3_cepoq")
-outline_color = null
-barline_color = null
-beatline_color = null
-note_margin_vertical = null
-bar_length = null
-beat_count = null
 
 [node name="Scroll" type="HScrollBar" parent="FlowBox"]
 layout_mode = 1
@@ -168,7 +181,7 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
+offset_left = 8.0
 offset_right = -4.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -224,6 +237,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxMap"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_t7673")
 text = "Map Setting"
 horizontal_alignment = 1
 
@@ -266,29 +280,29 @@ text = "title_latin"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxSinger" type="HBoxContainer" parent="Edit/VBox/Scroll/VBox/VBoxMap"]
+[node name="HBoxAuthor" type="HBoxContainer" parent="Edit/VBox/Scroll/VBox/VBoxMap"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxMap/HBoxSinger"]
+[node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxMap/HBoxAuthor"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 text = "singer"
 
-[node name="LineEdit" type="LineEdit" parent="Edit/VBox/Scroll/VBox/VBoxMap/HBoxSinger"]
+[node name="LineEdit" type="LineEdit" parent="Edit/VBox/Scroll/VBox/VBoxMap/HBoxAuthor"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxSingerLatin" type="HBoxContainer" parent="Edit/VBox/Scroll/VBox/VBoxMap"]
+[node name="HBoxAuthorLatin" type="HBoxContainer" parent="Edit/VBox/Scroll/VBox/VBoxMap"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxMap/HBoxSingerLatin"]
+[node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxMap/HBoxAuthorLatin"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 text = "singer_latin"
 
-[node name="LineEdit" type="LineEdit" parent="Edit/VBox/Scroll/VBox/VBoxMap/HBoxSingerLatin"]
+[node name="LineEdit" type="LineEdit" parent="Edit/VBox/Scroll/VBox/VBoxMap/HBoxAuthorLatin"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -345,6 +359,7 @@ text = "audio (bgm)"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "null"
+text_overrun_behavior = 3
 
 [node name="HBoxVideo" type="HBoxContainer" parent="Edit/VBox/Scroll/VBox/VBoxMap"]
 layout_mode = 2
@@ -359,6 +374,7 @@ text = "video (bga)"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "null"
+text_overrun_behavior = 3
 
 [node name="HBoxBpm" type="HBoxContainer" parent="Edit/VBox/Scroll/VBox/VBoxMap"]
 layout_mode = 2
@@ -389,12 +405,15 @@ text = "bg (cover)"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "null"
+text_overrun_behavior = 3
 
 [node name="VBoxEditor" type="VBoxContainer" parent="Edit/VBox/Scroll/VBox"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxEditor"]
 layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_e86mn")
 text = "Editor Setting"
 horizontal_alignment = 1
 
@@ -407,7 +426,7 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 text = "FlowSize"
 
-[node name="HSliderScale" type="HSlider" parent="Edit/VBox/Scroll/VBox/VBoxEditor/HBoxScale"]
+[node name="HSlider" type="HSlider" parent="Edit/VBox/Scroll/VBox/VBoxEditor/HBoxScale"]
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 20.0
@@ -424,19 +443,34 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.4
 text = "Beats"
 
-[node name="LineEditBeats" type="LineEdit" parent="Edit/VBox/Scroll/VBox/VBoxEditor/HBoxBeats"]
+[node name="SpinBox" type="SpinBox" parent="Edit/VBox/Scroll/VBox/VBoxEditor/HBoxBeats"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HBoxBgDark" type="HBoxContainer" parent="Edit/VBox/Scroll/VBox/VBoxEditor"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxEditor/HBoxBgDark"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "4"
-max_length = 3
-context_menu_enabled = false
-virtual_keyboard_type = 2
+size_flags_stretch_ratio = 0.4
+text = "Bg Dark"
+
+[node name="HSlider" type="HSlider" parent="Edit/VBox/Scroll/VBox/VBoxEditor/HBoxBgDark"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 0.5
+tick_count = 11
 
 [node name="VBoxEvent" type="VBoxContainer" parent="Edit/VBox/Scroll/VBox"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Edit/VBox/Scroll/VBox/VBoxEvent"]
 layout_mode = 2
+theme_override_constants/line_spacing = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_dfic7")
 text = "Event Setting"
 horizontal_alignment = 1
 
@@ -510,7 +544,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_2v0do")
 text = "-- Info --
 Time: 00:00:000 (0.000)
 Type: Hit
-Pos: 135° ~ 90°"
+Pos: x° ~ x°"
 
 [node name="HBoxSide" type="HBoxContainer" parent="Edit/VBox/Scroll/VBox/VBoxEvent"]
 layout_mode = 2

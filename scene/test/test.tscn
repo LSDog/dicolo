@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cvonjf6lsdmlw"]
+[gd_scene load_steps=29 format=3 uid="uid://cvonjf6lsdmlw"]
 
 [ext_resource type="Script" path="res://scene/test/GithubAPITest.gd" id="1_n5jhp"]
 [ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://visual/texture/circle_512.svg" id="2_e4efk"]
@@ -333,6 +333,11 @@ _data = {
 }
 point_count = 5
 
+[sub_resource type="Gradient" id="Gradient_0vpk2"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.447005)
+colors = PackedColorArray(0.94902, 0.843137, 0.929412, 1, 1, 1, 1, 0)
+
 [node name="Test" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -619,24 +624,6 @@ offset_top = 432.0
 offset_right = 696.0
 offset_bottom = 580.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Container"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ReferenceRect" type="ReferenceRect" parent="Container/MarginContainer"]
-layout_mode = 2
-
-[node name="VScrollBar" type="VScrollBar" parent="Container/MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-max_value = 1.0
-page = 0.12
-value = 0.88
-
-[node name="HScrollBar" type="HScrollBar" parent="Container/MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 10
-
 [node name="TrackL" type="Sprite2D" parent="."]
 position = Vector2(839, 327)
 
@@ -713,6 +700,10 @@ progress = 1385.73
 [node name="Follow" type="Sprite2D" parent="TrackL/ExamplePath/PathFollow2D7"]
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("3_shmos")
+
+[node name="Cross" type="Line2D" parent="TrackL/ExamplePath"]
+points = PackedVector2Array(-257, -8, 186, 178)
+gradient = SubResource("Gradient_0vpk2")
 
 [node name="Circle" type="Sprite2D" parent="TrackL"]
 modulate = Color(1, 1, 1, 0.117647)

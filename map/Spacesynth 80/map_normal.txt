@@ -1,9 +1,9 @@
 !dicolo_map_v1
 title:Spacesynth 80
-singer:Maxim Vasilyev
+author:Maxim Vasilyev
 mapper:LSDog
 diff:6
-mapname:normal
+map_name:normal
 audio:Spacesynth_80.mp3
 bpm:125
 bg:bg.jpg

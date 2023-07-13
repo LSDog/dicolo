@@ -1,9 +1,9 @@
 !dicolo_map_v1
 title:tuyokudakisimetefukakukizutukete
-singer:SATO Takashi/初音ミク
+author:SATO Takashi/初音ミク
 mapper:LSDog
 diff:5
-mapname:normal
+map_name:normal
 audio:tuyokudakisimetefukakukizutukete.mp3
 bpm:90
 bg:bg.jpg

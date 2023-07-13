@@ -5,7 +5,7 @@ extends Resource
 @export var name :String = "Player";
 @export var avatar_path :String = "res://visual/partner/avatar_trans-1024x.png";
 var avatar :Texture2D = null;
-@export var exp :int = 0;
+@export var experience :int = 0;
 @export var level :int = 0;
 
 @export_category("Status")
@@ -36,19 +36,14 @@ func storage_file(path: String) -> String:
 
 func get_avatar() -> ImageTexture:
 	if avatar == null:
-		if avatar_path.begins_with("res://"):
-			avatar = load(avatar_path)
-		else:
-			var image = Image.new();
-			image.load(avatar_path);
-			avatar = ImageTexture.create_from_image(image);
+		avatar = ExternLoader.load_image(avatar_path);
 	return avatar;
 
 func _to_string() -> String:
 	var compare_obj := Resource.new();
 	var prop_list := [];
 	for dic in get_property_list():
-		var name :String = dic["name"];
-		if compare_obj.get(name) == null:
-			prop_list.append('%s: %s' % [name, get(name)]);
+		var p_name :String = dic["name"];
+		if compare_obj.get(p_name) == null:
+			prop_list.append('%s: %s' % [p_name, get(p_name)]);
 	return str(prop_list);

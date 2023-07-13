@@ -37,10 +37,10 @@ var mapCard_copy :MapCard = scene_MapCard.instantiate();
 var example_beatmap :BeatMap = null:
 	set(value):
 		example_beatmap = value;
-		labelTitle.text = example_beatmap.title;
-		labelInfo.text = example_beatmap.singer;
-		if example_beatmap.bg_image_path != "":
-			image_rect.texture = load(example_beatmap.bg_image_path);
+		labelTitle.text = value.title;
+		labelInfo.text = value.author;
+		if value.bg_image_path != "":
+			image_rect.texture = ExternLoader.load_image(value.get_bg_image_path());
 
 ## readme.txt 里的话
 var readme :String;
@@ -125,7 +125,7 @@ func select():
 		vbox_height += node.size.y + separation;
 	vbox_height -= separation;
 	
-	var total_height :int = size.y + vbox_height;
+	var total_height :int = size.y + roundi(vbox_height);
 	custom_minimum_size.y = 500 if total_height >= 500 else total_height;
 	size.y = total_height;
 	image_rect.visible = false;
@@ -179,11 +179,46 @@ func add_mapCard(diff: float, info: String, rating: String, map_name: String, ma
 	map_card.set_rating(rating);
 	map_card.map_name = map_name;
 	map_card.map_path = map_path;
+	var thread = Thread.new();
+	thread.start((func(_map_card: MapCard):
+		_map_card.example_map = BeatMap.new(
+			_map_card.map_path.get_base_dir(),
+			FileAccess.open(_map_card.map_path, FileAccess.READ), true);
+		_map_card.example_map_loaded = true;
+		print(" >>>>>>> load_thread: ", _map_card.map_name);
+		print(" >>>>>>> load_thread: audio: ", _map_card.example_map.audio_path);
+		
+	).bind(map_card));
+	thread.wait_to_finish();
 	map_card.map_play_request.connect(Global.mainMenu.play_map);
 	map_card.map_select.connect(func():
 		if selected_mapCard != null && selected_mapCard != map_card:
 			selected_mapCard.unselect();
 		selected_mapCard = map_card;
+		var mapcard_map = map_card.example_map;
+		print("Select map: ", example_beatmap.map_name);
+		# 更改界面预览当前背景
+		if Global.mainMenu.last_background_path != mapcard_map.get_bg_image_path():
+			if mapcard_map.bg_image_path != "":
+				Global.mainMenu.last_background_path = mapcard_map.get_bg_image_path();
+				Global.mainMenu.background.texture = ExternLoader.load_image(
+					mapcard_map.get_bg_image_path());
+			else:
+				# 没有bg的情况下加载默认的
+				Global.mainMenu.last_background_path = "default";
+				Global.mainMenu.background.texture = Global.mainMenu.default_backgrounds.pick_random();
+		# 更改界面预览当前歌曲
+		if Global.mainMenu.last_audio_path != mapcard_map.get_audio_path():
+			Global.mainMenu.last_audio_path = mapcard_map.get_audio_path();
+			Global.mainMenu.musicPlayer.play_music(
+				ExternLoader.load_audio(mapcard_map.get_audio_path()),
+				mapcard_map.title+" - "+mapcard_map.author,
+				mapcard_map.start_time,
+				mapcard_map.bpm
+			);
+		# 设置readme文本
+		Global.mainMenu.leftPanel.set_readme(readme);
+		# 分数
 		Global.mainMenu.leftPanel.set_score(randi_range(500_0000, 1000_0000));
 		Global.mainMenu.leftPanel.set_count(randf_range(0.8, 1.0), randi_range(500, 1000));
 	);

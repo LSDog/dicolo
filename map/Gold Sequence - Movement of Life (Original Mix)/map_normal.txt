@@ -1,8 +1,8 @@
 !dicolo_map_v1
 title:Gold Sequence - Movement of Life (Original Mix)
-singer:Maxim Vasilyev
+author:Maxim Vasilyev
 mapper:LSDog
 diff:4.5
-mapname:normal
+map_name:normal
 audio:Gold_Sequence.mp3
 bpm:138

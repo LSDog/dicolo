@@ -53,6 +53,6 @@ func save_res_data(data: Resource, path: String) -> void:
 
 ## 加载res/tres/scn/tscn等Resource数据
 func load_res_data(path: String) -> Resource:
-	var data :Resource = load(data_path + path); 
+	var data :Resource = load(data_path + path);
 	print("[DataManager] loaded ", path);
 	return data;

@@ -30,7 +30,8 @@ var data_has_loaded_setting: bool;
 
 func _ready():
 	
-	print("player data: ", DataManager.data_player)
+	# 请求安卓权限
+	OS.request_permissions();
 	
 	get_tree().root.size_changed.connect(func():
 		var now = get_tree().root.size;

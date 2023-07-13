@@ -1,8 +1,8 @@
 !dicolo_map_v1
 title:Beyond the Horizon
-singer:ももぞう
+author:ももぞう
 mapper:LSDog
 diff:6
-mapname:normal
+map_name:normal
 audio:beyond-the-horizon.mp3
 bpm:130
