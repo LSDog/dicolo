@@ -52,10 +52,7 @@ func _ready():
 	playground.play_mode = playground.PLAY_MODE.EDIT;
 	
 	# 测试用 加载map
-	#load_map("res://map/HareHareYukai/map_normal.txt");
-	
-	# 设置Gui值
-	sliderBgDark.value = playground.bgpanel_mask.color.a;
+	#load_map("user://map/HareHareYukai/map_normal.txt");
 	
 	# 绑定Gui操作
 	playground.play_end.connect(func():
@@ -93,6 +90,9 @@ func _ready():
 		playground.bgpanel_mask.color.a = value;
 	);
 	
+	# 设置值
+	sliderBgDark.value = 0.6;
+	
 
 ## 加载铺面
 func load_map(map_file_path: String):
@@ -101,7 +101,7 @@ func load_map(map_file_path: String):
 	playground.load_map(map_file_path, false);
 	has_loaded = true;
 	loaded.emit();
-	print("[Editor] loaded.");
+	print("[Editor] map loaded.");
 	update_flow_scale();
 	flowScroll.value_changed.connect(func(value):
 		flow.offset = value;
@@ -113,7 +113,21 @@ func load_map(map_file_path: String):
 		edit_event_type = event_types[event_types.find(String(button.name))]
 	);
 	
+	print("[Editor] loading properties...");
 	var map :BeatMap = playground.beatmap;
+	# 加载铺面信息/Event到编辑器
+	editTitle.text = map.title;
+	editTitleLatin.text = map.title_latin;
+	editAuthor.text = map.author;
+	editAuthorLatin.text = map.author_latin;
+	editMapper.text = map.mapper;
+	spinDiff.value = map.diff;
+	editMapName.text = map.map_name;
+	buttonAudio.text = map.audio_path;
+	buttonVideo.text = map.video_path;
+	spinBpm.value = map.bpm;
+	buttonBg.text = map.bg_image_path;
+	# 绑定 gui
 	editTitle.text_changed.connect(func(text): map.title = text);
 	editTitleLatin.text_changed.connect(func(text): map.title_latin = text);
 	editAuthor.text_changed.connect(func(text): map.author = text);
@@ -136,18 +150,7 @@ func load_map(map_file_path: String):
 		get_file_choose(["*.png, *.jpg, *.jpeg, *.svg, *.webp, *.bmp", "Image"]).file_selected.connect(func(path):
 			map.bg_image_path = copy_to_map_dir(path)
 			playground.load_bg_image()));
-	# 加载铺面信息/Event到编辑器
-	editTitle.text = map.title;
-	editTitleLatin.text = map.title_latin;
-	editAuthor.text = map.author;
-	editAuthorLatin.text = map.author_latin;
-	editMapper.text = map.mapper;
-	spinDiff.value = map.diff;
-	editMapName.text = map.map_name;
-	buttonAudio.text = map.audio_path;
-	buttonVideo.text = map.video_path;
-	spinBpm.value = map.bpm;
-	buttonBg.text = map.bg_image_path;
+	print("[Editor] adding events.");
 	for event in map.events:
 		flow.add_note(
 			event.event_type,
@@ -160,8 +163,6 @@ func load_map(map_file_path: String):
 				flow.size.y/2.0 - flow.note_margin_vertical * 2.0
 			)
 		);
-	#for key in BeatMap.EVENT_TYPE.keys():
-	#	NOTE_TYPE_MAP[key] = BeatMap.EVENT_TYPE[key];
 
 func get_file_choose(filters: Array[String]) -> FileDialog:
 	var fileDialog = FileDialog.new();

@@ -1,7 +1,6 @@
-[gd_scene load_steps=29 format=3 uid="uid://ogha2bnilh12"]
+[gd_scene load_steps=27 format=3 uid="uid://ogha2bnilh12"]
 
 [ext_resource type="Script" path="res://scene/playground/PlaygroundControl.gd" id="1_p2o0i"]
-[ext_resource type="Shader" path="res://visual/shader/whirl_texture.gdshader" id="2_hx1af"]
 [ext_resource type="Script" path="res://scene/playground/Spectrum.gd" id="3_fqg67"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="4_ea2p3"]
 [ext_resource type="FontFile" uid="uid://dy4m6l0n1c0kk" path="res://visual/font/LettersLaughingAtTheirExecution-WJLG.ttf" id="5_slvds"]
@@ -16,10 +15,6 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjfdj"]
 draw_center = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8lu0f"]
-shader = ExtResource("2_hx1af")
-shader_parameter/rotation = 0.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_w6vl8"]
 line_spacing = 0.0
@@ -107,7 +102,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_cjfdj")
 bus = &"Music"
 
 [node name="Background" type="TextureRect" parent="BGPanel"]
-material = SubResource("ShaderMaterial_8lu0f")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

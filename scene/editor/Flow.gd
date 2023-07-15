@@ -8,6 +8,7 @@ extends Panel
 @onready var playLine :Control = $"../PlayLine";
 @onready var scroll :Control = $"../Scroll" as HScrollBar;
 @onready var note_hit_stylebox :StyleBox = preload("res://scene/editor/note_hit.stylebox");
+@onready var note_cross_stylebox :StyleBox = preload("res://scene/editor/note_cross.stylebox");
 @onready var note_slide_stylebox :StyleBox = preload("res://scene/editor/note_slide.stylebox");
 @onready var note_bounce_stylebox :StyleBox = preload("res://scene/editor/note_bounce.stylebox");
 
@@ -185,6 +186,8 @@ func add_note(
 	match note_type:
 		BeatMap.EVENT_TYPE.Hit:
 			note.add_theme_stylebox_override("panel", note_hit_stylebox);
+		BeatMap.EVENT_TYPE.Cross:
+			note.add_theme_stylebox_override("panel", note_cross_stylebox);
 		BeatMap.EVENT_TYPE.Slide:
 			note.add_theme_stylebox_override("panel", note_slide_stylebox);
 		BeatMap.EVENT_TYPE.Bounce:

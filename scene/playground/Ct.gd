@@ -9,7 +9,8 @@ var prev_position :Vector2;
 var velocity :Vector2 = Vector2.ZERO;
 
 # track中的相关变量 大部分由Playground负责计算
-var pos :Vector2;
+var pos :Vector2; ## 相对于track的位置
+var prev_pos :Vector2;
 var distance :float;
 var degree :float;
 var velocity_degree :float;

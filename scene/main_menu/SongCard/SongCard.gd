@@ -185,8 +185,6 @@ func add_mapCard(diff: float, info: String, rating: String, map_name: String, ma
 			_map_card.map_path.get_base_dir(),
 			FileAccess.open(_map_card.map_path, FileAccess.READ), true);
 		_map_card.example_map_loaded = true;
-		print(" >>>>>>> load_thread: ", _map_card.map_name);
-		print(" >>>>>>> load_thread: audio: ", _map_card.example_map.audio_path);
 		
 	).bind(map_card));
 	thread.wait_to_finish();

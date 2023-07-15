@@ -129,6 +129,7 @@ var texture_follow = preload("res://visual/texture/follow.svg");
 
 
 var sound_hit = preload("res://audio/map/note_hihat.wav");
+var sound_cross = preload("res://audio/map/note_snarehat.wav");
 var sound_slide = preload("res://audio/map/note_hihatclosed.wav");
 var sound_bounce = preload("res://audio/map/note_floortom.wav");
 
@@ -202,7 +203,7 @@ func load_map(map_file_path: String, auto_start: bool = false):
 	print("One Beat = ", get_beat_time(), "s");
 	
 	if beatmap.lrc_path != "":
-		var lrcfile = LyricsFile.new(FileAccess.open(beatmap.lrc_path, FileAccess.READ));
+		var lrcfile = LyricsFile.new(FileAccess.open(beatmap.get_lrc_path(), FileAccess.READ));
 		if lrcfile.loaded:
 			lyrics = lrcfile;
 			has_lyrics = true;
@@ -600,6 +601,30 @@ func generate_note(note :BeatMap.Event.Note, before_time: float, offset :float =
 				).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD);
 			tween_step(tween, offset);
 			return [line, polygon];
+		BeatMap.EVENT_TYPE.Cross:
+			var radius = trackl_diam/2.0 if track == trackl else trackr_diam/2.0;
+			var start_pos = get_point_on_track(note.deg, radius);
+			var end_pos = get_point_on_track(note.deg_end, radius);
+			var line := Line2D.new();
+			line.width = 10;
+			line.points = [start_pos, start_pos];
+			line.default_color = Color(246, 227, 242, 0.5);
+			path.add_child(line);
+			var hint_line := Line2D.new();
+			hint_line.points = [start_pos, end_pos];
+			hint_line.default_color = Color(1,1,1,0);
+			hint_line.begin_cap_mode = Line2D.LINE_CAP_ROUND;
+			hint_line.end_cap_mode = Line2D.LINE_CAP_ROUND;
+			path.add_child(hint_line);
+			var tween = create_anim_tween(line);
+			tween.parallel().tween_method((func(pos): line.points[1] = pos),
+				start_pos, end_pos, event_before_beat*get_beat_time()
+				).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
+			tween.parallel().tween_property(hint_line, "default_color:a", 0.5, event_before_beat*get_beat_time()
+				).from(0.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
+			tween.parallel().tween_property(hint_line, "width", line.width, event_before_beat*get_beat_time()
+				).from(96).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC);
+			return [line, hint_line];
 		BeatMap.EVENT_TYPE.Slide:
 			var path_follow := PathFollow2D.new();
 			path.add_child(path_follow);
@@ -649,12 +674,14 @@ func generate_note(note :BeatMap.Event.Note, before_time: float, offset :float =
 			return [bounce];
 	return [];
 
+## 让一个tween跳到delta秒后
 func tween_step(tween: Tween, delta: float, kill_if_finish: bool = true):
 	if !tween.custom_step(delta) && kill_if_finish:
 		print("kill ", tween);
 		tween.kill();
 		anim_tweens.erase(tween);
 
+## 判定note
 func judge_note(wait_index :int, note_array = null):
 	if judged_notes.has(wait_index):
 		return; # 此音符已判定 忽略
@@ -689,6 +716,14 @@ func judge_note(wait_index :int, note_array = null):
 				tween.set_trans(Tween.TRANS_LINEAR);
 				tween.parallel().tween_property(slide_path_follow, "modulate", Color(1,0,0,0), note_after_time);
 				tween.parallel().tween_property(hint_point, "modulate", Color(1,0,0,0), note_after_time);
+			BeatMap.EVENT_TYPE.Cross:
+				var line :Line2D = note_item_array[0];
+				var hint_line :Line2D = note_item_array[1];
+				var tween = create_anim_tween(hint_line);
+				tween.set_ease(Tween.EASE_OUT);
+				tween.set_trans(Tween.TRANS_LINEAR);
+				tween.parallel().tween_property(line, "modulate", Color(1,0,0,0), note_after_time);
+				tween.parallel().tween_property(hint_line, "modulate", Color(1,0,0,0), note_after_time);
 			BeatMap.EVENT_TYPE.Bounce:
 				var bounce :Sprite2D = note_item_array[0];
 				var tween = create_anim_tween(bounce);
@@ -716,25 +751,21 @@ func judge_note(wait_index :int, note_array = null):
 	var radius := trackl_diam/2.0 if track == trackl else trackr_diam/2.0;
 	var ct := ctl if note.side == note.SIDE.LEFT else ctr;
 	
-	var touched := false;
-	var hit := false;
-	
 	# 判断碰没碰上 然后搞特效 让判定完的东西消失啥的
 	match note.event_type:
 		
 		BeatMap.EVENT_TYPE.Hit:
 			note = note as BeatMap.Event.Note.Hit;
-			touched = (
+			var touched = (
 				ct.distance >= radius - judge_hit_radius &&
 				is_in_degree(ct.degree, note.deg, note.deg_end)
 			);
-			hit = is_in_degree(
+			var hit = is_in_degree(
 				get_degree_in_track(ct.velocity, true),
 				ct.degree - judge_hit_deg_offset,
 				ct.degree + judge_hit_deg_offset
 			);
 			if edit_mode || ct.velocity.length() >= judge_hit_speed && touched && hit:
-				judged_notes[wait_index] = note_array;
 				var line :Line2D = note_item_array[0];
 				#var polygon :Polygon2D = note_item_array[1];
 				line.default_color = COLOR_JUST if judge == JUDGEMENT.JUST else COLOR_GOOD;
@@ -751,16 +782,17 @@ func judge_note(wait_index :int, note_array = null):
 					).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD);
 				note_item_array.append(line_fx);
 				
+				note_array[1] = note_item_array; ## 新Node得加进去
+				judged_notes[wait_index] = note_array;
 				remove_note(wait_index, true);
 		
 		BeatMap.EVENT_TYPE.Slide:
 			note = note as BeatMap.Event.Note.Slide;
-			touched = (
+			var touched = (
 				ct.distance >= radius - judge_slide_radius &&
 				is_in_degree(ct.degree, note.deg - judge_slide_deg/2.0, note.deg + judge_slide_deg/2.0)
 			);
 			if edit_mode || touched:
-				judged_notes[wait_index] = note_array;
 				var path_follow := note_item_array[0] as PathFollow2D;
 				#var slide :Sprite2D = path_follow.get_child(0);
 				var ring := path_follow.get_child(1) as Sprite2D;
@@ -773,11 +805,33 @@ func judge_note(wait_index :int, note_array = null):
 				tween.parallel().tween_property(ring, "modulate:a", 0.0, note_after_time*2
 					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
 				
+				judged_notes[wait_index] = note_array;
 				remove_note(wait_index, true);
+		
+		BeatMap.EVENT_TYPE.Cross:
+			note = note as BeatMap.Event.Note.Cross;
+			var start_pos = get_point_on_track(note.deg, radius);
+			var end_pos = get_point_on_track(note.deg_end, radius);
+			var crossed := has_crossed_line(start_pos, end_pos, ct.pos, ct.prev_pos);
+			if edit_mode || crossed:
+				judged_notes[wait_index] = note_array;
+				var line :Line2D = note_item_array[0];
+				var hint_line :Line2D = note_item_array[1];
+				hint_line.begin_cap_mode = Line2D.LINE_CAP_BOX;
+				hint_line.end_cap_mode = Line2D.LINE_CAP_BOX;
+				hint_line.modulate = COLOR_JUST if judge == JUDGEMENT.JUST else COLOR_GOOD;
+				hint_line.queue_redraw();
+				var tween = create_anim_tween(hint_line);
+				tween.parallel().tween_property(line, "modulate:a", 0.0, note_after_time*2
+					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
+				tween.parallel().tween_property(hint_line, "width", 96, note_after_time
+					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
+				tween.parallel().tween_property(hint_line, "modulate:a", 0.0, note_after_time*2
+					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
 		
 		BeatMap.EVENT_TYPE.Bounce:
 			note = note as BeatMap.Event.Note.Bounce;
-			touched = ct.distance <= judge_bounce_radius;
+			var touched = ct.distance <= judge_bounce_radius;
 			if edit_mode || ct.velocity.length_squared() >= judge_bounce_speed**2 && touched:
 				judged_notes[wait_index] = note_array;
 				var bounce := note_item_array[0] as Sprite2D;
@@ -794,6 +848,7 @@ func judge_note(wait_index :int, note_array = null):
 
 ## 更新ct的数值
 func update_ct(ct: Ct):
+	ct.prev_pos = ct.pos;
 	ct.pos = get_ct_position(ct);
 	ct.distance = ct.pos.length();
 	ct.degree = get_degree_in_track(ct.pos, true);
@@ -819,12 +874,28 @@ func is_in_degree(x: float, min_val: float, max_val: float) -> bool:
 		min_val = max_val;
 		max_val = temp_min;
 	if min_val < 0 && max_val > 0:
-		# 跨 0° 的判断方法
+		# 跨 0° 的判断方法: 拆成 前面~0° 以及 0°~后面
 		return is_in_degree(x, min_val, 0) || is_in_degree(x, 0, max_val);
 	x = fposmod(x, 360) + 360 * floorf(min_val/360.0);
 	if min_val == -20:
 		print("min_val %.1f\tct %.1f\tmax %.1f" % [min_val, x ,max_val]);
 	return min_val <= x && x <= max_val;
+
+## 检查先后两点是否穿过了一条线，包括prev点在线上的情况
+func has_crossed_line(
+	line_start: Vector2, line_end: Vector2,
+	pos_now: Vector2, pos_prev: Vector2) -> bool:
+	if pos_prev == pos_now: return false;
+	if line_start.y == line_end.y: ## 横线
+		return pos_prev.x <= line_start.x && pos_now.x >= line_start.x;
+	elif line_start.x == line_end.x: ## 竖线
+		return pos_prev.y <= line_start.y && pos_now.y >= line_start.y;
+	else: ## 斜线，通过与在线上同x的点的y值比较
+		var delta_y = line_start.y - line_end.y;
+		var delta_x = line_start.x - line_end.x;
+		var y_del_prev = (line_start.x - pos_prev.x)/delta_x*delta_y - pos_prev.y;
+		var y_del_now = (line_start.x - pos_now.x)/delta_x*delta_y - pos_now.y;
+		return y_del_prev <= 0 && y_del_now >= 0 || y_del_prev >= 0 && y_del_now <= 0;
 
 func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"):	
 	var player = AudioStreamPlayer.new();
@@ -858,6 +929,11 @@ func remove_note(wait_index :int, use_animation :float = false):
 			).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
 	judged_notes.erase(wait_index);
 	waiting_notes.erase(wait_index);
+
+## 返回轨道上的度数对应的相对位置，相对位置
+func get_point_on_track(deg: float, radius: float = 1.0) -> Vector2:
+	var rad := deg_to_rad(deg-90);
+	return (Vector2(cos(rad),sin(rad)) * radius);
 
 ## 获得从start“转”到end的所有点，这意味着他可以返回绕好几圈的结果
 func get_points_from_curve(curve :Curve2D, start_ratio :float = 0, end_ratio :float = 1):

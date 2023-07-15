@@ -259,7 +259,7 @@ class Event:
 				super._init(p_time, p_side);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				self.event_type = EVENT_TYPE.Hit;
+				self.event_type = EVENT_TYPE.Cross;
 		
 		class Bounce:
 			extends Note;

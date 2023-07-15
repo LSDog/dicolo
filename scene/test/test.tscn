@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cvonjf6lsdmlw"]
+[gd_scene load_steps=28 format=3 uid="uid://cvonjf6lsdmlw"]
 
 [ext_resource type="Script" path="res://scene/test/GithubAPITest.gd" id="1_n5jhp"]
 [ext_resource type="Texture2D" uid="uid://un7fyf1x5brm" path="res://visual/texture/circle_512.svg" id="2_e4efk"]
@@ -332,11 +332,6 @@ _data = {
 "points": PackedVector2Array(-128, 0, 141.257, 0, 0, -256, 0, -141.257, 0, 141.257, 256, 0, 141.257, 0, -141.257, 0, 0, 256, 0, 141.257, 0, -141.257, -256, 0, -141.257, 0, 0, 0, 0, -256)
 }
 point_count = 5
-
-[sub_resource type="Gradient" id="Gradient_0vpk2"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.447005)
-colors = PackedColorArray(0.94902, 0.843137, 0.929412, 1, 1, 1, 1, 0)
 
 [node name="Test" type="Control"]
 layout_mode = 3
@@ -703,7 +698,8 @@ texture = ExtResource("3_shmos")
 
 [node name="Cross" type="Line2D" parent="TrackL/ExamplePath"]
 points = PackedVector2Array(-257, -8, 186, 178)
-gradient = SubResource("Gradient_0vpk2")
+width = 16.0
+default_color = Color(0.964706, 0.890196, 0.94902, 1)
 
 [node name="Circle" type="Sprite2D" parent="TrackL"]
 modulate = Color(1, 1, 1, 0.117647)
