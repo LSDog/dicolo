@@ -125,7 +125,7 @@ func select():
 		vbox_height += node.size.y + separation;
 	vbox_height -= separation;
 	
-	var total_height :int = size.y + roundi(vbox_height);
+	var total_height :int = roundi(size.y + vbox_height);
 	custom_minimum_size.y = 500 if total_height >= 500 else total_height;
 	size.y = total_height;
 	image_rect.visible = false;
