@@ -813,6 +813,7 @@ func judge_note(wait_index :int, note_array = null):
 			var start_pos = get_point_on_track(note.deg, radius);
 			var end_pos = get_point_on_track(note.deg_end, radius);
 			var crossed := has_crossed_line(start_pos, end_pos, ct.pos, ct.prev_pos);
+			#print("crossed = ", crossed);
 			if edit_mode || crossed:
 				judged_notes[wait_index] = note_array;
 				var line :Line2D = note_item_array[0];
@@ -821,13 +822,17 @@ func judge_note(wait_index :int, note_array = null):
 				hint_line.end_cap_mode = Line2D.LINE_CAP_BOX;
 				hint_line.modulate = COLOR_JUST if judge == JUDGEMENT.JUST else COLOR_GOOD;
 				hint_line.queue_redraw();
+				play_sound(sound_cross);
 				var tween = create_anim_tween(hint_line);
-				tween.parallel().tween_property(line, "modulate:a", 0.0, note_after_time*2
+				tween.parallel().tween_property(line, "modulate:a", 0.0, note_after_time
 					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
-				tween.parallel().tween_property(hint_line, "width", 96, note_after_time
-					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
-				tween.parallel().tween_property(hint_line, "modulate:a", 0.0, note_after_time*2
-					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
+				tween.parallel().tween_property(hint_line, "width", 140, note_after_time
+					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
+				tween.parallel().tween_property(hint_line, "modulate:a", 0.0, note_after_time/2.0
+					).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
+				
+				judged_notes[wait_index] = note_array;
+				remove_note(wait_index, true);
 		
 		BeatMap.EVENT_TYPE.Bounce:
 			note = note as BeatMap.Event.Note.Bounce;
@@ -891,11 +896,12 @@ func has_crossed_line(
 	elif line_start.x == line_end.x: ## 竖线
 		return pos_prev.y <= line_start.y && pos_now.y >= line_start.y;
 	else: ## 斜线，通过与在线上同x的点的y值比较
-		var delta_y = line_start.y - line_end.y;
-		var delta_x = line_start.x - line_end.x;
-		var y_del_prev = (line_start.x - pos_prev.x)/delta_x*delta_y - pos_prev.y;
-		var y_del_now = (line_start.x - pos_now.x)/delta_x*delta_y - pos_now.y;
-		return y_del_prev <= 0 && y_del_now >= 0 || y_del_prev >= 0 && y_del_now <= 0;
+		var delta_y = line_end.y - line_start.y;
+		var delta_x = line_end.x - line_start.x;
+		var y_del_prev = (pos_prev.x - line_start.x)/delta_x*delta_y - pos_prev.y;
+		var y_del_now = (pos_now.x - line_start.x)/delta_x*delta_y - pos_now.y;
+		#print("    >> has_crossed_line : (%.1f,%.1f)"%[y_del_prev, y_del_now])
+		return y_del_prev <= 0 && y_del_now > 0 || y_del_prev >= 0 && y_del_now < 0;
 
 func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"):	
 	var player = AudioStreamPlayer.new();
