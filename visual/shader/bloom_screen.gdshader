@@ -1,4 +1,5 @@
 shader_type canvas_item;
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
 uniform float bloomRadius = 1.0;
 uniform float bloomThreshold = 1.0;
@@ -36,8 +37,8 @@ vec3 GetBloom(sampler2D tex, vec2 uv, vec2 texPixelSize) {
 }
 
 void fragment() {
-	vec4 col = texture(TEXTURE, UV);
-	vec3 bloom = GetBloom(TEXTURE, UV, TEXTURE_PIXEL_SIZE);
+	vec4 col = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec3 bloom = GetBloom(SCREEN_TEXTURE, SCREEN_UV, TEXTURE_PIXEL_SIZE);
 	col.rgb += bloom * bloomIntensity;
 	COLOR = col;
 }

@@ -66,6 +66,8 @@ func _process(delta: float):
 	mouse_position.clamp(Vector2.ZERO, size);
 	background.position = (
 		mouse_position.clamp(Vector2.ZERO, size) - size/2.0) * (1-parallax_bg_scale)/2.0;
+	
+	$Practicle/GPUParticles2D.emitting = true;
 
 func select_map(song_name: String, map_name: String):
 	print("select map: ", song_name, " -- ", map_name);

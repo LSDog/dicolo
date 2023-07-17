@@ -10,7 +10,7 @@ extends Panel
 @onready var note_hit_stylebox :StyleBox = preload("res://scene/editor/note_hit.stylebox");
 @onready var note_cross_stylebox :StyleBox = preload("res://scene/editor/note_cross.stylebox");
 @onready var note_slide_stylebox :StyleBox = preload("res://scene/editor/note_slide.stylebox");
-@onready var note_bounce_stylebox :StyleBox = preload("res://scene/editor/note_bounce.stylebox");
+@onready var note_bound_stylebox :StyleBox = preload("res://scene/editor/note_bound.stylebox");
 
 @export var outline_color := Color.LIGHT_YELLOW;
 @export var barline_color := Color.LIGHT_BLUE;
@@ -190,8 +190,8 @@ func add_note(
 			note.add_theme_stylebox_override("panel", note_cross_stylebox);
 		BeatMap.EVENT_TYPE.Slide:
 			note.add_theme_stylebox_override("panel", note_slide_stylebox);
-		BeatMap.EVENT_TYPE.Bounce:
-			note.add_theme_stylebox_override("panel", note_bounce_stylebox);
+		BeatMap.EVENT_TYPE.Bound:
+			note.add_theme_stylebox_override("panel", note_bound_stylebox);
 		_:
 			print("not support note type in edtor: ", note_type);
 			return;

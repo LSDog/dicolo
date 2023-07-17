@@ -1,7 +1,8 @@
-[gd_scene load_steps=62 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=68 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_1m2wa"]
 [ext_resource type="Texture2D" uid="uid://besj0l23codt1" path="res://visual/background/dicolo_icon_light_bubbles.png" id="2_tlhgm"]
+[ext_resource type="Texture2D" uid="uid://dyruh3syyydp6" path="res://visual/texture/ct.svg" id="3_7kmml"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="3_xct3g"]
 [ext_resource type="Script" path="res://scene/main_menu/SongList.gd" id="4_c0nrc"]
 [ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="5_etfut"]
@@ -26,6 +27,41 @@
 [ext_resource type="AudioStream" uid="uid://c0bw0kmqnvfow" path="res://audio/intro/dicolo!_rin.wav" id="22_ghic7"]
 [ext_resource type="AudioStream" uid="uid://cf1f2lob8pau1" path="res://audio/intro/dicolo!_len.wav" id="23_jg7m8"]
 [ext_resource type="Texture2D" uid="uid://485q4nyju4h0" path="res://visual/icon/icon.png" id="25_2hpux"]
+
+[sub_resource type="Gradient" id="Gradient_5dqxp"]
+offsets = PackedFloat32Array(0, 0.05, 0.888889, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3glhm"]
+gradient = SubResource("Gradient_5dqxp")
+
+[sub_resource type="Curve" id="Curve_ubipp"]
+_data = [Vector2(0, 0), 0.0, 7.97661, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_kbpy7"]
+curve = SubResource("Curve_ubipp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_auky1"]
+lifetime_randomness = 0.2
+emission_shape = 1
+emission_sphere_radius = 128.0
+particle_flag_disable_z = true
+direction = Vector3(1, -0.5, 0)
+spread = 25.0
+gravity = Vector3(0, 128, 0)
+initial_velocity_min = 200.0
+initial_velocity_max = 400.0
+angular_velocity_min = -35.41
+angular_velocity_max = 82.62
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_min = -180.0
+angle_max = 180.0
+scale_min = 0.75
+scale_curve = SubResource("CurveTexture_kbpy7")
+color = Color(1, 1, 1, 0.2)
+color_ramp = SubResource("GradientTexture1D_3glhm")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwa4q"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -538,6 +574,23 @@ texture = ExtResource("2_tlhgm")
 expand_mode = 1
 stretch_mode = 6
 metadata/_edit_lock_ = true
+
+[node name="Practicle" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -290.0
+offset_bottom = -290.0
+grow_vertical = 0
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Practicle"]
+emitting = false
+amount = 10
+process_material = SubResource("ParticleProcessMaterial_auky1")
+texture = ExtResource("3_7kmml")
+lifetime = 3.0
+local_coords = true
 
 [node name="BgPanel" type="Panel" parent="."]
 layout_mode = 1

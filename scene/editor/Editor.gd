@@ -7,6 +7,7 @@ extends Control
 @onready var flowBox :Control = $FlowBox as Control;
 @onready var flow :EditorFlow = $FlowBox/FlowPanel as EditorFlow;
 @onready var flowScroll :HScrollBar = $FlowBox/Scroll as HScrollBar;
+@onready var sliderProgress :Slider = $FlowBox/SliderProgress;
 @onready var playLine :Control = $FlowBox/PlayLine;
 
 @onready var buttonPlay := $Edit/VBox/HBoxPlayback/ButtonPlay;
@@ -47,12 +48,13 @@ var has_loaded := false;
 func _ready():
 	# 禁用 virtualJoystic
 	playground.enable_virtualJoystick = false;
-	playground.menuButton.visible = false;
+	playground.buttonMenu.visible = false;
 	# 设定模式
-	playground.play_mode = playground.PLAY_MODE.EDIT;
-	
+	playground.play_mode = playground.MODE.EDIT;
+	# 同步进度条
+	flowScroll.share(sliderProgress);
 	# 测试用 加载map
-	#load_map("user://map/HareHareYukai/map_normal.txt");
+	load_map("user://map/HareHareYukai/map_test.txt");
 	
 	# 绑定Gui操作
 	playground.play_end.connect(func():
@@ -153,7 +155,7 @@ func load_map(map_file_path: String):
 	print("[Editor] adding events.");
 	for event in map.events:
 		flow.add_note(
-			event.event_type,
+			event.type,
 			Vector2(
 				flow.get_length_in_flow(event.time),
 				flow.get_note_pos_y(event.side)

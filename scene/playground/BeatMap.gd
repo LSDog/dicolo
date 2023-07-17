@@ -3,15 +3,14 @@ class_name BeatMap
 extends Resource
 
 ## 音符类型
-enum EVENT_TYPE {None, Note, Hit, Slide, Cross, Bounce, Start, Bpm, End};
+enum EVENT_TYPE {None, Note, Hit, Slide, Cross, Bound, Start, Bpm, End};
+## 总分
+const TOTAL_SCORE :float = 1000000;
 
-## 是否加载完毕
-var loaded :bool = false;
+var loaded :bool = false; ## 是否加载完毕
 
-## 铺面文件夹路径
-var dir_path :String;
-## 铺面文件路径
-var file_path :String;
+var dir_path :String; ## 铺面文件夹路径
+var file_path :String; ## 铺面文件路径
 
 var title :String; ## 歌曲标题
 var title_latin :String; ## 歌曲标题(拉丁字母)
@@ -26,12 +25,23 @@ var bpm: float; ## 默认Bpm
 var bg_image_path :String; ## 背景图片路径
 var lrc_path :String; ## 歌词路径
 var events :Array[Event] = []; ## 音符/事件等
+
 var start_time: float; ## 开始时间（来自第一个event的时间）
+var end_time: float; ## 结束时间（来自最后一个_end或的时间）
+var last_event_time: float; ## 最后一个event的时间
+
+var event_counts :Array[int] = []; ## 记录铺面中事件的数量，顺序同EVENT_TYPE
+var note_count :int = 0; ## 音符的总数
+var note_scores :Array[float] = []; ## 记录note的分值，顺序同EVENT_TYPE
 
 ## 构造器。需要当前铺面目录和已经打开的 [FileAccess] ([method FileAccess.open])
 ## ignore_notes 会忽略所有notes 但是保留其他event
 func _init(dir :String, file :FileAccess, ignore_notes :bool = false):
 	resource_name = "BeatMap";
+	event_counts.resize(EVENT_TYPE.size());
+	event_counts.fill(0);
+	note_scores.resize(EVENT_TYPE.size());
+	note_scores.fill(0.0);
 	if file == null || !file.is_open(): return;
 	if !dir.ends_with('/'): dir += '/';
 	dir_path = dir;
@@ -76,6 +86,18 @@ func _init(dir :String, file :FileAccess, ignore_notes :bool = false):
 				"events": in_event = true;
 	file.close();
 	start_time = 0.0 if events.is_empty() else events[0].time;
+	last_event_time = 0.0 if events.is_empty() else events[-1].time;
+	# 计算分值
+	if !ignore_notes:
+		var ratio_hit :float = event_counts[EVENT_TYPE.Hit];
+		var ratio_slide :float = event_counts[EVENT_TYPE.Slide] / 4.0;
+		var ratio_cross :float = event_counts[EVENT_TYPE.Cross];
+		var ratio_bound :float = event_counts[EVENT_TYPE.Bound];
+		var ratio_all = ratio_hit + ratio_slide + ratio_cross + ratio_bound;
+		note_scores[EVENT_TYPE.Hit] = ratio_hit/ratio_all * TOTAL_SCORE / event_counts[EVENT_TYPE.Hit];
+		note_scores[EVENT_TYPE.Slide] = ratio_slide/ratio_all * TOTAL_SCORE / event_counts[EVENT_TYPE.Slide];
+		note_scores[EVENT_TYPE.Cross] = ratio_cross/ratio_all * TOTAL_SCORE / event_counts[EVENT_TYPE.Cross];
+		note_scores[EVENT_TYPE.Bound] = ratio_bound/ratio_all * TOTAL_SCORE / event_counts[EVENT_TYPE.Bound];
 	loaded = true;
 
 func get_audio_path():
@@ -105,14 +127,15 @@ func add_other_event(time: float, event_string: String):
 	var data_split := event_string.split('/');
 	match data_split[0]:
 		"_start":
-			events.append(Event.Start.new(time));
+			add_and_count_event(Event.Start.new(time));
 		"_end":
-			events.append(Event.End.new(time));
+			end_time = time;
+			add_and_count_event(Event.End.new(time));
 		"_bpm":
 			if data_split.size() < 2:
 				push_warning("%f _bpm data wrong" % time);
 				return;
-			events.append(Event.Bpm.new(time, data_split[1].to_float()));
+			add_and_count_event(Event.Bpm.new(time, data_split[1].to_float()));
 
 ## 接受单个音符形式，如 c/r/135
 func add_note(time: float, note_string :String):
@@ -123,7 +146,7 @@ func add_note(time: float, note_string :String):
 			if note_split.size() < 4:
 				push_warning("%f hit data wrong" % time);
 				return;
-			events.append(Event.Note.Hit.new(
+			add_and_count_event(Event.Note.Hit.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
@@ -133,7 +156,7 @@ func add_note(time: float, note_string :String):
 			if note_split.size() < 3:
 				push_warning("%f slide data wrong" % time);
 				return;
-			events.append(Event.Note.Slide.new(
+			add_and_count_event(Event.Note.Slide.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(),
@@ -142,20 +165,25 @@ func add_note(time: float, note_string :String):
 			if note_split.size() < 4:
 				push_warning("%f hit data wrong" % time);
 				return;
-			events.append(Event.Note.Cross.new(
+			add_and_count_event(Event.Note.Cross.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT, \
 				0.0 if !note_split[2].is_valid_float() else note_split[2].to_float(), \
 				0.0 if !note_split[3].is_valid_float() else note_split[3].to_float()
 			));
-		"b": # bounce
+		"b": # bound
 			if note_split.size() < 2:
-				push_warning("%f bounce data wrong" % time);
+				push_warning("%f bound data wrong" % time);
 				return;
-			events.append(Event.Note.Bounce.new(
+			add_and_count_event(Event.Note.Bound.new(
 				time, \
 				Event.SIDE.LEFT if note_split[1]=="l" else Event.SIDE.RIGHT
 			));
+
+## 将 event 放进列表并计数
+func add_and_count_event(event: Event):
+	events.append(event);
+	event_counts[event.type] += 1;
 
 ## 保存铺面
 func save_to_file():
@@ -198,7 +226,7 @@ func append_no_empty(array: PackedStringArray, str_array: Array):
 class Event:
 	
 	# Event 类型（get_class不能用）
-	var event_type = EVENT_TYPE.None;
+	var type = EVENT_TYPE.None;
 	
 	## 执行的时间(s)
 	var time: float;
@@ -222,7 +250,7 @@ class Event:
 		
 		func _init(p_time: float, p_side: SIDE):
 			super._init(p_time, p_side);
-			self.event_type = EVENT_TYPE.Note;
+			self.type = EVENT_TYPE.Note;
 		
 		class Hit:
 			extends Note;
@@ -235,7 +263,7 @@ class Event:
 				super._init(p_time, p_side);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				self.event_type = EVENT_TYPE.Hit;
+				self.type = EVENT_TYPE.Hit;
 		
 		class Slide:
 			extends Note;
@@ -246,7 +274,7 @@ class Event:
 			func _init(p_time: float, p_side: SIDE, p_deg: float):
 				super._init(p_time, p_side);
 				self.deg = p_deg;
-				self.event_type = EVENT_TYPE.Slide;
+				self.type = EVENT_TYPE.Slide;
 		
 		class Cross:
 			extends Note;
@@ -259,16 +287,16 @@ class Event:
 				super._init(p_time, p_side);
 				self.deg = p_deg;
 				self.deg_end = p_deg_end;
-				self.event_type = EVENT_TYPE.Cross;
+				self.type = EVENT_TYPE.Cross;
 		
-		class Bounce:
+		class Bound:
 			extends Note;
 			
 			func to_file_string():
 				return "%f b/%s" % [time,side_str[side]];
 			func _init(p_time: float, p_side: SIDE):
 				super._init(p_time, p_side);
-				self.event_type = EVENT_TYPE.Bounce;
+				self.type = EVENT_TYPE.Bound;
 	
 	## 开始
 	class Start:
@@ -277,7 +305,7 @@ class Event:
 			return "%f _start" % time;
 		func _init(p_time: float):
 			super._init(p_time, SIDE.OTHER);
-			event_type = EVENT_TYPE.Start;
+			type = EVENT_TYPE.Start;
 
 	## 结束
 	class End:
@@ -286,7 +314,7 @@ class Event:
 			return "%f _end" % time;
 		func _init(p_time: float):
 			super._init(p_time, SIDE.OTHER);
-			event_type = EVENT_TYPE.End;
+			type = EVENT_TYPE.End;
 	
 	## bpm更改
 	class Bpm:
@@ -298,5 +326,5 @@ class Event:
 		func _init(p_time: float, p_bpm: float):
 			super._init(p_time, SIDE.OTHER);
 			self.bpm = p_bpm;
-			event_type = EVENT_TYPE.Bpm;
+			type = EVENT_TYPE.Bpm;
 	

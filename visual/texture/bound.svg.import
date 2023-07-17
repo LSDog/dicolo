@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://2k2u7yyjoqwg"
-path="res://.godot/imported/bounce.svg-9516078a130e4dbd5fe4ff916aea1095.ctex"
+path="res://.godot/imported/bound.svg-55f6aa5246c77a2fcabe09b0b08ba1ec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://visual/texture/bounce.svg"
-dest_files=["res://.godot/imported/bounce.svg-9516078a130e4dbd5fe4ff916aea1095.ctex"]
+source_file="res://visual/texture/bound.svg"
+dest_files=["res://.godot/imported/bound.svg-55f6aa5246c77a2fcabe09b0b08ba1ec.ctex"]
 
 [params]
 
