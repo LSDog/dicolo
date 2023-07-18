@@ -825,6 +825,8 @@ func judge_note(wait_index :int, note_array = null):
 				judged_notes[wait_index] = note_array;
 				var line :Line2D = note_item_array[0];
 				var hint_line :Line2D = note_item_array[1];
+				var extend_start := hint_line.points[0]*2 - hint_line.points[1];
+				var extend_end := hint_line.points[1]*2 - hint_line.points[0];
 				hint_line.begin_cap_mode = Line2D.LINE_CAP_BOX;
 				hint_line.end_cap_mode = Line2D.LINE_CAP_BOX;
 				hint_line.modulate = COLOR_BEST if judge == JUDGEMENT.BEST else COLOR_GOOD;
@@ -833,8 +835,14 @@ func judge_note(wait_index :int, note_array = null):
 				var tween = create_anim_tween(hint_line);
 				tween.parallel().tween_property(line, "modulate:a", 0.0, note_after_time
 					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
-				tween.parallel().tween_property(hint_line, "width", 140, note_after_time
-					).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
+				tween.parallel().tween_method(
+					func(pos:Vector2): hint_line.set_point_position(0, pos),
+					hint_line.points[0], extend_start, note_after_time
+				).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
+				tween.parallel().tween_method(
+					func(end:Vector2): hint_line.points[1] = end,
+					hint_line.points[1], extend_end, note_after_time
+				).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 				tween.parallel().tween_property(hint_line, "modulate:a", 0.0, note_after_time/2.0
 					).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
 				
@@ -872,13 +880,14 @@ func get_score(note_type: BeatMap.EVENT_TYPE, judge: JUDGEMENT, offset: float = 
 	match judge:
 		JUDGEMENT.BEST: return base_score;
 		JUDGEMENT.GOOD: return base_score*(
-			(pow(E,-40*offset+10)+401.4287934927351)/804.8575869854702 );
+			(pow(E,-40*offset+10)+401.4287934927351)/804.8575869854702);
 		# GOOD's curve -> (e^(-40*offset + 10) + e^(6) - 2)/(2*e^(6) - 2)
 		_,JUDGEMENT.MISS: return 0;
 
 func set_score(value: float):
 	score = value;
-	labelScore.text = "%07d" % floori(score);
+	labelScore.text = "%07d" % floori(roundi(score*10)/10.0);
+	# round四舍五入小数第二位，解决分数满分总和变成999999
 
 func set_combo(value: int):
 	combo = value;

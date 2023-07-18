@@ -87,7 +87,6 @@ scale = Vector2(2, 2)
 texture = ExtResource("4_pf83e")
 
 [node name="Stick" type="Sprite2D" parent="LOut"]
-z_index = 1
 material = SubResource("ShaderMaterial_wbcmf")
 texture = ExtResource("5_bw2km")
 
@@ -107,7 +106,6 @@ texture = ExtResource("4_pf83e")
 flip_h = true
 
 [node name="Stick" type="Sprite2D" parent="ROut"]
-z_index = 1
 material = SubResource("ShaderMaterial_wbcmf")
 texture = ExtResource("5_bw2km")
 
