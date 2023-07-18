@@ -10,6 +10,7 @@ extends Control
 @onready var bgPanel :Panel = $BgPanel;
 @onready var animation_control :Control = $Animations;
 @onready var animation_player :AnimationPlayer = $Animations/AnimationPlayer;
+@onready var targetArrow :Control = $TargetArrow;
 
 var last_background_path :String;
 var last_audio_path :String;
@@ -66,6 +67,17 @@ func _process(delta: float):
 	mouse_position.clamp(Vector2.ZERO, size);
 	background.position = (
 		mouse_position.clamp(Vector2.ZERO, size) - size/2.0) * (1-parallax_bg_scale)/2.0;
+	
+	# 选中的map的指示箭头
+	if songList.selected_card != null && songList.selected_card.selected_mapCard != null:
+		var mapCard :MapCard = songList.selected_card.selected_mapCard;
+		var pos = mapCard.global_position;
+		pos.y += mapCard.size.y/2.0;
+		pos.x += -2+sin(Time.get_ticks_msec()/200.0)*7;
+		var safe_y = clampf(pos.y, 20, get_viewport().size.y/Global.stretch_scale - 20);
+		targetArrow.rotation = atan((pos.y - safe_y)/64);
+		pos.y = safe_y;
+		targetArrow.global_position = pos;
 	
 	$Practicle/GPUParticles2D.emitting = true;
 
