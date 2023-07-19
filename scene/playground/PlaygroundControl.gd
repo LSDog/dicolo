@@ -26,14 +26,14 @@ extends Control
 @onready var background := $BGPanel/Background;
 @onready var playground := $PlayGround;
 @onready var progress := $BGPanel/Progress;
-@onready var boxCount := $BGPanel/VBoxCount;
-@onready var labelScore := $BGPanel/VBoxCount/LabelScore;
+@onready var labelScore := $BGPanel/LabelScore;
+@onready var labelAcc := $BGPanel/LabelAcc;
 @onready var labelCombo := $BGPanel/LabelCombo;
-@onready var labelAcc := $BGPanel/VBoxCount/LabelAcc;
+@onready var progressAcc := $BGPanel/ProgressAcc;
 @onready var lyricsLabel :=  $BGPanel/LyricLabel;
 @onready var virtualJoystick := $VirtualJoystick;
 @onready var buttonMenu := $ButtonMenu;
-
+@onready var panelScore := $PanelScore;
 
 @export_category("Setting")
 @export var enable_control :bool = true; ## 允许控制
@@ -82,11 +82,11 @@ var play_mode := MODE.PLAY;
 enum MODE {PLAY, EDIT}; ## 游玩模式的枚举
 
 enum JUDGEMENT { BEST, GOOD, MISS } ## 判定的枚举
-const BEST_RATIO := 1.0;
-const GOOD_RATIO := 0.75;
-const MISS_RATIO := 0.0;
-const COLOR_GOOD = Color.WHITE;
-const COLOR_BEST = Color(0.95, 0.9, 0.55);
+## 判定的代表色
+const JUDGE_COLOR :Array[Color] = [Color(0.95, 0.9, 0.55), Color(0.55, 0.95, 0.9), Color.WHITE];
+const COLOR_BEST = JUDGE_COLOR[0];
+const COLOR_GOOD = JUDGE_COLOR[1];
+const COLOR_MISS = JUDGE_COLOR[2];
 
 ## 铺面
 var beatmap :BeatMap;
@@ -120,7 +120,7 @@ var score :float = 0.0; ## 总分
 var combo :int = 0; ## 当前combo
 var max_combo :int = 0; ## 最大Combo
 var acc :float = -1; ## 准确度，-1为等待第一次输入
-var judge_count :Array[int] = [];
+var judge_counts :Array[int] = [];
 
 # 信号
 signal map_loaded; ## 铺面加载完毕
@@ -135,7 +135,7 @@ signal play_end; ## 结束
 func _ready():
 	
 	correct_size();
-	judge_count.resize(JUDGEMENT.size());
+	judge_counts.resize(JUDGEMENT.size());
 	
 	buttonMenu.pressed.connect(func():
 		if !paused: pause();
@@ -143,26 +143,27 @@ func _ready():
 	)
 	
 	# 暂停菜单
-	$Pause/Content/Quit.pressed.connect(func():
-		var playGroundScene = get_tree().current_scene;
-		Global.unfreeze(Global.mainMenu);
-		Global.mainMenu.visible = true;
-		get_tree().current_scene = Global.mainMenu;
-		get_tree().root.remove_child(playGroundScene);
-		playGroundScene.queue_free();
-	)
+	$Pause/Content/Quit.pressed.connect(quit);
 	$Pause/Content/Back.pressed.connect(resume);
 	$Pause/Content/Restart.pressed.connect(restart);
 	
 	# 音乐结束之后进入end
 	audioPlayer.finished.connect(end);
 
+func quit():
+	var playgroundScene = get_tree().current_scene;
+	Global.unfreeze(Global.mainMenu);
+	Global.mainMenu.visible = true;
+	get_tree().current_scene = Global.mainMenu;
+	get_tree().root.remove_child(playgroundScene);
+	playgroundScene.queue_free();
 
 ## 修正大小
 func correct_size():
 	# 保证 stretch scale 更改后 track 大小不变
 	var keep_scale = Vector2(1.0/Global.stretch_scale, 1.0/Global.stretch_scale);
-	boxCount.scale = keep_scale;
+	$VirtualJoystick/LOut.scale = Vector2.ONE * 0.2 * keep_scale;
+	$VirtualJoystick/ROut.scale = Vector2.ONE * 0.2 * keep_scale;
 	progress.scale = keep_scale;
 	buttonMenu.scale = keep_scale;
 	playground.scale = keep_scale;
@@ -221,7 +222,7 @@ func pre_start():
 	set_combo(0);
 	set_score(0);
 	reset_acc();
-	judge_count.fill(0);
+	judge_counts.fill(0);
 	
 	# 一秒延迟
 	await get_tree().create_timer(1).timeout;
@@ -358,6 +359,7 @@ func jump(time :float, do_pause :bool = true):
 func restart():
 	
 	$Pause.visible = false;
+	ended = false;
 	started = false;
 	paused = false;
 	audioPlayer.stop();
@@ -369,6 +371,8 @@ func restart():
 	start_time = 0.0;
 	play_time = 0.0;
 	event_index = 0;
+	waiting_notes.clear();
+	judged_notes.clear();
 	for item in trackl_path.get_children():
 		trackl_path.remove_child(item);
 		item.free();
@@ -389,6 +393,8 @@ func end():
 	videoPlayer.stop();
 	
 	play_end.emit();
+	panelScore.set_value();
+	panelScore.show_anim();
 
 ## 获取一个可以随游戏暂停而暂停的Tween
 func create_anim_tween(node: Node = self) -> Tween:
@@ -449,7 +455,7 @@ func _process(delta):
 				play_time += delta;
 				
 				# 音频 <- 视频流校准
-				if !jumped && has_video:
+				if videoPlayer.is_playing() && !videoPlayer.paused && !jumped && has_video:
 					var audio_delay = audio_pos - video_pos;
 					if abs(audio_delay) > max_delay: # 音视频延迟超过校准时间就回调音频
 						# 更新 audio_pos
@@ -478,6 +484,8 @@ func _process(delta):
 							);
 							# 塞到待判定音符里
 							waiting_notes[event_index] = [event, canvasItems];
+						else:
+							waiting_notes[event_index] = [event];
 						event_index += 1;
 					else:
 						break;
@@ -495,9 +503,18 @@ func _process(delta):
 					if event is BeatMap.Event.Note:
 						# 这里判定Note
 						judge_note(wait_index, event_array);
-					elif play_time > event.time:
+					elif play_time >= event.time:
 						# 这里处理事件
-						handle_event(event);
+						handle_other_event(wait_index);
+				
+				
+				# All best / Full Combo 指示(在acc圈的颜色上)
+				var best_judge := (
+					JUDGEMENT.MISS if judge_counts[JUDGEMENT.MISS] != 0 else
+					JUDGEMENT.BEST if judge_counts[JUDGEMENT.GOOD] == 0 else
+					JUDGEMENT.GOOD
+				);
+				progressAcc.tint_progress = JUDGE_COLOR[best_judge];
 				
 				
 				# 处理歌词
@@ -550,15 +567,19 @@ func _process(delta):
 
 
 ## 处理音符以外的各种事件
-func handle_event(event :BeatMap.Event):
+func handle_other_event(wait_index: int):
+	var event :BeatMap.Event = waiting_notes[wait_index][0];
+	print("handle event: ", event);
 	match event.type:
-		"Start":
+		BeatMap.EVENT_TYPE.Start:
 			print("[Event] -- Start!");
-		"End":
+		BeatMap.EVENT_TYPE.End:
+			end();
 			print("[Event] -- End!")
-		"Bpm":
+		BeatMap.EVENT_TYPE.Bpm:
 			bpm = event.bpm;
 			print("[Event] -- Bpm changed: ", event.bpm);
+	waiting_notes.erase(wait_index);
 
 ## 通过note获取相应的轨道
 func get_track(note :BeatMap.Event.Note) -> CanvasItem:
@@ -698,7 +719,7 @@ func judge_note(wait_index :int, note_array = null):
 	# miss 判定与动画
 	if offset > judge_good:
 		judge = JUDGEMENT.MISS;
-		judge_count[judge] += 1;
+		judge_counts[judge] += 1;
 		judged_notes[wait_index] = note_array;
 		set_combo(0);
 		update_acc(acc_miss);
@@ -840,7 +861,7 @@ func judge_note(wait_index :int, note_array = null):
 					hint_line.points[0], extend_start, note_after_time
 				).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 				tween.parallel().tween_method(
-					func(end:Vector2): hint_line.points[1] = end,
+					func(pos:Vector2): hint_line.points[1] = pos,
 					hint_line.points[1], extend_end, note_after_time
 				).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 				tween.parallel().tween_property(hint_line, "modulate:a", 0.0, note_after_time/2.0
@@ -871,7 +892,7 @@ func judge_note(wait_index :int, note_array = null):
 		set_combo(combo + 1);
 		update_acc(acc_best if judge == JUDGEMENT.BEST else acc_good);
 		set_score(score + get_score(note.type, judge, offset));
-		judge_count[judge] += 1;
+		judge_counts[judge] += 1;
 
 const E :float = 2.718281828459045;
 
@@ -899,6 +920,7 @@ func set_combo(value: int):
 func update_acc(new_acc: float):
 	acc = new_acc if acc == -1 else (acc+new_acc)/2.0;
 	labelAcc.text = ("%.2f" % (acc*100.0)).replace('.', ',') + "%";
+	progressAcc.create_tween().tween_property(progressAcc, "value", acc, (acc - progressAcc.value));
 
 func reset_acc():
 	acc = -1;
@@ -935,8 +957,6 @@ func is_in_degree(x: float, min_val: float, max_val: float) -> bool:
 		# 跨 0° 的判断方法: 拆成 前面~0° 以及 0°~后面
 		return is_in_degree(x, min_val, 0) || is_in_degree(x, 0, max_val);
 	x = fposmod(x, 360) + 360 * floorf(min_val/360.0);
-	if min_val == -20:
-		print("min_val %.1f\tct %.1f\tmax %.1f" % [min_val, x ,max_val]);
 	return min_val <= x && x <= max_val;
 
 ## 检查先后两点是否穿过了一条线，包括prev点在线上的情况

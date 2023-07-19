@@ -11,6 +11,7 @@ extends Control
 @onready var animation_control :Control = $Animations;
 @onready var animation_player :AnimationPlayer = $Animations/AnimationPlayer;
 @onready var targetArrow :Control = $TargetArrow;
+@onready var targetArrowClick :Control = $TargetArrow/ControlClick;
 
 var last_background_path :String;
 var last_audio_path :String;
@@ -50,11 +51,17 @@ func _ready():
 		tween.tween_property(bgPanel_stylebox, "border_width_left", 0.0, 60/musicPlayer.bpm).from(250.0);
 		tween.tween_property(bgPanel_stylebox, "border_width_right", 0.0, 60/musicPlayer.bpm).from(250.0);
 	);
-	
+	# 自动切歌（随机）
 	musicPlayer.audio_end.connect(func():
 		await get_tree().create_timer(1.0).timeout;
 		if !musicPlayer.play:
 			songList.select_song_random();
+	);
+	# 指针点击跳转
+	targetArrowClick.gui_input.connect(func(event:InputEvent):
+		if event is InputEventMouseButton:
+			if event.button_index <= MOUSE_BUTTON_MIDDLE:
+				songList.scroll_to(songList.selected_index);
 	);
 	
 	background.scale.x = parallax_bg_scale;

@@ -196,6 +196,7 @@ func update_flow_scale():
 	flow.position.x -= (playLine.position.x-flow.position.x)*(scale_multiple-1);
 	flowScroll.page = flowBox.size.x;
 	flowScroll.max_value = flow.size.x + flowScroll.page;
+	sliderProgress.max_value = flowScroll.max_value;
 	flow.rescale_contents(scale_multiple);
 
 func _process(_delta: float) -> void:

@@ -138,7 +138,9 @@ func get_file_name(path: String) -> String:
 	return path.substr(path.rfind("/")+1);
 
 ## 播放声音
-func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"):	
+func play_sound(
+		stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"
+	) -> AudioStreamPlayer:
 	var player = AudioStreamPlayer.new();
 	add_child(player);
 	player.stream = stream;
@@ -147,3 +149,4 @@ func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: S
 	player.bus = bus;
 	player.finished.connect(func(): player.queue_free());
 	player.play();
+	return player;
