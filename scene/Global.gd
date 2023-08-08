@@ -33,6 +33,7 @@ func _ready():
 	# 请求安卓权限
 	OS.request_permissions();
 	
+	
 	get_tree().root.size_changed.connect(func():
 		var now = get_tree().root.size;
 		var origin_ratio :float = ProjectSettings.get_setting("display/window/size/width", 1152.0) / ProjectSettings.get_setting("display/window/size/height", 648.0);

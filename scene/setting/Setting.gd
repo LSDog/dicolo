@@ -54,6 +54,7 @@ func bind_gui_action():
 		if input_event is InputEventMouseButton:
 			if input_event.pressed || input_event.button_index > MOUSE_BUTTON_MIDDLE: return;
 			var fileDialog = FileDialog.new();
+			if (OS.get_name() == "Android"): fileDialog.root_subfolder = "/storage/emulated/0"
 			fileDialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE;
 			fileDialog.access = FileDialog.ACCESS_FILESYSTEM;
 			fileDialog.filters = ["*.png, *.jpg, *.jpeg, *.svg, *.webp, *.bmp", "Image"];
@@ -187,7 +188,7 @@ func set_setting_from_data():
 	
 	optionFullScreenMode.selected = get_data("FullScreenMode", optionFullScreenMode.selected);
 	buttonFullScreen.button_pressed = get_data("FullScreen", buttonFullScreen.button_pressed);
-	inputFPS.text_submitted.emit(get_data("FPS", 60));
+	inputFPS.text_submitted.emit(str(get_data("FPS", 60)));
 	checkVSync.button_pressed = get_data("VSync", checkVSync.button_pressed);
 	sliderScale.value = get_data("Scale", sliderScale.value);
 	

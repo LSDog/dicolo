@@ -281,10 +281,11 @@ func select_song_random():
 	var last_indexes = range(0, get_song_count()).filter(func(i):
 		return !randomed_index_list.has(i);
 	);
-	var index = last_indexes.pick_random();
-	randomed_index_list.append(index);
-	select_song(index);
-	scroll_to(index);
+	if !last_indexes.is_empty():
+		var index = last_indexes.pick_random();
+		randomed_index_list.append(index);
+		select_song(index);
+		scroll_to(index);
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventKey:

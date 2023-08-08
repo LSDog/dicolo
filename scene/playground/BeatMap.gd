@@ -234,10 +234,10 @@ class Event:
 	## 所在track的位置
 	var side :SIDE;
 	## 位置常量
-	enum SIDE {OTHER=-1, LEFT=0, RIGHT=1}
-	static var side_str := {SIDE.OTHER:'', SIDE.LEFT:'l', SIDE.RIGHT:'r'};
+	enum SIDE {NONE=-1, LEFT=0, RIGHT=1}
+	static var side_str := {SIDE.NONE:'', SIDE.LEFT:'l', SIDE.RIGHT:'r'};
 	
-	func _init(p_time: float, p_side: SIDE = SIDE.OTHER):
+	func _init(p_time: float, p_side: SIDE = SIDE.NONE):
 		self.time = p_time;
 		self.side = p_side;
 	
@@ -304,7 +304,7 @@ class Event:
 		func to_file_string() -> String:
 			return "%f _start" % time;
 		func _init(p_time: float):
-			super._init(p_time, SIDE.OTHER);
+			super._init(p_time, SIDE.NONE);
 			type = EVENT_TYPE.Start;
 
 	## 结束
@@ -313,7 +313,7 @@ class Event:
 		func to_file_string() -> String:
 			return "%f _end" % time;
 		func _init(p_time: float):
-			super._init(p_time, SIDE.OTHER);
+			super._init(p_time, SIDE.NONE);
 			type = EVENT_TYPE.End;
 	
 	## bpm更改
@@ -324,7 +324,7 @@ class Event:
 		func to_file_string() -> String:
 			return "%f _bpm %f" % time;
 		func _init(p_time: float, p_bpm: float):
-			super._init(p_time, SIDE.OTHER);
+			super._init(p_time, SIDE.NONE);
 			self.bpm = p_bpm;
 			type = EVENT_TYPE.Bpm;
 	

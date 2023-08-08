@@ -81,7 +81,7 @@ func _process(delta: float):
 		var pos = mapCard.global_position;
 		pos.y += mapCard.size.y/2.0;
 		pos.x += -2+sin(Time.get_ticks_msec()/200.0)*7;
-		var safe_y = clampf(pos.y, 20, get_viewport().size.y/Global.stretch_scale - 20);
+		var safe_y = clampf(pos.y, 20, size.y/Global.stretch_scale - 20);
 		targetArrow.rotation = atan((pos.y - safe_y)/64);
 		pos.y = safe_y;
 		targetArrow.global_position = pos;
@@ -93,6 +93,10 @@ func select_map(song_name: String, map_name: String):
 
 func play_map(map_path: String):
 	print("play song: ", map_path);
+	
+	var mask :StyleBoxFlat = $PanelMask.get_theme_stylebox("panel", "StyleBoxFlat");
+	$PanelMask.create_tween().tween_property(mask, "bg_color:a", 1, 0.25);
+	
 	var playground_scene := preload("res://scene/playground/Playground.tscn") as PackedScene;
 	var playground := playground_scene.instantiate() as PlaygroundControl;
 	get_tree().root.add_child(playground);
@@ -108,3 +112,7 @@ func edit_map(map_path: String):
 	get_tree().current_scene = editor;
 	Global.freeze(self);
 	editor.load_map(map_path);
+
+func back_to_mainMenu():
+	var mask :StyleBoxFlat = $PanelMask.get_theme_stylebox("panel", "StyleBoxFlat");
+	$PanelMask.create_tween().tween_property(mask, "bg_color:a", 0, 0.25);

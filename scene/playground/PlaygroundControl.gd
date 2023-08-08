@@ -38,18 +38,19 @@ extends Control
 @export_category("Setting")
 @export var enable_control :bool = true; ## 允许控制
 
-@export var enable_virtualJoystick :bool = true: ## 是否使用虚拟摇杆
+@export var enable_virtualJoystick :bool = false: ## 是否使用虚拟摇杆
 	set(value):
 		enable_virtualJoystick = value;
 		virtualJoystick.visible = value;
+		virtualJoystick.mouse_filter = MOUSE_FILTER_STOP if value else MOUSE_FILTER_IGNORE;
 		virtualJoystick.process_mode = Node.PROCESS_MODE_INHERIT if value else Node.PROCESS_MODE_DISABLED;
 ## 铺/音/画不同步的调整阈值
 @export var max_delay :float = 0.05;
 
 @export_category("Timing")
 ## 预处理拍数，相当于“音符在击打前多久开始出现动画”
-@export var event_before_beat :float = 4;
-@export var note_after_time :float = 0.25; ## 音符动画时间
+var event_before_beat :float = 4;
+var note_after_time :float = 0.25; ## 音符动画时间
 
 @export_category("Judge")
 @export var judge_best :float = 0.1; ## 判定 best 的时间
@@ -57,13 +58,8 @@ extends Control
 @export var judge_good :float = 0.25; ## 判定 good 的时间
 @export var acc_good :float = 0.5; ## good 的准确度
 @export var acc_miss :float = 0.0; ## miss 的准确度
-@export var judge_hit_radius :float = 5; ## hit ct与轨道半径最远差值
-@export var judge_hit_speed :float = 10; ## hit 最小速度
-@export var judge_hit_deg_offset :float = 45; ## hit 最大容许的撞击角度偏差
-@export var judge_slide_radius :float = 5; ## slide ct与轨道半径最远差值
-@export var judge_slide_deg :float = 8; ## slide 可判定的左右度数 (左右各0.5倍)
-@export var judge_bound_radius :float = 10; ## bound 回弹的最大判定半径
-@export var judge_bound_speed :float = 100; ## bound 回弹的最小速度
+var judge_bound_radius :float = 10; ## bound 回弹的最大判定半径
+var judge_bound_speed :float = 100; ## bound 回弹的最小速度
 
 var texture_hit_fx = preload("res://visual/texture/hit_fx.svg");
 var texture_slide = preload("res://visual/texture/slide.svg");
@@ -78,10 +74,14 @@ var sound_slide = preload("res://audio/map/note_hihatclosed.wav");
 var sound_bound = preload("res://audio/map/note_floortom.wav");
 
 ## 游玩模式
-var play_mode := MODE.PLAY;
-enum MODE {PLAY, EDIT}; ## 游玩模式的枚举
+var play_mode := PLAY_MODE.PLAY;
+enum PLAY_MODE {PLAY, EDIT}; ## 游玩模式的枚举
+## 输入模式: 摇杆/虚拟摇杆/触控
+var input_mode := INPUT_MODE.TOUCH;
+enum INPUT_MODE {JOYSTICK,V_JOYSTICK,TOUCH} ## 输入模式的枚举
+## 判定的枚举
+enum JUDGEMENT { BEST, GOOD, MISS }
 
-enum JUDGEMENT { BEST, GOOD, MISS } ## 判定的枚举
 ## 判定的代表色
 const JUDGE_COLOR :Array[Color] = [Color(0.95, 0.9, 0.55), Color(0.55, 0.95, 0.9), Color.WHITE];
 const COLOR_BEST = JUDGE_COLOR[0];
@@ -100,7 +100,17 @@ var judged_notes := {};
 var bpm :float; ## 当前bpm
 var anim_tweens :Array[Tween] = []; ## 动画的tween们
 
-# 歌词
+## 触控点，index为事件中的index，结构为
+## [ [[l_pos, l_deg, dis], [r_pos, r_deg, dis], vec, vec_deg], ... ]
+##   [[左track相对位置,度数,距离], [右track...], 速度, 速度的角度]
+var touch_points :Array = [];
+## 上一帧的触控点，结构为
+## [ [l_pos, r_pos], ... ]
+var prev_touch_points :Array = [];
+var touch_just :int = 0; ## 每一位(右到左)1/0表示touch_points中index是否为新的点击
+var touch_used :int = 0; ## 同上，按位表示touch_points中index是否已经用于作为判定了
+
+## 歌词
 var lyrics :LyricsFile;
 var lrc_index :int = 0; ## 歌词到哪句了
 
@@ -134,8 +144,16 @@ signal play_end; ## 结束
 
 func _ready():
 	
+	match input_mode:
+		INPUT_MODE.TOUCH:
+			enable_virtualJoystick = false;
+		INPUT_MODE.JOYSTICK:
+			enable_virtualJoystick = false;
+	
 	correct_size();
 	judge_counts.resize(JUDGEMENT.size());
+	touch_points.resize(20);
+	prev_touch_points.resize(20);
 	
 	buttonMenu.pressed.connect(func():
 		if !paused: pause();
@@ -154,6 +172,7 @@ func quit():
 	var playgroundScene = get_tree().current_scene;
 	Global.unfreeze(Global.mainMenu);
 	Global.mainMenu.visible = true;
+	Global.mainMenu.back_to_mainMenu();
 	get_tree().current_scene = Global.mainMenu;
 	get_tree().root.remove_child(playgroundScene);
 	playgroundScene.queue_free();
@@ -277,7 +296,7 @@ func pause():
 	paused = true;
 	videoPlayer.paused = true;
 	audioPlayer.stream_paused = true;
-	if play_mode == MODE.PLAY: $Pause.visible = true;
+	if play_mode == PLAY_MODE.PLAY: $Pause.visible = true;
 	pause_anim_tweens();
 	
 	play_pause.emit();
@@ -416,13 +435,42 @@ func resume_anim_tweens():
 	for tween in anim_tweens:
 		if tween.is_valid(): tween.play();
 
-func _unhandled_input(event):
-	if event is InputEvent:
-		event = event as InputEvent;
-		if event.is_action_pressed("esc"):
-			if !paused: pause();
-			else: resume();
-			accept_event();
+func _gui_input(event: InputEvent) -> void:
+	## 触控输入
+	if input_mode != INPUT_MODE.TOUCH: return;
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			var pos :Vector2 = event.position - playground.global_position;
+			var l_pos := pos-trackl_center;
+			var r_pos := pos-trackr_center;
+			touch_points[event.index] = [
+				[l_pos, get_degree_in_track(l_pos), l_pos.length()],
+				[r_pos, get_degree_in_track(r_pos), r_pos.length()],
+				0, 0
+			];
+			touch_just |= 1 << event.index;
+		else:
+			touch_used &= 0 << event.index;
+			touch_points.remove_at(event.index);
+			if touch_points.is_empty(): touch_points.resize(20);
+		print(event);
+		accept_event();
+	elif event is InputEventScreenDrag:
+		var touch :Array = touch_points[event.index];
+		var pos :Vector2 = event.position - playground.global_position;
+		var l_pos := pos-trackl_center;
+		var r_pos := pos-trackr_center;
+		touch[0] = [l_pos, get_degree_in_track(l_pos), l_pos.length()];
+		touch[1] = [r_pos, get_degree_in_track(r_pos), r_pos.length()];
+		touch[2] = event.velocity;
+		touch[3] = get_degree_in_track(event.velocity);
+		accept_event();
+
+func _unhandled_input(event: InputEvent):
+	if event.is_action_pressed("esc"):
+		if !paused: pause();
+		else: resume();
+		accept_event();
 
 func _process(delta):
 	
@@ -492,8 +540,9 @@ func _process(delta):
 				
 				
 				# 计算俩个 Ct 的值
-				update_ct(ctl);
-				update_ct(ctr);
+				if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+					update_ct(ctl);
+					update_ct(ctr);
 				
 				
 				# 处理等待中的event
@@ -507,6 +556,18 @@ func _process(delta):
 						# 这里处理事件
 						handle_other_event(wait_index);
 				
+				if input_mode == INPUT_MODE.TOUCH:
+					# 清除此帧“刚点击”的按钮
+					if touch_just != 0: touch_just = 0;
+					# 搞“上一帧的触控点”
+					prev_touch_points.fill([]);
+					for i in touch_points.size():
+						var touch = touch_points[i];
+						if touch == null || touch.is_empty(): return;
+						if prev_touch_points[i].is_empty():
+							prev_touch_points[i].resize(2);
+						prev_touch_points[i][0] = touch[0][0];
+						prev_touch_points[i][1] = touch[1][0];
 				
 				# All best / Full Combo 指示(在acc圈的颜色上)
 				var best_judge := (
@@ -761,7 +822,7 @@ func judge_note(wait_index :int, note_array = null):
 	
 	# 非 miss 的判定与动画
 	
-	var edit_mode :bool = play_mode == MODE.EDIT;
+	var edit_mode :bool = play_mode == PLAY_MODE.EDIT;
 	# 编辑模式下精准击中
 	if edit_mode && offset < 0: return;
 	
@@ -781,20 +842,45 @@ func judge_note(wait_index :int, note_array = null):
 		
 		BeatMap.EVENT_TYPE.Hit:
 			note = note as BeatMap.Event.Note.Hit;
-			var touched = (
-				ct.distance >= radius - judge_hit_radius &&
-				is_in_degree(ct.degree, note.deg, note.deg_end)
-			);
-			var hit = is_in_degree(
-				get_degree_in_track(ct.velocity, true),
-				ct.degree - judge_hit_deg_offset,
-				ct.degree + judge_hit_deg_offset
-			);
-			if edit_mode || ct.velocity.length() >= judge_hit_speed && touched && hit:
+			var reached := false;
+			if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+				# 摇杆输入, 通过ct判断
+				reached = (
+					# ct 距离 track边缘 5px 内
+					ct.distance >= radius - 5 &&
+					# 在角度内
+					is_in_degree(ct.degree, note.deg, note.deg_end) &&
+					# 撞击角度 最大容许偏差45°(一共90°)
+					is_in_degree(
+						get_degree_in_track(ct.velocity),
+						ct.degree - 45, ct.degree + 45
+					) &&
+					# 速度大于256px/s
+					ct.velocity.length() >= 256
+				);
+			elif input_mode == INPUT_MODE.TOUCH:
+				# 触控输入
+				for i in touch_points.size():
+					if (touch_just>>i)&1 != 1 || (touch_used>>i)&1 != 0: continue;
+					var touch = touch_points[i];
+					if touch == null || touch.is_empty(): continue;
+					var point = touch[0 if note.side == BeatMap.Event.SIDE.LEFT else 1];
+					if point == null || point.is_empty(): continue;
+					# 点击距离track边缘最大128px (共256px)
+					reached = (
+						# 触控角度可偏差±10
+						is_in_degree(point[1], note.deg, note.deg_end, 10) &&
+						radius - 128 <= point[2] && point[2] <= radius + 128
+					);
+					if reached:
+						touch_used |= 1 << i;
+						break;
+			if edit_mode || reached:
 				is_judged = true;
+				anim_track_flash(note.side, JUDGE_COLOR[judge]);
 				var line :Line2D = note_item_array[0];
 				#var polygon :Polygon2D = note_item_array[1];
-				line.default_color = COLOR_BEST if judge == JUDGEMENT.BEST else COLOR_GOOD;
+				line.default_color = JUDGE_COLOR[judge];
 				line.queue_redraw();
 				play_sound(sound_hit);
 				# 特效
@@ -814,12 +900,26 @@ func judge_note(wait_index :int, note_array = null):
 		
 		BeatMap.EVENT_TYPE.Slide:
 			note = note as BeatMap.Event.Note.Slide;
-			var touched = (
-				ct.distance >= radius - judge_slide_radius &&
-				is_in_degree(ct.degree, note.deg - judge_slide_deg/2.0, note.deg + judge_slide_deg/2.0)
-			);
-			if edit_mode || touched:
+			var reached := false;
+			if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+				reached = (
+					ct.distance >= radius - 5 &&
+					is_in_degree(ct.degree, note.deg, note.deg, 4)
+				);
+			elif input_mode == INPUT_MODE.TOUCH:
+				for i in touch_points.size():
+					var touch = touch_points[i];
+					if touch == null || touch.is_empty(): continue;
+					var point = touch[0 if note.side == BeatMap.Event.SIDE.LEFT else 1];
+					if point == null || point.is_empty(): continue;
+					reached = (
+						is_in_degree(point[1], note.deg, note.deg, 10) &&
+						radius - 128 <= point[2] && point[2] <= radius + 128
+					);
+					if reached: break;
+			if edit_mode || reached:
 				is_judged = true;
+				anim_track_flash(note.side, JUDGE_COLOR[judge]);
 				var path_follow := note_item_array[0] as PathFollow2D;
 				#var slide :Sprite2D = path_follow.get_child(0);
 				var ring := path_follow.get_child(1) as Sprite2D;
@@ -839,10 +939,26 @@ func judge_note(wait_index :int, note_array = null):
 			note = note as BeatMap.Event.Note.Cross;
 			var start_pos = get_point_on_track(note.deg, radius);
 			var end_pos = get_point_on_track(note.deg_end, radius);
-			var crossed := has_crossed_line(start_pos, end_pos, ct.pos, ct.prev_pos);
-			#print("crossed = ", crossed);
+			var crossed := false;
+			if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+				crossed = has_crossed_line(start_pos, end_pos, ct.pos, ct.prev_pos);
+			elif input_mode == INPUT_MODE.TOUCH:
+				var side_index := 0 if note.side == BeatMap.Event.SIDE.LEFT else 1;
+				for i in touch_points.size():
+					var prev_point = prev_touch_points[i];
+					if prev_point == null || prev_point.is_empty(): continue;
+					var touch = touch_points[i];
+					if touch == null || touch.is_empty(): continue;
+					var point = touch[side_index];
+					if point == null || point.is_empty(): continue;
+					# 点击距离track边缘最大128px (共256px)
+					crossed = has_crossed_line(start_pos, end_pos, prev_point[side_index], point[0]);
+					if crossed:
+						touch_used |= 1 << i;
+						break;
 			if edit_mode || crossed:
 				is_judged = true;
+				anim_track_flash(note.side, JUDGE_COLOR[judge]);
 				judged_notes[wait_index] = note_array;
 				var line :Line2D = note_item_array[0];
 				var hint_line :Line2D = note_item_array[1];
@@ -850,7 +966,7 @@ func judge_note(wait_index :int, note_array = null):
 				var extend_end := hint_line.points[1]*2 - hint_line.points[0];
 				hint_line.begin_cap_mode = Line2D.LINE_CAP_BOX;
 				hint_line.end_cap_mode = Line2D.LINE_CAP_BOX;
-				hint_line.modulate = COLOR_BEST if judge == JUDGEMENT.BEST else COLOR_GOOD;
+				hint_line.modulate = JUDGE_COLOR[judge];
 				hint_line.queue_redraw();
 				play_sound(sound_cross);
 				var tween = create_anim_tween(hint_line);
@@ -872,12 +988,24 @@ func judge_note(wait_index :int, note_array = null):
 		
 		BeatMap.EVENT_TYPE.Bound:
 			note = note as BeatMap.Event.Note.Bound;
-			var touched = ct.distance <= judge_bound_radius;
-			if edit_mode || ct.velocity.length_squared() >= judge_bound_speed**2 && touched:
+			var reached := false;
+			if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+				reached = ct.distance <= 10 && ct.velocity.length_squared() >= 5000**2
+			elif input_mode == INPUT_MODE.TOUCH:
+				for i in touch_points.size():
+					if (touch_just>>i)&1 != 1 || (touch_used>>i)&1 != 0: continue;
+					var point = touch_points[i][0 if note.side == BeatMap.Event.SIDE.LEFT else 1];
+					if point == null || point.is_empty(): continue;
+					reached = point[2] <= 128;
+					if reached:
+						touch_used |= 1 << i;
+						break;
+			if edit_mode || reached:
 				is_judged = true;
+				anim_track_flash(note.side, JUDGE_COLOR[judge]);
 				judged_notes[wait_index] = note_array;
 				var bound := note_item_array[0] as Sprite2D;
-				bound.modulate = COLOR_BEST if judge == JUDGEMENT.BEST else COLOR_GOOD;
+				bound.modulate = JUDGE_COLOR[judge];
 				bound.queue_redraw();
 				play_sound(sound_bound);
 				var tween = create_anim_tween(bound);
@@ -893,6 +1021,13 @@ func judge_note(wait_index :int, note_array = null):
 		update_acc(acc_best if judge == JUDGEMENT.BEST else acc_good);
 		set_score(score + get_score(note.type, judge, offset));
 		judge_counts[judge] += 1;
+
+func anim_track_flash(side: BeatMap.Event.SIDE, color: Color = COLOR_MISS):
+	if side == null || side == BeatMap.Event.SIDE.NONE: return;
+	var track_circle = trackl_circle if side == BeatMap.Event.SIDE.LEFT else trackr_circle;
+	color.a = 0.5;
+	track_circle.create_tween().tween_property(track_circle, "modulate", trackl_circle.modulate, 0.1
+		).from(color).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 
 const E :float = 2.718281828459045;
 
@@ -920,7 +1055,7 @@ func set_combo(value: int):
 func update_acc(new_acc: float):
 	acc = new_acc if acc == -1 else (acc+new_acc)/2.0;
 	labelAcc.text = ("%.2f" % (acc*100.0)).replace('.', ',') + "%";
-	progressAcc.create_tween().tween_property(progressAcc, "value", acc, (acc - progressAcc.value));
+	progressAcc.value = acc;
 
 func reset_acc():
 	acc = -1;
@@ -931,9 +1066,9 @@ func update_ct(ct: Ct):
 	ct.prev_pos = ct.pos;
 	ct.pos = get_ct_position(ct);
 	ct.distance = ct.pos.length();
-	ct.degree = get_degree_in_track(ct.pos, true);
+	ct.degree = get_degree_in_track(ct.pos);
 	ct.velocity_degree = (
-		0.0 if ct.velocity == Vector2.ZERO else get_degree_in_track(ct.velocity, true)
+		0.0 if ct.velocity == Vector2.ZERO else get_degree_in_track(ct.velocity)
 	);
 
 ## 获取 Ct 在 track 中的相对位置
@@ -941,18 +1076,20 @@ func get_ct_position(ct: Ct) -> Vector2:
 	return ct.position - (trackl.position if ct == ctl else trackr.position);
 
 ## 通过与 track中心 的相对位置获取度数（顺时针，正上0°）
-func get_degree_in_track(vec: Vector2, negative_y :bool = false) -> float:
+func get_degree_in_track(vec: Vector2) -> float:
 	return (
 		0 if vec == Vector2.ZERO else
-		abs(fposmod((float(atan2(vec.y if !negative_y else -vec.y , vec.x)/PI)*180.0-90), -360))
+		abs(fposmod((float(atan2(-vec.y , vec.x)/PI)*180.0-90), -360))
 	);
 
-## 判断此度数x是否在min~max里
-func is_in_degree(x: float, min_val: float, max_val: float) -> bool:
+## 判断此度数x是否在min~max里, offset 可以让两边范围增加(2*offset)
+func is_in_degree(x: float, min_val: float, max_val: float, offset: float = 0) -> bool:
 	if min_val > max_val:
 		var temp_min := min_val;
 		min_val = max_val;
 		max_val = temp_min;
+	min_val -= offset;
+	max_val += offset;
 	if min_val < 0 && max_val > 0:
 		# 跨 0° 的判断方法: 拆成 前面~0° 以及 0°~后面
 		return is_in_degree(x, min_val, 0) || is_in_degree(x, 0, max_val);
@@ -998,7 +1135,7 @@ func remove_note(wait_index :int, use_animation :float = false):
 	for item in canvas_items:
 		if item == null: continue;
 		if !use_animation:
-			if play_mode == MODE.EDIT: item.free();
+			if play_mode == PLAY_MODE.EDIT: item.free();
 			else: item.queue_free();
 		else:
 			var tween := create_anim_tween();

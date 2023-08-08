@@ -6,6 +6,7 @@ var trail :Line2D = null;
 var curve :Curve2D = Curve2D.new();
 
 var prev_position :Vector2;
+# 速度 pixel/s
 var velocity :Vector2 = Vector2.ZERO;
 
 # track中的相关变量 大部分由Playground负责计算
@@ -23,7 +24,7 @@ func _ready():
 	get_parent().add_child.call_deferred(trail);
 	get_parent().move_child.call_deferred(trail, get_index());
 
-func _process(_delta):
+func _process(delta):
 	
 	# 处理轨迹
 	if trail == null: return;
@@ -33,5 +34,5 @@ func _process(_delta):
 	trail.add_point(position)
 	
 	# 计算速度
-	velocity = position - prev_position;
+	velocity = (position - prev_position)/delta;
 	prev_position = position;
