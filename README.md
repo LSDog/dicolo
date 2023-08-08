@@ -31,17 +31,16 @@
 # ✔ 进度 | Progress
 - [ ] **界面** —— 这辈子画不好的东西！
   - [x] ![](https://progress-bar.dev/100/) 启动动画
-  - [ ] ![](https://progress-bar.dev/75/) 主菜单 
-  - [ ] ![](https://progress-bar.dev/50/) 游戏界面
-  - [ ] ![](https://progress-bar.dev/70/) 设置
+  - [ ] ![](https://progress-bar.dev/80/) 主菜单 
+  - [ ] ![](https://progress-bar.dev/80/) 游戏界面
+  - [ ] ![](https://progress-bar.dev/80/) 设置
   - [ ] ![](https://progress-bar.dev/0/) 铺面商店
 - [ ] **逻辑** —— 代码去死吧！！
-  - [ ] ![](https://progress-bar.dev/90/) 载入铺面
-  - [ ] ![](https://progress-bar.dev/85/) 游玩
-	- [ ] 90% 音符动画
-	- [ ] 85% 判定
-  - [ ] ![](https://progress-bar.dev/20/) 编辑铺面
-  - [ ] ![](https://progress-bar.dev/50/) 用户数据存读
+  - [ ] ![](https://progress-bar.dev/100/) 载入铺面
+  - [ ] ![](https://progress-bar.dev/90/) 游玩
+	- [x] 80% 分数计算 / 结分
+  - [ ] ![](https://progress-bar.dev/50/) 编辑铺面
+  - [ ] ![](https://progress-bar.dev/60/) 用户数据存读
   - [ ] ![](https://progress-bar.dev/0/) 下载/上传铺面
 - [ ] **曲谱** —— 没有曲子，更不会写铺子！
   - [ ] ![](https://progress-bar.dev/100/) 10首左右内置曲
