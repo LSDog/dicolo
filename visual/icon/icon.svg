@@ -15,7 +15,7 @@
     <color-profile
        name="Agfa-:-Swop-Standard"
        xlink:href="file:///C:/Windows/system32/spool/drivers/color/RSWOP.icm"
-       id="color-profile32874" />
+       id="color-profile837" />
     <linearGradient
        id="linearGradient12363">
       <stop
@@ -146,6 +146,10 @@
        style="display:inline;fill:none;stroke:url(#radialGradient12367);stroke-width:128;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:256, 64;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="circle4254"
        d="M 899.97938,736 A 448,448 0 0 1 472.95423,958.29522 448,448 0 0 1 91.017707,665.22503 448,448 0 0 1 195.21616,195.21617" />
+    <path
+       style="display:none;fill:none;stroke:#00998f;stroke-width:32;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:283.424, 70.72;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       id="path1294"
+       d="M 941.5486,760 A 496,496 0 0 1 468.77075,1006.1126 496,496 0 0 1 45.912462,681.642 496,496 0 0 1 161.27503,161.27504" />
     <path
        style="display:inline;opacity:1;fill:none;stroke:url(#radialGradient5148);stroke-width:128;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:38.4;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="path24276"
