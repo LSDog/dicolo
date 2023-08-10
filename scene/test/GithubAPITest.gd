@@ -5,6 +5,7 @@ extends TextureRect
 var tls_client;
 
 func _ready():
+	return; # 测试记得删这行
 	_ready_later.call_deferred();
 	
 func _ready_later():

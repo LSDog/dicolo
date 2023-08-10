@@ -38,7 +38,7 @@ extends Control
 # Event setting
 @onready var note_choose := $Edit/VBox/Scroll/VBox/VBoxEvent/NoteChoose;
 
-var edit_event_type :BeatMap.EVENT_TYPE; ## 正在编辑的
+var edit_event_type :BeatMap.EVENT_TYPE; ## 点条就会新出现一个note条 的event type
 
 var event_types :Array = BeatMap.EVENT_TYPE.keys(); ## 列出音符类型的array
 
@@ -50,7 +50,7 @@ func _ready():
 	playground.enable_virtualJoystick = false;
 	playground.buttonMenu.visible = false;
 	# 设定模式
-	playground.play_mode = playground.MODE.EDIT;
+	playground.play_mode = playground.PLAY_MODE.EDIT;
 	# 同步进度条
 	flowScroll.share(sliderProgress);
 	# 测试用 加载map
