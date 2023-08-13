@@ -87,6 +87,20 @@ func _process(_delta):
 			DisplayServer.screen_set_orientation(DisplayServer.SCREEN_REVERSE_LANDSCAPE);
 		else: DisplayServer.screen_set_orientation(DisplayServer.SCREEN_LANDSCAPE);
 
+## int 转换为二进制形式的字符串
+func int2bin(value: int, min_digit: int = 1) -> String:
+	if value <= 0: return "0".repeat(min_digit);
+	var out = "";
+	var digit = 0;
+	while value > 0:
+		out = ("1" if value & 1 else "0") + out;
+		value >>= 1;
+		digit += 1;
+	if digit < min_digit:
+		out = "0".repeat(min_digit - digit) + out;
+	return out;
+
+
 ## 获取左摇杆Vec
 func get_joy_left() -> Vector2:
 	if gamepad_id == -1: return Vector2.ZERO;

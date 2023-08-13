@@ -29,7 +29,6 @@ extends Control
 @onready var labelScore := $BGPanel/LabelScore;
 @onready var labelAcc := $BGPanel/LabelAcc;
 @onready var labelCombo := $BGPanel/LabelCombo;
-@onready var progressAcc := $BGPanel/ProgressAcc;
 @onready var lyricsLabel :=  $BGPanel/LyricLabel;
 @onready var virtualJoystick := $VirtualJoystick;
 @onready var buttonMenu := $ButtonMenu;
@@ -129,7 +128,8 @@ var play_time := 0.0; ## 演奏总时间
 var score :float = 0.0; ## 总分
 var combo :int = 0; ## 当前combo
 var max_combo :int = 0; ## 最大Combo
-var acc :float = -1; ## 准确度，-1为等待第一次输入
+var acc :float = 0; ## 准确度
+var acc_judge_count :int = 0; ## acc的判定(计算)次数
 var judge_counts :Array[int] = [];
 
 # 信号
@@ -362,15 +362,13 @@ func jump(time :float, do_pause :bool = true):
 		remove_note(i);
 	for i in judged_notes.keys():
 		remove_note(i);
-	for node in trackl_path.get_children(): node.queue_free();
-	for node in trackr_path.get_children(): node.queue_free();
+	for node in trackl_path.get_children(): node.free();
+	for node in trackr_path.get_children(): node.free();
 	
 	# 强制运行很短的时间来预览
 	resume();
 	_process(1/100.0);
 	pause();
-	
-	#print(anim_tweens)
 	
 	play_jump.emit(time);
 
@@ -393,10 +391,10 @@ func restart():
 	waiting_notes.clear();
 	judged_notes.clear();
 	for item in trackl_path.get_children():
-		trackl_path.remove_child(item);
+		#trackl_path.remove_child(item);
 		item.free();
 	for item in trackr_path.get_children():
-		trackr_path.remove_child(item);
+		#trackr_path.remove_child(item);
 		item.free();
 	pre_start();
 	
@@ -439,6 +437,7 @@ func _gui_input(event: InputEvent) -> void:
 	## 触控输入
 	if input_mode != INPUT_MODE.TOUCH: return;
 	if event is InputEventScreenTouch:
+		if paused || ended || event.double_tap: return;
 		if event.pressed:
 			var pos :Vector2 = event.position - playground.global_position;
 			var l_pos := pos-trackl_center;
@@ -450,13 +449,13 @@ func _gui_input(event: InputEvent) -> void:
 			];
 			touch_just |= 1 << event.index;
 		else:
-			touch_used &= 0 << event.index;
-			touch_points.remove_at(event.index);
-			if touch_points.is_empty(): touch_points.resize(20);
-		print(event);
-		accept_event();
+			touch_just &= ~(1 << event.index);
+			touch_used &= ~(1 << event.index);
+			touch_points[event.index] = null;
+		#accept_event();
 	elif event is InputEventScreenDrag:
-		var touch :Array = touch_points[event.index];
+		var touch = touch_points[event.index];
+		if touch == null: return;
 		var pos :Vector2 = event.position - playground.global_position;
 		var l_pos := pos-trackl_center;
 		var r_pos := pos-trackr_center;
@@ -544,9 +543,8 @@ func _process(delta):
 					update_ct(ctl);
 					update_ct(ctr);
 				
-				
 				# 处理等待中的event
-				for wait_index in waiting_notes:
+				for wait_index in waiting_notes.keys():
 					var event_array = waiting_notes[wait_index];
 					var event = event_array[0];
 					if event is BeatMap.Event.Note:
@@ -555,6 +553,7 @@ func _process(delta):
 					elif play_time >= event.time:
 						# 这里处理事件
 						handle_other_event(wait_index);
+				
 				
 				if input_mode == INPUT_MODE.TOUCH:
 					# 清除此帧“刚点击”的按钮
@@ -575,7 +574,6 @@ func _process(delta):
 					JUDGEMENT.BEST if judge_counts[JUDGEMENT.GOOD] == 0 else
 					JUDGEMENT.GOOD
 				);
-				progressAcc.tint_progress = JUDGE_COLOR[best_judge];
 				
 				
 				# 处理歌词
@@ -624,13 +622,12 @@ func _process(delta):
 		
 		ctl.position = trackl.position + joyl*trackl_diam/2;
 		ctr.position = trackr.position + joyr*trackr_diam/2;
-		
 
 
 ## 处理音符以外的各种事件
 func handle_other_event(wait_index: int):
 	var event :BeatMap.Event = waiting_notes[wait_index][0];
-	print("handle event: ", event);
+	print("handle event: ", event.type);
 	match event.type:
 		BeatMap.EVENT_TYPE.Start:
 			print("[Event] -- Start!");
@@ -650,7 +647,6 @@ func get_track(note :BeatMap.Event.Note) -> CanvasItem:
 ## 生成音符并返回相关的CanvasItem节点数组，如 [PathFollow2D] 或 [PathFollow2D, Path2D, PathFollow2D]
 ## offset: 与预生成时间点的差值
 func generate_note(note :BeatMap.Event.Note, before_time: float, offset :float = 0.0) -> Array:
-	#print("[Event] ", BeatMap.EVENT_TYPE.find_key(note.type), " ", play_time);
 	var track = get_track(note);
 	var path :Path2D = track.get_child(0) as Path2D; # 获取 path2D 记得放在第一位
 	
@@ -761,7 +757,6 @@ func generate_note(note :BeatMap.Event.Note, before_time: float, offset :float =
 ## 让一个tween跳到delta秒后
 func tween_step(tween: Tween, delta: float, kill_if_finish: bool = true):
 	if !tween.custom_step(delta) && kill_if_finish:
-		print("kill ", tween);
 		tween.kill();
 		anim_tweens.erase(tween);
 
@@ -822,7 +817,7 @@ func judge_note(wait_index :int, note_array = null):
 	
 	# 非 miss 的判定与动画
 	
-	var edit_mode :bool = play_mode == PLAY_MODE.EDIT;
+	var edit_mode :bool = (play_mode == PLAY_MODE.EDIT);
 	# 编辑模式下精准击中
 	if edit_mode && offset < 0: return;
 	
@@ -861,19 +856,21 @@ func judge_note(wait_index :int, note_array = null):
 			elif input_mode == INPUT_MODE.TOUCH:
 				# 触控输入
 				for i in touch_points.size():
-					if (touch_just>>i)&1 != 1 || (touch_used>>i)&1 != 0: continue;
+					if (touch_just>>i)&1 == 0 || (touch_used>>i)&1 == 1: continue;
 					var touch = touch_points[i];
 					if touch == null || touch.is_empty(): continue;
-					var point = touch[0 if note.side == BeatMap.Event.SIDE.LEFT else 1];
+					var point = touch[note.side];
 					if point == null || point.is_empty(): continue;
-					# 点击距离track边缘最大128px (共256px)
+					# 点击距离track边缘±128px 或 点击在track外note.side的半屏
+					# 角度可偏差±10
 					reached = (
-						# 触控角度可偏差±10
-						is_in_degree(point[1], note.deg, note.deg_end, 10) &&
-						radius - 128 <= point[2] && point[2] <= radius + 128
+						is_in_degree(point[1], note.deg, note.deg_end, 10) && (
+							radius - 128 <= point[2] && point[2] <= radius + 128
+							|| point[2] > radius && is_in_half_screen(point[0], note.side)
+						)
 					);
 					if reached:
-						touch_used |= 1 << i;
+						touch_used |= (1 << i);
 						break;
 			if edit_mode || reached:
 				is_judged = true;
@@ -913,8 +910,10 @@ func judge_note(wait_index :int, note_array = null):
 					var point = touch[0 if note.side == BeatMap.Event.SIDE.LEFT else 1];
 					if point == null || point.is_empty(): continue;
 					reached = (
-						is_in_degree(point[1], note.deg, note.deg, 10) &&
-						radius - 128 <= point[2] && point[2] <= radius + 128
+						is_in_degree(point[1], note.deg, note.deg, 10) && (
+							radius - 128 <= point[2] && point[2] <= radius + 128
+							|| point[2] > 128 && is_in_half_screen(point[0], note.side)
+						)
 					);
 					if reached: break;
 			if edit_mode || reached:
@@ -1033,6 +1032,7 @@ const E :float = 2.718281828459045;
 
 func get_score(note_type: BeatMap.EVENT_TYPE, judge: JUDGEMENT, offset: float = 0) -> float:
 	var base_score = beatmap.note_scores[note_type];
+	offset = abs(offset);
 	match judge:
 		JUDGEMENT.BEST: return base_score;
 		JUDGEMENT.GOOD: return base_score*(
@@ -1053,13 +1053,14 @@ func set_combo(value: int):
 		).from(Vector2.ONE*1.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC);
 
 func update_acc(new_acc: float):
-	acc = new_acc if acc == -1 else (acc+new_acc)/2.0;
-	labelAcc.text = ("%.2f" % (acc*100.0)).replace('.', ',') + "%";
-	progressAcc.value = acc;
+	acc = new_acc if acc_judge_count == 0 else (acc*acc_judge_count+new_acc)/(acc_judge_count+1);
+	acc_judge_count += 1;
+	labelAcc.text = ("%.2f" % (acc*100.0)).replace('.', ',');
 
 func reset_acc():
-	acc = -1;
-	labelAcc.text = "00,00%";
+	acc = 0;
+	acc_judge_count = 0;
+	labelAcc.text = "00,00";
 
 ## 更新ct的数值
 func update_ct(ct: Ct):
@@ -1081,6 +1082,15 @@ func get_degree_in_track(vec: Vector2) -> float:
 		0 if vec == Vector2.ZERO else
 		abs(fposmod((float(atan2(-vec.y , vec.x)/PI)*180.0-90), -360))
 	);
+
+## 判断点是否在左右某个半屏里面，包含中心点
+func is_in_half_screen(pos: Vector2, side: BeatMap.Event.SIDE) -> bool:
+	if side == BeatMap.Event.SIDE.LEFT:
+		return pos.x <= size.x/2.0;
+	elif side == BeatMap.Event.SIDE.RIGHT:
+		return pos.x >= size.x/2.0;
+	else:
+		return false;
 
 ## 判断此度数x是否在min~max里, offset 可以让两边范围增加(2*offset)
 func is_in_degree(x: float, min_val: float, max_val: float, offset: float = 0) -> bool:
@@ -1110,7 +1120,6 @@ func has_crossed_line(
 		var delta_x = line_end.x - line_start.x;
 		var y_del_prev = (pos_prev.x - line_start.x)/delta_x*delta_y - pos_prev.y;
 		var y_del_now = (pos_now.x - line_start.x)/delta_x*delta_y - pos_now.y;
-		#print("    >> has_crossed_line : (%.1f,%.1f)"%[y_del_prev, y_del_now])
 		return y_del_prev <= 0 && y_del_now > 0 || y_del_prev >= 0 && y_del_now < 0;
 
 func play_sound(stream: AudioStream, volume: float = 0, pitch: float = 1, bus: String = "Master"):	
