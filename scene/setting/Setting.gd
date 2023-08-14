@@ -7,32 +7,33 @@ const COLOR_WAITING := Color("e098ff");
 const COLOR_CHANGED := Color("ffdd00");
 
 # Player #
-@onready var textureAvatar := $Panel/Scroll/Margin/List/Player/Profile/TextureAvatar;
-@onready var lineEditName := $Panel/Scroll/Margin/List/Player/Profile/LineEditName;
+@onready var textureAvatar :TextureRect = $Panel/Scroll/Margin/List/Player/Profile/TextureAvatar;
+@onready var lineEditName :LineEdit = $Panel/Scroll/Margin/List/Player/Profile/LineEditName;
 # Video #
-@onready var buttonFullScreen := $Panel/Scroll/Margin/List/Video/FullScreen/Button;
-@onready var optionFullScreenMode := $Panel/Scroll/Margin/List/Video/FullScreenMode/Option;
-var optionFullScreenMode_items = [DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN, DisplayServer.WINDOW_MODE_FULLSCREEN];
-@onready var inputFPS := $Panel/Scroll/Margin/List/Video/FPS/Input;
-@onready var checkVSync := $Panel/Scroll/Margin/List/Video/VSync/CheckButton;
-@onready var labelScale := $Panel/Scroll/Margin/List/Video/Scale/Label;
-@onready var sliderScale := $Panel/Scroll/Margin/List/Video/Scale/HSlider;
+@onready var buttonFullScreen :Button = $Panel/Scroll/Margin/List/Video/FullScreen/Button;
+@onready var optionFullScreenMode :OptionButton = $Panel/Scroll/Margin/List/Video/FullScreenMode/Option;
+var optionFullScreenMode_items :Array[DisplayServer.WindowMode] = [DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN, DisplayServer.WINDOW_MODE_FULLSCREEN];
+@onready var inputFPS :LineEdit = $Panel/Scroll/Margin/List/Video/FPS/Input;
+@onready var checkVSync :CheckButton = $Panel/Scroll/Margin/List/Video/VSync/CheckButton;
+@onready var labelScale :Label = $Panel/Scroll/Margin/List/Video/Scale/Label;
+@onready var sliderScale :HSlider = $Panel/Scroll/Margin/List/Video/Scale/HSlider;
 # Audio #
-@onready var sliderVolumeMaster := $Panel/Scroll/Margin/List/Audio/VolumeMaster/HSlider;
-@onready var sliderVolumeMusic := $Panel/Scroll/Margin/List/Audio/VolumeMusic/HSlider;
-@onready var sliderVolumeEffect := $Panel/Scroll/Margin/List/Audio/VolumeEffect/HSlider;
-@onready var sliderVolumeVoice := $Panel/Scroll/Margin/List/Audio/VolumeVoice/HSlider;
+@onready var sliderVolumeMaster :HSlider = $Panel/Scroll/Margin/List/Audio/VolumeMaster/HSlider;
+@onready var sliderVolumeMusic :HSlider = $Panel/Scroll/Margin/List/Audio/VolumeMusic/HSlider;
+@onready var sliderVolumeEffect :HSlider = $Panel/Scroll/Margin/List/Audio/VolumeEffect/HSlider;
+@onready var sliderVolumeVoice :HSlider = $Panel/Scroll/Margin/List/Audio/VolumeVoice/HSlider;
 # Device #
-@onready var labelGamepad := $Panel/Scroll/Margin/List/Device/Gamepad/Label;
-@onready var optionGamepad := $Panel/Scroll/Margin/List/Device/Gamepad/Option;
+@onready var labelGamepad :Label = $Panel/Scroll/Margin/List/Device/Gamepad/Label;
+@onready var optionGamepad :OptionButton = $Panel/Scroll/Margin/List/Device/Gamepad/Option;
 # GamePlay #
 var audio_offset :int = 0;
-@onready var labelAudioOffset := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/LabelOffset;
-@onready var buttonAudioOffsetAdd := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonAdd;
-@onready var buttonAudioOffsetSub := $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonSub;
+@onready var labelAudioOffset :Label = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/LabelOffset;
+@onready var buttonAudioOffsetAdd :Button = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonAdd;
+@onready var buttonAudioOffsetSub :Button = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonSub;
 # Misc #
-@onready var checkDebugInfo := $Panel/Scroll/Margin/List/Misc/DebugInfo/CheckButton;
-@onready var buttonReloadMap := $Panel/Scroll/Margin/List/Misc/ButtonReloadMap;
+@onready var checkDebugInfo :CheckButton = $Panel/Scroll/Margin/List/Misc/DebugInfo/CheckButton;
+@onready var storageLocation :Button = $Panel/Scroll/Margin/List/Misc/StorageLoation/Button;
+@onready var buttonReloadMap :Button = $Panel/Scroll/Margin/List/Misc/ButtonReloadMap;
 
 var loading_data := true;
 
@@ -45,65 +46,72 @@ func _ready():
 	
 	bind_gui_action();
 	
-	set_setting_from_data();
-	
+	if DataManager.all_data_has_loaded:
+		set_setting_from_data();
+	else:
+		DataManager.data_loaded.connect(set_setting_from_data);
+
+
 
 ## 绑定gui与设置变化
 func bind_gui_action():
-	textureAvatar.gui_input.connect(func(input_event):
-		if input_event is InputEventMouseButton:
-			if input_event.pressed || input_event.button_index > MOUSE_BUTTON_MIDDLE: return;
-			var fileDialog = FileDialog.new();
-			if (OS.get_name() == "Android"): fileDialog.root_subfolder = "/storage/emulated/0"
-			fileDialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE;
-			fileDialog.access = FileDialog.ACCESS_FILESYSTEM;
-			fileDialog.filters = ["*.png, *.jpg, *.jpeg, *.svg, *.webp, *.bmp", "Image"];
+	
+	textureAvatar.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton:
+			if event.pressed || event.button_index > MOUSE_BUTTON_MIDDLE: return;
+			var fileDialog := Global.get_file_dialog(
+				FileDialog.FILE_MODE_OPEN_FILE, FileDialog.ACCESS_FILESYSTEM,"",
+				["*.png, *.jpg, *.jpeg, *.svg, *.webp, *.bmp", "Image"],
+			);
 			add_child(fileDialog);
-			fileDialog.size = Vector2i(1024, 512);
-			fileDialog.popup_centered()
+			fileDialog.popup_centered();
 			fileDialog.canceled.connect(func():
 				remove_child(fileDialog);
 				fileDialog.queue_free();
 			);
-			fileDialog.file_selected.connect(func(path):
+			fileDialog.file_selected.connect(func(path: String):
 				DataManager.data_player.set_avatar(path);
 				var texture := DataManager.data_player.get_avatar();
 				textureAvatar.texture = texture;
 				Global.mainMenu.downPanel.textureAvatar.texture = texture;
-				DataManager.save_data_player();
+				if !loading_data: DataManager.save_data_player();
 			);
 	);
-	lineEditName.text_changed.connect(func(text):
+	lineEditName.text_changed.connect(func(text: String):
 		DataManager.data_player.name = text;
-		if loading_data: return;
-		DataManager.save_data_player();
+		if !loading_data: DataManager.save_data_player();
 	);
-	buttonFullScreen.toggled.connect(func(pressed):
+	buttonFullScreen.toggled.connect(func(pressed: bool):
 		var id = optionFullScreenMode.get_selected_id();
 		DisplayServer.window_set_mode(
 			DisplayServer.WINDOW_MODE_WINDOWED
 			if !pressed else
 			optionFullScreenMode_items[id]
 		);
-		save_data("FullScreen", pressed);
+		get_setting().full_screen = pressed;
+		save_setting();
 	);
 	optionFullScreenMode.item_selected.connect(func(index: int):
 		if buttonFullScreen.button_pressed:
 			DisplayServer.window_set_mode(optionFullScreenMode_items[index]);
-		save_data("FullScreenMode", index);
+		get_setting().full_screen_mode = index;
+		save_setting();
 	);
 	inputFPS.text_changed.connect(func(_text: String):
 		inputFPS.modulate = COLOR_WAITING;
 	);
 	inputFPS.text_submitted.connect(func(text: String):
 		if text.is_valid_int():
-			var fps = text.to_int();
+			var fps := text.to_int();
 			Engine.max_fps = 0 if fps < 0 else fps;
 			inputFPS.modulate = COLOR_NORMAL;
 			# 给初始化加载数据用的
 			if inputFPS.text != text:
 				inputFPS.text = text;
-			save_data("FPS", text);
+			get_setting().fps = text.to_int();
+			save_setting();
+		else:
+			Notifier.notif_popup("You should input a integer for fps!", Notifier.COLOR_BAD);
 	);
 	checkVSync.toggled.connect(func(pressed: bool):
 		DisplayServer.window_set_vsync_mode(
@@ -111,7 +119,8 @@ func bind_gui_action():
 			if pressed else
 			DisplayServer.VSYNC_DISABLED
 		);
-		save_data("VSync", pressed);
+		get_setting().v_sync = pressed;
+		save_setting();
 	);
 	sliderScale.value_changed.connect(func(value: float):
 		get_tree().root.content_scale_factor = value;
@@ -120,23 +129,24 @@ func bind_gui_action():
 		event.set_button_index(MOUSE_BUTTON_LEFT);
 		event.set_pressed(false);
 		Input.parse_input_event(event);
-		save_data("Scale", value);
+		get_setting().scale = value;
+		save_setting();
 	);
 	sliderVolumeMaster.value_changed.connect(func(value: float):
 		set_audio_bus_Volume("Master", value);
-		save_data("Volume.Master", value);
+		get_setting().volume_master = value; save_setting();
 	);
 	sliderVolumeMusic.value_changed.connect(func(value: float):
 		set_audio_bus_Volume("Music", value);
-		save_data("Volume.Music", value);
+		get_setting().volume_music = value; save_setting();
 	);
 	sliderVolumeEffect.value_changed.connect(func(value: float):
 		set_audio_bus_Volume("Effect", value);
-		save_data("Volume.Effect", value);
+		get_setting().volume_effect = value; save_setting();
 	);
 	sliderVolumeVoice.value_changed.connect(func(value: float):
 		set_audio_bus_Volume("Voice", value);
-		save_data("Volume.Voice", value);
+		get_setting().volume_voice = value; save_setting();
 	);
 	update_gamepad_select();
 	Input.joy_connection_changed.connect(func(device: int, connected: bool):
@@ -149,12 +159,12 @@ func bind_gui_action():
 		update_gamepad_select();
 		if connected: Global.gamepad_id = device;
 	);
-	optionGamepad.item_selected.connect(func(id):
+	optionGamepad.item_selected.connect(func(id: int):
 		Global.gamepad_id = id;
 		update_labelGamepad();
 	);
 	if Global.mainMenu != null:
-		var musicPlayer = Global.mainMenu.musicPlayer;
+		var musicPlayer := Global.mainMenu.musicPlayer;
 		musicPlayer.beat.connect(func():
 			labelAudioOffset.create_tween().tween_property(
 				labelAudioOffset, "modulate:a", 1.0, 60.0/musicPlayer.bpm
@@ -162,15 +172,16 @@ func bind_gui_action():
 		);
 	buttonAudioOffsetAdd.pressed.connect(func():
 		set_audio_offset(audio_offset + 1);
-		save_data("AudioOffset", audio_offset);
+		get_setting().audio_offset = audio_offset; save_setting();
 	);
 	buttonAudioOffsetSub.pressed.connect(func():
 		set_audio_offset(audio_offset - 1);
-		save_data("AudioOffset", audio_offset);
+		get_setting().audio_offset = audio_offset; save_setting();
 	);
 	checkDebugInfo.toggled.connect(func(flag: bool):
 		Global.debugInfo.visible = flag;
-		save_data("DebugInfo", flag);
+		get_setting().debug_info = flag;
+		save_setting();
 	);
 	buttonReloadMap.pressed.connect(func():
 		Notifier.notif_popup("Reloding all the map and song...");
@@ -179,27 +190,69 @@ func bind_gui_action():
 		Global.mainMenu.songList.select_song_random();
 		Notifier.notif_popup("Reloded!", Notifier.COLOR_OK);
 	);
+	storageLocation.pressed.connect(func():
+		var fileDialog := Global.get_file_dialog(
+			FileDialog.FILE_MODE_OPEN_DIR, FileDialog.ACCESS_FILESYSTEM
+		);
+		add_child(fileDialog);
+		fileDialog.popup_centered();
+		fileDialog.canceled.connect(func():fileDialog.queue_free());
+		fileDialog.dir_selected.connect(func(path: String):
+			var storage_location_file := FileAccess.open("user://storage_location", FileAccess.WRITE_READ);
+			var err := FileAccess.get_open_error();
+			if storage_location_file != null && err == OK:
+				storage_location_file.store_string(path);
+				storage_location_file.flush();
+				storage_location_file.close();
+			else: Global.pop_text(
+					"Unable to change the storage location!
+					error: " + error_string(err)
+				); return;
+			print("ready to move files to new storage location: " + path);
+			Notifier.notif_popup("Moving files!", Notifier.COLOR_WARN, Notifier.default_icon, false);
+			Global.move_file(Global.storage_path, path, ["logs", "shader_cache"], ["storage_location"]);
+			var dialog := Global.pop_text(
+				"Changing storage location to %s
+				dicolo! has already moved your file
+				~ Please restart the game ~" % path
+			, true);
+		);
+	)
+
+func get_setting() -> DataSetting:
+	return DataManager.get_data_setting();
+
+func save_setting():
+	if loading_data: return;
+	DataManager.save_data_setting();
 
 func set_setting_from_data():
 	
-	var data_player := DataManager.data_player as PlayerData;
+	print("set_setting_from_data...");
+	
+	var data_player := DataManager.data_player as DataPlayer;
 	textureAvatar.texture = data_player.get_avatar();
 	lineEditName.text = data_player.name;
 	
-	optionFullScreenMode.selected = get_data("FullScreenMode", optionFullScreenMode.selected);
-	buttonFullScreen.button_pressed = get_data("FullScreen", buttonFullScreen.button_pressed);
-	inputFPS.text_submitted.emit(str(get_data("FPS", 60)));
-	checkVSync.button_pressed = get_data("VSync", checkVSync.button_pressed);
-	sliderScale.value = get_data("Scale", sliderScale.value);
+	var setting := get_setting();
+	optionFullScreenMode.selected = setting.full_screen_mode;
+	buttonFullScreen.button_pressed = setting.full_screen;
+	inputFPS.text = str(setting.fps);
+	checkVSync.button_pressed = setting.v_sync;
+	sliderScale.value = setting.scale;
 	
-	sliderVolumeMaster.value = get_data("Volume.Master", sliderVolumeMaster.value);
-	sliderVolumeMusic.value = get_data("Volume.Music", sliderVolumeMusic.value);
-	sliderVolumeEffect.value = get_data("Volume.Effect", sliderVolumeEffect.value);
-	sliderVolumeVoice.value = get_data("Volume.Voice", sliderVolumeVoice.value);
+	sliderVolumeMaster.value = setting.volume_master;
+	sliderVolumeMusic.value = setting.volume_music;
+	sliderVolumeEffect.value = setting.volume_effect;
+	sliderVolumeVoice.value = setting.volume_voice;
 	
-	set_audio_offset(get_data("AudioOffset", 0));
+	set_audio_offset(setting.audio_offset);
 	
-	checkDebugInfo.button_pressed = get_data("DebugInfo", checkDebugInfo.button_pressed);
+	checkDebugInfo.button_pressed = setting.debug_info;
+	
+	
+	if Global.storage_path != "user://":
+		storageLocation.text = Global.storage_path;
 	
 	loading_data = false;
 	Global.data_loaded_setting.emit();
@@ -249,23 +302,12 @@ func _gui_input(event: InputEvent):
 
 func anim_show():
 	visible = true;
-	var tween = create_tween();
+	var tween := create_tween();
 	tween.tween_property(self, "offset_left", 0, 0.15
 		).from(-size.x).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 
 func anim_hide():
-	var tween = create_tween();
+	var tween := create_tween();
 	tween.tween_property(self, "offset_left", -size.x, 0.15
 		).from(0.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
 	tween.finished.connect(func(): visible = false);
-	
-## 保存数据到配置文件
-func save_data(key: String, value):
-	if loading_data: return;
-	DataManager.data_setting[key] = value;
-	DataManager.save_data_setting();
-
-## 获取配置
-func get_data(key: String, default = null):
-	var value = DataManager.data_setting.get(key);
-	return default if value == null else value;

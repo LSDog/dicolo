@@ -50,7 +50,7 @@ func _ready_later():
 			[result_item['owner']['login'], result_item['name']]
 	)));
 	
-	var file_temp := FileAccess.open("user://temp_%d.jpeg" % hash(self), FileAccess.WRITE);
+	var file_temp := Global.open_storage_file("temp_%d.jpeg" % hash(self), FileAccess.WRITE);
 	file_temp.close();
 	
 	var url = "https://raw.githubusercontent.com/LSDogX/dicolo-map-HareHareYukai/master/bg.jpeg";

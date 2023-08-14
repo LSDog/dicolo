@@ -2,7 +2,7 @@ extends Control
 
 @onready var click_circle = preload("res://visual/texture/ring.svg");
 
-@onready var panelLightPad = $PanelLightPad;
+@onready var panelLightPad := $PanelLightPad;
 var left_touch_count :int = 0;
 var right_touch_count :int = 0;
 var panelLightPad_gradient :Gradient;

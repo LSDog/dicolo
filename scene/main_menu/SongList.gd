@@ -146,9 +146,9 @@ func load_maps():
 		print("Loading maps in res://")
 		load_maps_in_dir(dir_res);
 		
-	var dir_user := DirAccess.open("user://map");
+	var dir_user := Global.open_storage_path("map");
 	if dir_user != null:
-		print("Loading maps in user://")
+		print("Loading maps in storage path "+Global.storage_path);
 		load_maps_in_dir(dir_user);
 
 ## 加载特定目录下的文件夹形式的铺面
@@ -189,9 +189,8 @@ func load_map_of_dir(dir: DirAccess):
 		map_file.close();
 	
 	if beatmap != null:
-		print("    - ", beatmap.file_path);
 		add_song(beatmap, maps, readme if readme != null else "");
-		print("       ↑ Loaded: ", beatmap.title);
+		print("    - ", beatmap.title, " ", beatmap.file_path);
 
 ## 重命名重复的map_name -> map_name [1]
 func get_renamed_map_name(maps: Dictionary, map_name: String) -> String:

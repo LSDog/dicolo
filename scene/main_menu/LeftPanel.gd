@@ -20,7 +20,7 @@ func _ready():
 	buttonShop.mouse_entered.connect(play_hover_sound);
 	buttonShop.pressed.connect(func():
 		play_click_sound();
-		Notifier.notif_popup("The shop is comming soon", Notifier.COLOR_BAD)
+		Notifier.notif_popup("Comming soon!", Notifier.COLOR_BLUE);
 	);
 
 

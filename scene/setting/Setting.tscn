@@ -114,6 +114,8 @@ stretch_mode = 5
 [node name="LineEditName" type="LineEdit" parent="Panel/Scroll/Margin/List/Player/Profile"]
 layout_mode = 2
 size_flags_horizontal = 3
+placeholder_text = "Your name"
+max_length = 22
 
 [node name="Video" type="VBoxContainer" parent="Panel/Scroll/Margin/List"]
 layout_mode = 2
@@ -384,7 +386,22 @@ layout_mode = 2
 size_flags_horizontal = 10
 button_pressed = true
 
+[node name="StorageLoation" type="HBoxContainer" parent="Panel/Scroll/Margin/List/Misc"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/Scroll/Margin/List/Misc/StorageLoation"]
+layout_mode = 2
+text = "StorageLocation"
+
+[node name="Button" type="Button" parent="Panel/Scroll/Margin/List/Misc/StorageLoation"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 23
+text = "default"
+text_overrun_behavior = 3
+
 [node name="ButtonReloadMap" type="Button" parent="Panel/Scroll/Margin/List/Misc"]
+modulate = Color(1, 0.109804, 0, 1)
 layout_mode = 2
 text = "Reload all the Maps"
 text_overrun_behavior = 3

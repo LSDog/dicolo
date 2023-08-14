@@ -81,7 +81,7 @@ func _process(delta: float):
 		var pos = mapCard.global_position;
 		pos.y += mapCard.size.y/2.0;
 		pos.x += -2+sin(Time.get_ticks_msec()/200.0)*7;
-		var safe_y = clampf(pos.y, 20, size.y/Global.stretch_scale - 20);
+		var safe_y = clampf(pos.y, 20, size.y - 20);
 		targetArrow.rotation = atan((pos.y - safe_y)/64);
 		pos.y = safe_y;
 		targetArrow.global_position = pos;

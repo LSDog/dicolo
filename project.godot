@@ -26,9 +26,9 @@ buses/default_bus_layout="res://audio/default_bus_layout.tres"
 [autoload]
 
 Global="*res://scene/Global.gd"
-Debugger="*res://scene/Debugger.gd"
 Notifier="*res://scene/notifier/Notifier.gd"
-DataManager="*res://scene/DataManager.gd"
+DataManager="*res://data/DataManager.gd"
+Debugger="*res://scene/Debugger.gd"
 
 [debug]
 

@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="2_6uq76"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r267s"]
-bg_color = Color(0.74902, 0.631373, 0.301961, 1)
+bg_color = Color(0.75, 0.63, 0.3, 0.85)
 skew = Vector2(-0.25, 0)
 border_width_left = 1024
 border_color = Color(0, 0, 0.2, 0.8)
@@ -64,7 +64,7 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_ingcj")
 
 [node name="Image" type="TextureRect" parent="Mask"]
-modulate = Color(1, 1, 1, 0.117647)
+modulate = Color(1, 1, 1, 0.176471)
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0

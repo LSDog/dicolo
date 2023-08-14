@@ -1176,3 +1176,4 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5jit3")
+metadata/_edit_lock_ = true

@@ -49,7 +49,7 @@ func _ready_later():
 	base_point.add_child(vbox);
 
 ## 弹出一个通知
-func notif_popup(text: String, border_color: Color = COLOR_NORAML, icon: Texture2D = default_icon):
+func notif_popup(text: String, border_color: Color = COLOR_NORAML, icon: Texture2D = default_icon, animation: bool = true):
 	var notif_box := notif_box_copy.duplicate() as PanelContainer;
 	var stylebox = notif_stylebox.duplicate(true);
 	stylebox.border_color = border_color;
@@ -59,11 +59,18 @@ func notif_popup(text: String, border_color: Color = COLOR_NORAML, icon: Texture
 	notif_box.add_theme_stylebox_override("panel", stylebox);
 	vbox.add_child(notif_box);
 	vbox.move_child(notif_box, 0);
-	var tween = notif_box.create_tween().set_parallel(true);
-	tween.finished.connect(func(): notif_box.queue_free());
-	tween.tween_property(notif_box, "modulate:a", 1.0, show_time).from(0.0);
-	tween.tween_property(notif_box, "position:x", 0, show_time).from(notif_box.size.x
-		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
-	tween.chain().tween_property(stylebox, "bg_color:v", 0.15, keep_time);
-	tween.chain().tween_property(notif_box, "modulate:a", 0.0, exit_time
-		).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
+	if animation:
+		var tween = notif_box.create_tween().set_parallel(true);
+		tween.finished.connect(func(): notif_box.queue_free());
+		tween.tween_property(notif_box, "modulate:a", 1.0, show_time).from(0.0);
+		tween.tween_property(notif_box, "position:x", 0, show_time).from(notif_box.size.x
+			).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO);
+		tween.chain().tween_property(stylebox, "bg_color:v", 0.15, keep_time);
+		tween.chain().tween_property(notif_box, "modulate:a", 0.0, exit_time
+			).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
+	else:
+		var tween = notif_box.create_tween().set_parallel(true);
+		tween.finished.connect(func(): notif_box.queue_free());
+		tween.chain().tween_property(stylebox, "bg_color:v", 0.15, keep_time).set_delay(show_time);
+		tween.chain().tween_property(notif_box, "modulate:a", 0.0, exit_time
+			).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);

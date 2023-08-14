@@ -40,7 +40,7 @@ signal audio_end();
 		loop = value;
 		button_Loop.modulate.a = 1.0 if loop else 0.5;
 		if !data_loading:
-			DataManager.data_setting["MusicPlayer.Loop"] = value;
+			DataManager.data_setting.music_player_loop = value;
 			DataManager.save_data_setting();
 
 var data_loading = true;
@@ -79,7 +79,7 @@ func _ready():
 	_ready_later.call_deferred();
 
 func _ready_later():
-	button_Loop.button_pressed = DataManager.data_setting.get("MusicPlayer.Loop", loop);
+	button_Loop.button_pressed = DataManager.data_setting.music_player_loop;
 	data_loading = false;
 
 func _process(_delta: float):
