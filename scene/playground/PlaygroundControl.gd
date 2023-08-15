@@ -37,12 +37,14 @@ extends Control
 @export_category("Setting")
 @export var enable_control :bool = true; ## 允许控制
 
+@export var enable_joystick :bool = false; ## 是否使用摇杆输入
 @export var enable_virtualJoystick :bool = false: ## 是否使用虚拟摇杆
 	set(value):
 		enable_virtualJoystick = value;
 		virtualJoystick.visible = value;
 		virtualJoystick.mouse_filter = MOUSE_FILTER_STOP if value else MOUSE_FILTER_IGNORE;
 		virtualJoystick.process_mode = Node.PROCESS_MODE_INHERIT if value else Node.PROCESS_MODE_DISABLED;
+@export var enable_touch :bool = false; ## 是否使用触控输入
 ## 铺/音/画不同步的调整阈值
 @export var max_delay :float = 0.05;
 
@@ -76,7 +78,12 @@ var sound_bound = preload("res://audio/map/note_floortom.wav");
 var play_mode := PLAY_MODE.PLAY;
 enum PLAY_MODE {PLAY, EDIT}; ## 游玩模式的枚举
 ## 输入模式: 摇杆/虚拟摇杆/触控
-var input_mode := INPUT_MODE.TOUCH;
+var input_mode := INPUT_MODE.TOUCH:
+	set(value):
+		if input_mode == value: return;
+		match input_mode:
+			INPUT_MODE.V_JOYSTICK: enable_virtualJoystick = true;
+			INPUT_MODE.TOUCH: enable_touch = true;
 enum INPUT_MODE {JOYSTICK,V_JOYSTICK,TOUCH} ## 输入模式的枚举
 ## 判定的枚举
 enum JUDGEMENT { BEST, GOOD, MISS }
@@ -435,7 +442,7 @@ func resume_anim_tweens():
 
 func _gui_input(event: InputEvent) -> void:
 	## 触控输入
-	if input_mode != INPUT_MODE.TOUCH: return;
+	if !enable_touch: return;
 	if event is InputEventScreenTouch:
 		if paused || ended || event.double_tap: return;
 		if event.pressed:
@@ -612,11 +619,19 @@ func _process(delta):
 	
 	if enable_control && can_control:
 		
-		# 控制准星
-		# limit_length 防止手柄坐标越界
-		var joyl :Vector2 = $VirtualJoystick.joy_l if Global.gamepad_id == -1 else Global.get_joy_left().limit_length(1.0);
-		var joyr :Vector2 = $VirtualJoystick.joy_r if Global.gamepad_id == -1 else Global.get_joy_right().limit_length(1.0);
+		# 手柄控制的准星
+		if !enable_joystick && !enable_virtualJoystick: return;
 		
+		var joyl :Vector2 = Vector2.ZERO;
+		var joyr :Vector2 = Vector2.ZERO;
+		
+		if enable_joystick && Global.gamepad_id != -1:
+			# limit_length 防止手柄坐标越界
+			joyl = Global.get_joy_left().limit_length(1.0);
+			joyr = Global.get_joy_right().limit_length(1.0);
+		elif enable_virtualJoystick:
+			joyl = virtualJoystick.joy_l;
+			joyr = virtualJoystick.joy_r;
 		trackl.position = trackl_center + joyl * 10;
 		trackr.position = trackr_center + joyr * 10;
 		
@@ -1041,6 +1056,8 @@ func get_score(note_type: BeatMap.EVENT_TYPE, judge: JUDGEMENT, offset: float = 
 		_,JUDGEMENT.MISS: return 0;
 
 func set_score(value: float):
+	# 编辑模式不计分
+	if play_mode == PLAY_MODE.EDIT: return;
 	score = value;
 	labelScore.text = "%07d" % floori(roundi(score*10)/10.0);
 	# round四舍五入小数第二位，解决分数满分总和变成999999

@@ -18,6 +18,9 @@ var last_info_update := 0.0;
 @onready var buttonMod := $VBox/ButtonMod;
 @onready var buttonDraw := $VBox/ButtonDraw;
 
+@onready var buttonSetting := $VBox/VBoxButton/ButtonSetting;
+@onready var buttonShop := $VBox/VBoxButton/ButtonShop;
+
 
 func _ready():
 	last_info_update = Global.now_time() + 1 - fmod(Global.now_time(), 1.0);
@@ -26,6 +29,18 @@ func _ready():
 func _ready_later():
 	textureAvatar.texture = DataManager.data_player.get_avatar();
 	apply_button_hover_sound(self);
+	buttonSetting.pressed.connect(func():
+		play_click_sound();
+		var setting := Global.setting;
+		if !setting.visible:
+			setting.anim_show();
+		else:
+			setting.anim_hide();
+	);
+	buttonShop.pressed.connect(func():
+		play_click_sound();
+		Notifier.notif_popup("Comming soon!", Notifier.COLOR_BLUE);
+	);
 	buttonEdit.pressed.connect(func():
 		play_click_sound();
 		editMenu.visible = !editMenu.visible;

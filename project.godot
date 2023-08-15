@@ -15,7 +15,7 @@ run/main_scene="res://scene/main_menu/MainMenu.tscn"
 config/use_custom_user_dir=true
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.1", "GL Compatibility")
-boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
+boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="res://visual/icon/icon_android.png"
 config/icon="res://visual/icon/icon.svg"
 

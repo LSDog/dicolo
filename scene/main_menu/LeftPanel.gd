@@ -4,25 +4,6 @@ extends Control
 @onready var labelReadme :RichTextLabel = $Readme/Label;
 @onready var labeScore :Label = $Score/Score;
 @onready var labelCount :Label = $Score/Count;
-@onready var buttonSetting := $VBoxButton/ButtonSetting;
-@onready var buttonShop := $VBoxButton/ButtonShop;
-
-func _ready():
-	buttonSetting.mouse_entered.connect(play_hover_sound);
-	buttonSetting.pressed.connect(func():
-		play_click_sound();
-		var setting := Global.setting;
-		if !setting.visible:
-			setting.anim_show();
-		else:
-			setting.anim_hide();
-	);
-	buttonShop.mouse_entered.connect(play_hover_sound);
-	buttonShop.pressed.connect(func():
-		play_click_sound();
-		Notifier.notif_popup("Comming soon!", Notifier.COLOR_BLUE);
-	);
-
 
 func set_readme(text: String):
 	labelReadme.text = text;
