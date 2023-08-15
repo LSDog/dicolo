@@ -15,7 +15,7 @@ run/main_scene="res://scene/main_menu/MainMenu.tscn"
 config/use_custom_user_dir=true
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.1", "GL Compatibility")
-boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
 boot_splash/image="res://visual/icon/icon_android.png"
 config/icon="res://visual/icon/icon.svg"
 
@@ -41,7 +41,6 @@ window/stretch/aspect="expand"
 window/vsync/vsync_mode=2
 window/mjpeg_quality=1.0
 window/movie_file="E:/Videos/record/godot_record.avi"
-window/threads/thread_model=2
 
 [editor]
 
@@ -51,13 +50,10 @@ naming/scene_name_casing=1
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 
-[editor_plugins]
-
-enabled=PackedStringArray()
-
 [filesystem]
 
 import/blender/enabled=false
+import/fbx/enabled=false
 
 [gui]
 

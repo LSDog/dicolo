@@ -93,6 +93,7 @@ func _ready():
 	
 	_ready_later.call_deferred();
 
+## 获取存储文件的地方，sub_path为子文件位置
 func get_storage_path(sub_path: String = "") -> String:
 	return storage_path + sub_path;
 

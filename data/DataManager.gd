@@ -1,4 +1,3 @@
-@tool
 extends Node
 
 ## 存储/加载 json 格式数据的地方
