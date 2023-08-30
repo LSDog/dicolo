@@ -1,7 +1,7 @@
 # Godot 4+ specific ignores
-export_presets.cfg
 .godot/
 .security/
 .out*/
 addons/
 map/HareHareYukai
+.vscode/

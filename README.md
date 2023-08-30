@@ -3,7 +3,7 @@
 
 ---
 <div align=center>
-<img src="https://github.com/LSDogX/dicolo/assets/61925478/aa267b2c-0288-4b3e-9fdb-43ce55df233a" width="128px" alt="aho!"/><img src="visual/icon/icon.svg" width="256px" alt="icon!"/>
+<img src="visual/icon/icon.svg" width="256px" alt="icon!"/>
 
   `🎉 dicolo! （＾∀＾●）ﾉｼ`
 </div>
@@ -18,6 +18,9 @@
 ### 这是 LSDog 用 [Godot](http://github.com/godotengine/godot) 开发的有趣音游！  
 
 > ### ***dicolo!*** 在我们的世界里是 ***你好!*** 的意思！  它读作 **`/dɪˈkolo/`**，或者近似 "**蒂可萝**" 的感觉。  
+
+![:dicolo](https://count.getloli.com/get/@:dicolo)  
+~**nya**~
 
 <br/>
 
@@ -36,14 +39,14 @@
   - [ ] ![](https://progress-bar.dev/80/) 设置
   - [ ] ![](https://progress-bar.dev/0/) 铺面商店
 - [ ] **逻辑** —— 代码去死吧！！
-  - [ ] ![](https://progress-bar.dev/100/) 载入铺面
+  - [x] ![](https://progress-bar.dev/100/) 载入铺面
   - [ ] ![](https://progress-bar.dev/90/) 游玩
 	- [x] 80% 分数计算 / 结分
   - [ ] ![](https://progress-bar.dev/50/) 编辑铺面
   - [ ] ![](https://progress-bar.dev/60/) 用户数据存读
   - [ ] ![](https://progress-bar.dev/0/) 下载/上传铺面
 - [ ] **曲谱** —— 没有曲子，更不会写铺子！
-  - [ ] ![](https://progress-bar.dev/100/) 10首左右内置曲
+  - [x] ![](https://progress-bar.dev/100/) 10首左右内置曲
   - [ ] ![](https://progress-bar.dev/0/) ↑它们的谱子
 - [ ] **插图** —— 啊？
   - [ ] ![](https://progress-bar.dev/50/) 内置曲的曲绘 (目前是AI生成)

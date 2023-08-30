@@ -13,6 +13,10 @@ body {
     background-color: rgb(10, 4, 17);
 }
 
+p {
+    white-space: pre-line;
+}
+
 a:link {
     font-weight: 800;
     color: rgb(79, 167, 245);
@@ -23,6 +27,16 @@ a:visited {
     color: rgb(79, 167, 245);
 }
 
+comment {
+    color: gray;
+}
+
+.big_button {
+    background-color: #0f1226;
+    padding: 1em;
+    font-size: 1.5em;
+    border-radius: 8em;
+}
 
 header {
     position: relative;
