@@ -185,6 +185,12 @@ offset_bottom = 194.0
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_dxybm")
 script = ExtResource("3_cepoq")
+outline_color = null
+barline_color = null
+beatline_color = null
+note_margin_vertical = null
+bar_length = null
+beat_count = null
 
 [node name="EventTag" type="Panel" parent="FlowBox/FlowPanel"]
 layout_mode = 1
@@ -694,8 +700,15 @@ suffix = "°"
 
 [node name="DebugLabel2" type="Label" parent="."]
 layout_mode = 1
-offset_right = 191.0
-offset_bottom = 32.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -208.0
+offset_top = -34.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "※ 视频进度更改在编辑器中不受支持！
 （如需预览请拖动进度到第0秒再播放）"
 label_settings = SubResource("LabelSettings_w6vl8")

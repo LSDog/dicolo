@@ -69,7 +69,7 @@ var texture_slide_hint_point = preload("res://visual/texture/slide_hint.svg");
 var texture_bound = preload("res://visual/texture/bound.svg");
 var texture_follow = preload("res://visual/texture/follow.svg");
 
-var sound_hit = preload("res://audio/map/note_hihat.wav");
+var sound_hit = preload("res://audio/map/note_hit.wav");
 var sound_cross = preload("res://audio/map/note_snarehat.wav");
 var sound_slide = preload("res://audio/map/note_hihatclosed.wav");
 var sound_bound = preload("res://audio/map/note_floortom.wav");
@@ -78,13 +78,16 @@ var sound_bound = preload("res://audio/map/note_floortom.wav");
 var play_mode := PLAY_MODE.PLAY;
 enum PLAY_MODE {PLAY, EDIT}; ## 游玩模式的枚举
 ## 输入模式: 摇杆/虚拟摇杆/触控
-var input_mode := INPUT_MODE.TOUCH:
+var input_mode := DataSetting.INPUT_MODE.NONE:
 	set(value):
-		if input_mode == value: return;
+		input_mode = value;
 		match input_mode:
-			INPUT_MODE.V_JOYSTICK: enable_virtualJoystick = true;
-			INPUT_MODE.TOUCH: enable_touch = true;
-enum INPUT_MODE {JOYSTICK,V_JOYSTICK,TOUCH} ## 输入模式的枚举
+			DataSetting.INPUT_MODE.JOYSTICK:
+				enable_joystick = true; enable_touch = false;
+			DataSetting.INPUT_MODE.V_JOYSTICK:
+				enable_virtualJoystick = true; enable_touch = false;
+			DataSetting.INPUT_MODE.TOUCH:
+				enable_touch = true; enable_joystick = false; enable_virtualJoystick = false;
 ## 判定的枚举
 enum JUDGEMENT { BEST, GOOD, MISS }
 
@@ -106,15 +109,13 @@ var judged_notes := {};
 var bpm :float; ## 当前bpm
 var anim_tweens :Array[Tween] = []; ## 动画的tween们
 
-## 触控点，index为事件中的index，结构为
-## [ [[l_pos, l_deg, dis], [r_pos, r_deg, dis], vec, vec_deg], ... ]
-##   [[左track相对位置,度数,距离], [右track...], 速度, 速度的角度]
-var touch_points :Array = [];
+## 触控点，index为事件中的index
+var touches :Array[PGTouch] = [];
 ## 上一帧的触控点，结构为
 ## [ [l_pos, r_pos], ... ]
-var prev_touch_points :Array = [];
-var touch_just :int = 0; ## 每一位(右到左)1/0表示touch_points中index是否为新的点击
-var touch_used :int = 0; ## 同上，按位表示touch_points中index是否已经用于作为判定了
+var prev_touches :Array[PGTouch] = [];
+var touch_just :int = 0; ## 每一位(右到左)1/0表示touches中index是否为新的点击
+var touch_used :int = 0; ## 同上，按位表示touches中index是否已经用于作为判定了
 
 ## 歌词
 var lyrics :LyricsFile;
@@ -149,18 +150,14 @@ signal play_jump(time:float); ## 跳转
 signal play_restart; ## 重开
 signal play_end; ## 结束
 
+signal touch_playground(touch_info:PGTouch);
+
 func _ready():
-	
-	match input_mode:
-		INPUT_MODE.TOUCH:
-			enable_virtualJoystick = false;
-		INPUT_MODE.JOYSTICK:
-			enable_virtualJoystick = false;
 	
 	correct_size();
 	judge_counts.resize(JUDGEMENT.size());
-	touch_points.resize(20);
-	prev_touch_points.resize(20);
+	touches.resize(20);
+	prev_touches.resize(20);
 	
 	buttonMenu.pressed.connect(func():
 		if !paused: pause();
@@ -447,30 +444,55 @@ func _gui_input(event: InputEvent) -> void:
 		if paused || ended || event.double_tap: return;
 		if event.pressed:
 			var pos :Vector2 = event.position - playground.global_position;
-			var l_pos := pos-trackl_center;
-			var r_pos := pos-trackr_center;
-			touch_points[event.index] = [
-				[l_pos, get_degree_in_track(l_pos), l_pos.length()],
-				[r_pos, get_degree_in_track(r_pos), r_pos.length()],
-				0, 0
-			];
+			var touch_info = PGTouch.new().update(self, pos);
+			touches[event.index] = touch_info;
 			touch_just |= 1 << event.index;
 		else:
 			touch_just &= ~(1 << event.index);
 			touch_used &= ~(1 << event.index);
-			touch_points[event.index] = null;
-		#accept_event();
+			touches[event.index] = null;
 	elif event is InputEventScreenDrag:
-		var touch = touch_points[event.index];
+		var touch :PGTouch = touches[event.index];
 		if touch == null: return;
 		var pos :Vector2 = event.position - playground.global_position;
-		var l_pos := pos-trackl_center;
-		var r_pos := pos-trackr_center;
-		touch[0] = [l_pos, get_degree_in_track(l_pos), l_pos.length()];
-		touch[1] = [r_pos, get_degree_in_track(r_pos), r_pos.length()];
-		touch[2] = event.velocity;
-		touch[3] = get_degree_in_track(event.velocity);
-		accept_event();
+		touch.update(self, pos, event.velocity);
+
+class PGTouch:
+	extends RefCounted;
+	var pos :Vector2;
+	var l_pos :Vector2; var l_deg :float; var l_len :float;
+	var r_pos :Vector2; var r_deg :float; var r_len :float;
+	var vel :Vector2 = Vector2.ZERO;
+	var vel_len :float = 0;
+	var vel_deg :float = 0;
+
+	func update(pg: PlaygroundControl, pos: Vector2, velocity: Vector2 = Vector2.ZERO) -> PGTouch:
+		self.pos = pos;
+		l_pos = pos-pg.trackl_center; l_deg = pg.get_degree_in_track(l_pos); l_len = l_pos.length();
+		r_pos = pos-pg.trackr_center; r_deg = pg.get_degree_in_track(r_pos); r_len = r_pos.length();
+		vel = velocity;
+		vel_len = vel.length();
+		vel_deg = pg.get_degree_in_track(velocity);
+		return self;
+	
+	func get_pos(side: BeatMap.Event.SIDE) -> Vector2:
+		if side == BeatMap.Event.SIDE.NONE: return Vector2.ZERO;
+		elif side == BeatMap.Event.SIDE.LEFT: return l_pos;
+		else: return r_pos;
+	
+	func get_point_info(side: BeatMap.Event.SIDE) -> Array:
+		if side == BeatMap.Event.SIDE.NONE: return [];
+		elif side == BeatMap.Event.SIDE.LEFT: return [l_pos, l_deg, l_len];
+		else: return [r_pos, r_deg, r_len];
+	
+	func clone() -> PGTouch:
+		var touch := PGTouch.new();
+		touch.pos = pos;
+		touch.l_pos = l_pos; touch.l_deg = l_deg; touch.l_len = l_len;
+		touch.r_pos = r_pos; touch.r_deg = r_deg; touch.r_len = r_len;
+		touch.vel = vel; touch.vel_len = vel_len; touch.vel_deg = vel_deg;
+		return touch;
+	
 
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("esc"):
@@ -546,7 +568,7 @@ func _process(delta):
 				
 				
 				# 计算俩个 Ct 的值
-				if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+				if enable_virtualJoystick || enable_joystick:
 					update_ct(ctl);
 					update_ct(ctr);
 				
@@ -562,18 +584,15 @@ func _process(delta):
 						handle_other_event(wait_index);
 				
 				
-				if input_mode == INPUT_MODE.TOUCH:
+				if enable_touch:
 					# 清除此帧“刚点击”的按钮
 					if touch_just != 0: touch_just = 0;
 					# 搞“上一帧的触控点”
-					prev_touch_points.fill([]);
-					for i in touch_points.size():
-						var touch = touch_points[i];
-						if touch == null || touch.is_empty(): return;
-						if prev_touch_points[i].is_empty():
-							prev_touch_points[i].resize(2);
-						prev_touch_points[i][0] = touch[0][0];
-						prev_touch_points[i][1] = touch[1][0];
+					prev_touches.fill(null);
+					for i in touches.size():
+						var touch := touches[i];
+						if touch != null:
+							prev_touches[i] = touch;
 				
 				# All best / Full Combo 指示(在acc圈的颜色上)
 				var best_judge := (
@@ -684,8 +703,8 @@ func generate_note(note :BeatMap.Event.Note, before_time: float, offset :float =
 			tween.parallel().tween_property(line, "width", 12.5, event_before_beat*get_beat_time()
 				).from(7.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
 			# 引导轨道（扇形）
-			var polygon = Polygon2D.new();
-			var polygon_points = [Vector2.ZERO];
+			var polygon := Polygon2D.new();
+			var polygon_points := [Vector2.ZERO];
 			polygon_points.append_array(points);
 			polygon_points.append(Vector2.ZERO);
 			polygon.color = Color.WHITE;
@@ -696,9 +715,9 @@ func generate_note(note :BeatMap.Event.Note, before_time: float, offset :float =
 			tween_step(tween, offset);
 			return [line, polygon];
 		BeatMap.EVENT_TYPE.Cross:
-			var radius = trackl_diam/2.0 if track == trackl else trackr_diam/2.0;
-			var start_pos = get_point_on_track(note.deg, radius);
-			var end_pos = get_point_on_track(note.deg_end, radius);
+			var radius := trackl_diam/2.0 if track == trackl else trackr_diam/2.0;
+			var start_pos := get_point_on_track(note.deg, radius);
+			var end_pos := get_point_on_track(note.deg_end, radius);
 			var line := Line2D.new();
 			line.width = 10;
 			line.points = [start_pos, start_pos];
@@ -710,7 +729,7 @@ func generate_note(note :BeatMap.Event.Note, before_time: float, offset :float =
 			hint_line.begin_cap_mode = Line2D.LINE_CAP_ROUND;
 			hint_line.end_cap_mode = Line2D.LINE_CAP_ROUND;
 			path.add_child(hint_line);
-			var tween = create_anim_tween(line);
+			var tween := create_anim_tween(line);
 			tween.parallel().tween_method((func(pos): line.points[1] = pos),
 				start_pos, end_pos, event_before_beat*get_beat_time()
 				).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO);
@@ -853,7 +872,7 @@ func judge_note(wait_index :int, note_array = null):
 		BeatMap.EVENT_TYPE.Hit:
 			note = note as BeatMap.Event.Note.Hit;
 			var reached := false;
-			if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+			if enable_joystick || enable_virtualJoystick:
 				# 摇杆输入, 通过ct判断
 				reached = (
 					# ct 距离 track边缘 5px 内
@@ -868,13 +887,13 @@ func judge_note(wait_index :int, note_array = null):
 					# 速度大于256px/s
 					ct.velocity.length() >= 256
 				);
-			elif input_mode == INPUT_MODE.TOUCH:
+			elif enable_touch:
 				# 触控输入
-				for i in touch_points.size():
+				for i in touches.size():
 					if (touch_just>>i)&1 == 0 || (touch_used>>i)&1 == 1: continue;
-					var touch = touch_points[i];
-					if touch == null || touch.is_empty(): continue;
-					var point = touch[note.side];
+					var touch := touches[i];
+					if touch == null: continue;
+					var point := touch.get_point_info(note.side);
 					if point == null || point.is_empty(): continue;
 					# 点击距离track边缘±128px 或 点击在track外note.side的半屏
 					# 角度可偏差±10
@@ -913,16 +932,16 @@ func judge_note(wait_index :int, note_array = null):
 		BeatMap.EVENT_TYPE.Slide:
 			note = note as BeatMap.Event.Note.Slide;
 			var reached := false;
-			if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+			if enable_joystick || enable_virtualJoystick:
 				reached = (
 					ct.distance >= radius - 5 &&
 					is_in_degree(ct.degree, note.deg, note.deg, 4)
 				);
-			elif input_mode == INPUT_MODE.TOUCH:
-				for i in touch_points.size():
-					var touch = touch_points[i];
-					if touch == null || touch.is_empty(): continue;
-					var point = touch[0 if note.side == BeatMap.Event.SIDE.LEFT else 1];
+			elif enable_touch:
+				for i in touches.size():
+					var touch := touches[i];
+					if touch == null: continue;
+					var point := touch.get_point_info(note.side);
 					if point == null || point.is_empty(): continue;
 					reached = (
 						is_in_degree(point[1], note.deg, note.deg, 10) && (
@@ -954,19 +973,20 @@ func judge_note(wait_index :int, note_array = null):
 			var start_pos = get_point_on_track(note.deg, radius);
 			var end_pos = get_point_on_track(note.deg_end, radius);
 			var crossed := false;
-			if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+			if enable_joystick || enable_virtualJoystick:
 				crossed = has_crossed_line(start_pos, end_pos, ct.pos, ct.prev_pos);
-			elif input_mode == INPUT_MODE.TOUCH:
-				var side_index := 0 if note.side == BeatMap.Event.SIDE.LEFT else 1;
-				for i in touch_points.size():
-					var prev_point = prev_touch_points[i];
-					if prev_point == null || prev_point.is_empty(): continue;
-					var touch = touch_points[i];
-					if touch == null || touch.is_empty(): continue;
-					var point = touch[side_index];
-					if point == null || point.is_empty(): continue;
+			elif enable_touch:
+				for i in touches.size():
+					var prev_touch := prev_touches[i];
+					if prev_touch == null: continue;
+					var touch := touches[i];
+					if touch == null: continue;
 					# 点击距离track边缘最大128px (共256px)
-					crossed = has_crossed_line(start_pos, end_pos, prev_point[side_index], point[0]);
+					crossed = has_crossed_line(
+						start_pos, end_pos, 
+						prev_touch.get_pos(note.side), 
+						touch.get_pos(note.side)
+					);
 					if crossed:
 						touch_used |= 1 << i;
 						break;
@@ -1003,12 +1023,12 @@ func judge_note(wait_index :int, note_array = null):
 		BeatMap.EVENT_TYPE.Bound:
 			note = note as BeatMap.Event.Note.Bound;
 			var reached := false;
-			if input_mode == INPUT_MODE.JOYSTICK || input_mode == INPUT_MODE.V_JOYSTICK:
+			if enable_joystick || enable_virtualJoystick:
 				reached = ct.distance <= 10 && ct.velocity.length_squared() >= 5000**2
-			elif input_mode == INPUT_MODE.TOUCH:
-				for i in touch_points.size():
+			elif enable_touch:
+				for i in touches.size():
 					if (touch_just>>i)&1 != 1 || (touch_used>>i)&1 != 0: continue;
-					var point = touch_points[i][0 if note.side == BeatMap.Event.SIDE.LEFT else 1];
+					var point = touches[i].get_point_info(note.side);
 					if point == null || point.is_empty(): continue;
 					reached = point[2] <= 128;
 					if reached:

@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://33673myn6ah7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4icuj"]
+bg_color = Color(1, 0.901961, 0.827451, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bd2gn"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 0.901961, 0.831373, 0.701961)
+draw_center = false
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_8xqkd"]
+line_spacing = 0.0
+font_size = 21
+font_color = Color(0.8, 0.0980392, 0.0980392, 1)
+outline_size = 10
+outline_color = Color(1, 1, 1, 0.8)
+shadow_size = 0
+
+[node name="EventTag" type="Panel"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 314.0
+offset_right = 316.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4icuj")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 1
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_bd2gn")
+text = "Tag"
+label_settings = SubResource("LabelSettings_8xqkd")

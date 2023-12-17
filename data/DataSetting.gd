@@ -1,6 +1,9 @@
 class_name DataSetting
 extends Resource
 
+@export_category("Gameplay")
+enum INPUT_MODE {NONE=-1,JOYSTICK,V_JOYSTICK,TOUCH}; ## 输入模式的枚举
+@export var input_mode :INPUT_MODE = INPUT_MODE.JOYSTICK;
 
 @export_category("Video")
 @export var full_screen :bool = false;

@@ -277,4 +277,5 @@ func get_file_dialog(
 	fileDialog.access = access;
 	fileDialog.filters = filters;
 	fileDialog.size = window_size;
+	fileDialog.canceled.connect(func(): fileDialog.queue_free());
 	return fileDialog;

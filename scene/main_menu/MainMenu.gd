@@ -4,7 +4,6 @@ extends Control
 @onready var background :TextureRect = $Background;
 @onready var songList :SongList = $SongList as SongList;
 @onready var musicPlayer :MusicPlayer = $LeftPanel/MusicPlayer;
-@onready var topPanel: PanelContainer = $TopPanel
 @onready var leftPanel :Control = $LeftPanel;
 @onready var downPanel :Control = $DownPanel;
 @onready var bgLbael :Label = $BgPanel/Label;
@@ -14,7 +13,6 @@ extends Control
 @onready var targetArrow :Control = $TargetArrow;
 @onready var targetArrowClick :Control = $TargetArrow/ControlClick;
 
-var input_mode :PlaygroundControl.INPUT_MODE;
 var last_background_path :String;
 var last_audio_path :String;
 var debug_label_last_report := 0.0;
@@ -104,7 +102,7 @@ func play_map(map_path: String):
 	get_tree().root.add_child(playground);
 	get_tree().current_scene = playground;
 	Global.freeze(self);
-	playground.input_mode = input_mode;
+	playground.input_mode = DataManager.data_setting.input_mode;
 	playground.load_map(map_path, true);
 
 func edit_map(map_path: String):

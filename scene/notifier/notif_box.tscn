@@ -22,6 +22,7 @@ anti_aliasing = false
 [node name="NotifBox" type="PanelContainer"]
 offset_right = 51.0
 offset_bottom = 48.0
+size_flags_horizontal = 8
 theme_override_styles/panel = SubResource("StyleBoxFlat_p4tae")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]

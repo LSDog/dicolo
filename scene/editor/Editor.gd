@@ -38,6 +38,9 @@ extends Control
 # Event setting
 @onready var note_choose := $Edit/VBox/Scroll/VBox/VBoxEvent/NoteChoose;
 
+
+@onready var copyEventTag :Panel = preload("res://scene/editor/EventTag.tscn").instantiate();
+
 var edit_event_type :BeatMap.EVENT_TYPE; ## 点条就会新出现一个note条 的event type
 
 var event_types :Array = BeatMap.EVENT_TYPE.keys(); ## 列出音符类型的array
@@ -54,7 +57,7 @@ func _ready():
 	# 同步进度条
 	flowScroll.share(sliderProgress);
 	# 测试用 加载map
-	load_map("user://map/HareHareYukai/map_test.txt");
+	load_map("res://map/HareHareYukai/map_test.txt");
 	
 	# 绑定Gui操作
 	playground.play_end.connect(func():
@@ -167,18 +170,11 @@ func load_map(map_file_path: String):
 		);
 
 func get_file_choose(filters: Array[String]) -> FileDialog:
-	var fileDialog = FileDialog.new();
-	fileDialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE;
-	fileDialog.access = FileDialog.ACCESS_FILESYSTEM;
-	fileDialog.filters = filters;
-	add_child(fileDialog);
-	fileDialog.size = Vector2i(1024, 512);
-	fileDialog.popup_centered()
-	fileDialog.canceled.connect(func():
-		remove_child(fileDialog);
-		fileDialog.queue_free();
+	return Global.get_file_dialog(
+		FileDialog.FILE_MODE_OPEN_FILE, 
+		FileDialog.ACCESS_FILESYSTEM,
+		"", filters
 	);
-	return fileDialog;
 
 ## 将文件存储到铺面目录 然后返回铺面文件夹下的相对路径
 func copy_to_map_dir(path: String) -> String:

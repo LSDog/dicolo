@@ -1,16 +1,12 @@
-[gd_scene load_steps=78 format=3 uid="uid://dvbls6ik2wsom"]
+[gd_scene load_steps=70 format=3 uid="uid://dvbls6ik2wsom"]
 
 [ext_resource type="Script" path="res://scene/main_menu/MainMenu.gd" id="1_1m2wa"]
 [ext_resource type="Texture2D" uid="uid://besj0l23codt1" path="res://visual/background/dicolo_icon_light_bubbles.png" id="2_tlhgm"]
 [ext_resource type="Texture2D" uid="uid://dyruh3syyydp6" path="res://visual/texture/ct.svg" id="3_7kmml"]
 [ext_resource type="FontFile" uid="uid://co8ymubld1txm" path="res://visual/font/Alibaba-PuHuiTi-Regular.ttf" id="3_xct3g"]
 [ext_resource type="Script" path="res://scene/main_menu/SongList.gd" id="4_c0nrc"]
-[ext_resource type="Script" path="res://scene/main_menu/TopPanel.gd" id="5_b6jcj"]
 [ext_resource type="FontFile" uid="uid://dg0mqbbbvqinh" path="res://visual/font/Alibaba-PuHuiTi-Bold.ttf" id="5_etfut"]
 [ext_resource type="Script" path="res://scene/main_menu/LeftPanel.gd" id="5_stw4b"]
-[ext_resource type="Texture2D" uid="uid://cc3yd1lhahwfs" path="res://visual/ui_icon/gamepad.svg" id="6_sx227"]
-[ext_resource type="Texture2D" uid="uid://8fisarshc2wd" path="res://visual/ui_icon/tablet.svg" id="7_mcq4g"]
-[ext_resource type="Texture2D" uid="uid://d2wmpkk2om4di" path="res://visual/ui_icon/click.svg" id="8_2ecik"]
 [ext_resource type="FontFile" uid="uid://dy4m6l0n1c0kk" path="res://visual/font/LettersLaughingAtTheirExecution-WJLG.ttf" id="8_y52a2"]
 [ext_resource type="Script" path="res://scene/main_menu/MusicPlayer.gd" id="9_wxa4b"]
 [ext_resource type="Texture2D" uid="uid://djconwornocsa" path="res://visual/ui_icon/hearts.svg" id="10_bpfdy"]
@@ -20,13 +16,14 @@
 [ext_resource type="Texture2D" uid="uid://un60dcpk62fi" path="res://visual/ui_icon/anticlockwise-rotation.svg" id="14_06lng"]
 [ext_resource type="Texture2D" uid="uid://bkg1gle7rjuxr" path="res://visual/ui_icon/shopping-cart.svg" id="15_4f8ke"]
 [ext_resource type="Script" path="res://scene/main_menu/DownPanel.gd" id="15_ml7uc"]
+[ext_resource type="Texture2D" uid="uid://dkwk7weurrfp0" path="res://visual/ui_icon/entry-door.svg" id="16_03wsk"]
 [ext_resource type="Texture2D" uid="uid://b1eoo1iuul5ip" path="res://visual/partner/avatar_trans-1024x.png" id="16_16t2a"]
 [ext_resource type="Texture2D" uid="uid://cbwyhuuanau7b" path="res://visual/ui_icon/compact-disc.svg" id="17_himgy"]
 [ext_resource type="Texture2D" uid="uid://crtsduk7s68wn" path="res://visual/ui_icon/cog.svg" id="17_yvf60"]
 [ext_resource type="Texture2D" uid="uid://blgnytuwcpehb" path="res://visual/ui_icon/toggles.svg" id="18_du0a7"]
 [ext_resource type="AudioStream" uid="uid://crod6cfe1nqid" path="res://audio/intro/Arcane_Beacon.wav" id="19_jw5he"]
 [ext_resource type="Texture2D" uid="uid://d25b25n5ka51" path="res://visual/ui_icon/rolling-dices.svg" id="19_n270n"]
-[ext_resource type="AudioStream" uid="uid://bawqmljx771uq" path="res://audio/intro/dicolo!_tsukuyomichan.wav" id="20_gpahj"]
+[ext_resource type="AudioStream" uid="uid://ibpykvd10c5n" path="res://audio/intro/dicolo!_tsukuyomichan.wav" id="20_gpahj"]
 [ext_resource type="AudioStream" uid="uid://cmucpnk84nn63" path="res://audio/intro/dicolo!_miku.wav" id="21_4we1j"]
 [ext_resource type="AudioStream" uid="uid://c0bw0kmqnvfow" path="res://audio/intro/dicolo!_rin.wav" id="22_ghic7"]
 [ext_resource type="AudioStream" uid="uid://cf1f2lob8pau1" path="res://audio/intro/dicolo!_len.wav" id="23_jg7m8"]
@@ -48,20 +45,18 @@ curve = SubResource("Curve_ubipp")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_auky1"]
 lifetime_randomness = 0.2
+particle_flag_disable_z = true
 emission_shape = 1
 emission_sphere_radius = 128.0
-particle_flag_disable_z = true
+angle_min = -180.0
+angle_max = 180.0
 direction = Vector3(1, -0.5, 0)
 spread = 25.0
-gravity = Vector3(0, 128, 0)
 initial_velocity_min = 200.0
 initial_velocity_max = 400.0
 angular_velocity_min = -35.41
 angular_velocity_max = 82.62
-orbit_velocity_min = 0.0
-orbit_velocity_max = 0.0
-angle_min = -180.0
-angle_max = 180.0
+gravity = Vector3(0, 128, 0)
 scale_min = 0.75
 scale_curve = SubResource("CurveTexture_kbpy7")
 color = Color(1, 1, 1, 0.2)
@@ -138,25 +133,6 @@ VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_rhtk2")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_iexgm")
 VScrollBar/styles/scroll = SubResource("StyleBoxFlat_o5o6b")
 VScrollBar/styles/scroll_focus = SubResource("StyleBoxFlat_8hb83")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d43co"]
-bg_color = Color(0, 0, 0, 0.4)
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g445l"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_top = 24
-border_color = Color(1, 1, 0.5, 0.25)
-border_blend = true
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7vtdb"]
-
-[sub_resource type="Theme" id="Theme_baqbq"]
-Button/styles/focus = SubResource("StyleBoxFlat_g445l")
-Button/styles/pressed = SubResource("StyleBoxEmpty_7vtdb")
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_ve6ma"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vy51k"]
 content_margin_left = 14.0
@@ -404,8 +380,6 @@ tracks/9/keys = {
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_eg2x4"]
 streams_count = 4
-random_pitch = 1.0
-random_volume_offset_db = 0.0
 stream_0/stream = ExtResource("20_gpahj")
 stream_0/weight = 1.0
 stream_1/stream = ExtResource("21_4we1j")
@@ -667,59 +641,6 @@ size_flags_vertical = 3
 theme_override_constants/separation = 10
 metadata/_edit_lock_ = true
 
-[node name="TopPanel" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -76.0
-offset_right = 76.0
-offset_bottom = 45.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_d43co")
-script = ExtResource("5_b6jcj")
-
-[node name="HBoxInputMode" type="HBoxContainer" parent="TopPanel"]
-layout_mode = 2
-theme = SubResource("Theme_baqbq")
-alignment = 1
-
-[node name="Gamepad" type="Button" parent="TopPanel/HBoxInputMode"]
-custom_minimum_size = Vector2(45, 0)
-layout_mode = 2
-toggle_mode = true
-action_mode = 0
-button_group = SubResource("ButtonGroup_ve6ma")
-icon = ExtResource("6_sx227")
-flat = true
-expand_icon = true
-
-[node name="VirtualJoystick" type="Button" parent="TopPanel/HBoxInputMode"]
-custom_minimum_size = Vector2(45, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_etfut")
-toggle_mode = true
-button_pressed = true
-action_mode = 0
-button_group = SubResource("ButtonGroup_ve6ma")
-text = "V"
-icon = ExtResource("7_mcq4g")
-flat = true
-icon_alignment = 1
-expand_icon = true
-
-[node name="Touch" type="Button" parent="TopPanel/HBoxInputMode"]
-custom_minimum_size = Vector2(45, 0)
-layout_mode = 2
-toggle_mode = true
-action_mode = 0
-button_group = SubResource("ButtonGroup_ve6ma")
-icon = ExtResource("8_2ecik")
-flat = true
-icon_alignment = 1
-expand_icon = true
-
 [node name="LeftPanel" type="Control" parent="."]
 self_modulate = Color(1, 1, 1, 0.647059)
 layout_mode = 1
@@ -909,6 +830,20 @@ text = "] Not Playing..."
 label_settings = SubResource("LabelSettings_n6jtj")
 autowrap_mode = 3
 
+[node name="WestGardenEntry" type="Button" parent="LeftPanel"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -354.0
+offset_right = 64.0
+offset_bottom = -290.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+icon = ExtResource("16_03wsk")
+expand_icon = true
+
 [node name="DownPanel" type="Panel" parent="."]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 1
@@ -951,7 +886,7 @@ alignment = 1
 [node name="Label" type="Label" parent="DownPanel/VBox/PlayerInfoVBox"]
 layout_mode = 2
 text = "name: %s
-coin: %d
+level: %d
 status: %s"
 label_settings = SubResource("LabelSettings_ewllf")
 

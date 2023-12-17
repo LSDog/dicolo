@@ -9,6 +9,14 @@ const COLOR_CHANGED := Color("ffdd00");
 # Player #
 @onready var textureAvatar :TextureRect = $Panel/Scroll/Margin/List/Player/Profile/TextureAvatar;
 @onready var lineEditName :LineEdit = $Panel/Scroll/Margin/List/Player/Profile/LineEditName;
+# GamePlay #
+var audio_offset :int = 0;
+@onready var buttonInputGamepad: Button = $Panel/Scroll/Margin/List/Gameplay/InputMode/Gamepad;
+@onready var buttonInputVJoy: Button = $Panel/Scroll/Margin/List/Gameplay/InputMode/VirtualJoystick;
+@onready var buttonInputTouch: Button = $Panel/Scroll/Margin/List/Gameplay/InputMode/Touch;
+@onready var labelAudioOffset :Label = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/LabelOffset;
+@onready var buttonAudioOffsetAdd :Button = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonAdd;
+@onready var buttonAudioOffsetSub :Button = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonSub;
 # Video #
 @onready var buttonFullScreen :Button = $Panel/Scroll/Margin/List/Video/FullScreen/Button;
 @onready var optionFullScreenMode :OptionButton = $Panel/Scroll/Margin/List/Video/FullScreenMode/Option;
@@ -25,11 +33,6 @@ var optionFullScreenMode_items :Array[DisplayServer.WindowMode] = [DisplayServer
 # Device #
 @onready var labelGamepad :Label = $Panel/Scroll/Margin/List/Device/Gamepad/Label;
 @onready var optionGamepad :OptionButton = $Panel/Scroll/Margin/List/Device/Gamepad/Option;
-# GamePlay #
-var audio_offset :int = 0;
-@onready var labelAudioOffset :Label = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/LabelOffset;
-@onready var buttonAudioOffsetAdd :Button = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonAdd;
-@onready var buttonAudioOffsetSub :Button = $Panel/Scroll/Margin/List/Gameplay/AudioOffset/ButtonSub;
 # Misc #
 @onready var checkDebugInfo :CheckButton = $Panel/Scroll/Margin/List/Misc/DebugInfo/CheckButton;
 @onready var storageLocation :Button = $Panel/Scroll/Margin/List/Misc/StorageLoation/Button;
@@ -80,6 +83,21 @@ func bind_gui_action():
 	lineEditName.text_changed.connect(func(text: String):
 		DataManager.data_player.name = text;
 		if !loading_data: DataManager.save_data_player();
+	);
+	buttonInputGamepad.pressed.connect(func():
+		Notifier.notif_popup("Now using Gamepad for rolling!", Notifier.COLOR_BLUE);
+		get_setting().input_mode = DataSetting.INPUT_MODE.JOYSTICK;
+		save_setting();
+	);
+	buttonInputVJoy.pressed.connect(func():
+		Notifier.notif_popup("Now using Virtual Joystick for rolling!", Notifier.COLOR_BLUE);
+		get_setting().input_mode = DataSetting.INPUT_MODE.V_JOYSTICK;
+		save_setting();
+	);
+	buttonInputTouch.pressed.connect(func():
+		Notifier.notif_popup("Now using finger for tapping!", Notifier.COLOR_BLUE);
+		get_setting().input_mode = DataSetting.INPUT_MODE.TOUCH;
+		save_setting();
 	);
 	buttonFullScreen.toggled.connect(func(pressed: bool):
 		var id = optionFullScreenMode.get_selected_id();
@@ -235,6 +253,15 @@ func set_setting_from_data():
 	lineEditName.text = data_player.name;
 	
 	var setting := get_setting();
+	
+	match setting.input_mode:
+		DataSetting.INPUT_MODE.JOYSTICK:
+			buttonInputGamepad.button_pressed = true;
+		DataSetting.INPUT_MODE.V_JOYSTICK:
+			buttonInputVJoy.button_pressed = true;
+		DataSetting.INPUT_MODE.TOUCH:
+			buttonInputTouch.button_pressed = true;
+	
 	optionFullScreenMode.selected = setting.full_screen_mode;
 	buttonFullScreen.button_pressed = setting.full_screen;
 	inputFPS.text = str(setting.fps);

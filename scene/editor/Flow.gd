@@ -17,6 +17,8 @@ extends Panel
 @export var beatline_color := Color(0.372549, 0.619608, 0.627451, 0.2);
 @export var note_margin_vertical := 4;
 
+const scn_EventTag = preload("res://scene/editor/EventTag.tscn");
+
 var flow_start_offset :float = 0.0; ## flow 开始_draw()的距离
 var beat_offset :float = 0.0;
 
@@ -44,10 +46,14 @@ var offset := 0.0:
 
 ## 鼠标拖动偏移值
 var mouse_offset := 0.0;
-## 控制中的note
-var holding_note :Control;
-## 控制中的note的type
-var holding_note_type :BeatMap.EVENT_TYPE = BeatMap.EVENT_TYPE.None;
+## 选中的note
+var selected_event :Array[BeatMap.Event];
+## 选中的note在flow中的节点
+var selected_event_node :Array[Control];
+
+var holding_note;
+var holding_note_type;
+
 ## 所有的note {位置: Vector2, 音符: Note}
 var note_map :Dictionary = {};
 
@@ -124,7 +130,7 @@ func _gui_input(event):
 					var note_pos = get_note_pos(event.position);
 					if pos_overlap_note(note_pos): return; # 当前位置存在note则忽略
 					holding_note_type = editor.edit_event_type;
-					var note_panel = add_note(holding_note_type, note_pos);
+					var note_panel = add_event(holding_note, note_pos);
 					holding_note = note_panel;
 				else:
 					holding_note = null;
@@ -172,14 +178,25 @@ func get_note_pos(mouse_pos :Vector2) -> Vector2:
 		floor_multiple(mouse_pos.x-beat_offset, beat_space)+beat_offset
 	, y);
 
-func add_note(
+func add_event(
+		event: BeatMap.Event,
+		p_note_pos: Vector2,
+		p_size :Vector2 = Vector2(10, size.y/2 - note_margin_vertical*2)
+	) -> Panel:
+		if event.type is BeatMap.Event.Note:
+			return _add_note(event.type, p_note_pos, p_size);
+		return
+		#match event.type:
+		#	_:
+		#		add_child()
+
+func _add_note(
 		note_type: BeatMap.EVENT_TYPE,
 		p_note_pos: Vector2,
 		p_size :Vector2 = Vector2(10, size.y/2 - note_margin_vertical*2)
 	) -> Panel:
 	
 	var note := Panel.new();
-	#note.name = 'note_' + BeatMap.EVENT_TYPE.find_key(note_type);
 	note.position = p_note_pos;
 	note.size = p_size;
 	
@@ -197,8 +214,6 @@ func add_note(
 			return;
 	
 	add_child(note);
-	
-	# note 自己的点击事件等
 	note.gui_input.connect(func(event):
 		
 		match event.get_class():
@@ -232,6 +247,7 @@ func add_note(
 				if !pos_overlap_note(note_pos):
 					move_note(note, note_pos);
 	);
+	
 	note_map[note.position] = note;
 	return note;
 
